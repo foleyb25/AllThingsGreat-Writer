@@ -1,12 +1,15 @@
 <template>
   <div>
-    <header class="mt-28">
+    <header class="mt-[72px]">
       <NavComponent></NavComponent>
     </header>
-    <main class="mt-28">
-      <router-view></router-view>
-    </main>
-    <FooterComponent class="mt-28"></FooterComponent>
+    <div class="flex flex-row">
+      <SideNavComponent class="w-1/4"></SideNavComponent>
+      <main class="w-3/4 max-h-screen h-screen bg-gray-50 overflow-scroll shadow-2xl">
+        <router-view></router-view>
+      </main>
+    </div>
+    
   </div>
 </template>
 

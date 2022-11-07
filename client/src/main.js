@@ -3,9 +3,15 @@ import {createRouter, createWebHistory} from 'vue-router'
 import './style.css'
 import 'flowbite'
 import App from './App.vue'
-import HomeView from "./views/HomeView.vue";
 import NavComponent from "./components/global/NavComponent.vue"
-import FooterCompoent from "./components/global/FooterComponent.vue"
+import SideNavComponent from "./components/global/SideNavComponent.vue"
+import AddBlogView from "./views/AddBlogView.vue";
+import BlogsView from "./views/BlogsView.vue";
+import MetricsView from "./views/MetricsView.vue";
+import TweetsView from "./views/TweetsView.vue";
+import AccountsView from "./views/AccountsView.vue";
+import CKEditor from '@ckeditor/ckeditor5-vue'
+
 
 const router = createRouter({
 
@@ -15,9 +21,34 @@ const router = createRouter({
         {
             path: "/",
             name: "home",
-            component: HomeView,
-        }
+            component: AddBlogView,
+        },
+        {
+            path: "/addBlog",
+            name: "AddBlogView",
+            component: AddBlogView,
+        },
+        {
+            path: "/blogs",
+            name: "BlogsView",
+            component: BlogsView,
+        },
+        {
+            path: "/metrics",
+            name: "MetricsView",
+            component: MetricsView,
+        },
+        {
+            path: "/tweets",
+            name: "TweetsView",
+            component: TweetsView,
+        },
+        {
+            path: "/account",
+            name: "AccountView",
+            component: AccountsView,
+        },
     ]
 })
 
-createApp(App).use(router).component('NavComponent', NavComponent).component('FooterComponent',FooterCompoent).mount('#app')
+createApp(App).use(router).use(CKEditor).component('NavComponent', NavComponent).component("SideNavComponent", SideNavComponent).mount('#app')

@@ -8,12 +8,10 @@
 </template>
 
 <script>
-import BlogComponent from "./BlogComponent.vue"
-
+import BlogComponent from "../components/BlogComponent.vue"
 export default {
     name: "ContentComponent",
     components: {BlogComponent},
-
     data() {
         return {
             items: [1,2,3,4,5,6,7]
