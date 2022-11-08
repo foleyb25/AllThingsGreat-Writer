@@ -1,22 +1,26 @@
 <template>
   <div>
-    <header class="mt-[72px]">
+    <header class="mt-[55px]">
       <NavComponent></NavComponent>
     </header>
     <div class="flex flex-row">
-      <SideNavComponent class="w-1/4"></SideNavComponent>
-      <main class="w-3/4 max-h-screen h-screen bg-gray-50 overflow-scroll shadow-2xl">
-        <router-view></router-view>
+      <SideNavComponent class="w-1/4 hidden md:block"></SideNavComponent>
+      <SideNavDrawerComponent class="md:hidden"></SideNavDrawerComponent>
+      <main class="w-full max-h-screen h-screen bg-gray-50 overflow-scroll shadow-2xl">
+        <router-view class="p-4"></router-view>
       </main>
     </div>
     
   </div>
 </template>
 
-<script>
+<script >
+import SideNavDrawerComponent from './components/global/SideNavDrawerComponent.vue';
+
 
 export default {
     name: "App",
+    components: { SideNavDrawerComponent }
 }
 </script>
 

@@ -1,9 +1,9 @@
 <template>
     <div class="flex flex-col">
-        <div class="h-[45%] w-full">
-            <img class="h-full w-full object-fill" src="../assets/mountains.jpg" alt="">
+        <div class="h-[47%] w-full relative overflow-hidden">
+            <img class="h-full w-full object-fill" src="src/assets/images/mountains.jpg" alt="">
         </div>
-        <div class="m-3 h-[55%]">
+        <div class="p-3 h-[53%]">
             <div class="h-[65%] font-semibold p-1">
                 Title
             </div>
@@ -13,10 +13,12 @@
                 <span class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"></span>
                 <a href="#" class="text-sm font-medium text-gray-900 underline hover:no-underline dark:text-white">73 comments</a>
             </div>
-            <div class="font-light text-slate-300 p-1">
+            <div class="font-light text-slate-300">
+                Category
+            </div>
+            <div class="font-light text-slate-300">
                 Blog Author
             </div>
         </div>
-        
     </div>
 </template>
