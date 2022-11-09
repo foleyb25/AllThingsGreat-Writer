@@ -49,58 +49,63 @@
             <input :v-on="imgPath" type="file" @change="onFileChange">
         </div>
         <div class="mt-4">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25" :disabled="isDisabled" @click="handleSubmit()">Create</button>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25" :disabled="isDisabled" @click="handleSubmit()">{{btnText}}</button>
         </div>
-        <h2 class="mt-8">Blog Preview:</h2>
-        <div class="bg-white m-auto flex flex-column justify-center">
+        <label for="img" class="block m-2 mt-20 text-sm font-medium text-gray-900 dark:text-gray-300">Blog Preview</label>
+        <div class="bg-white">
             <span v-html="editorData"></span>
         </div>
     </div>
 </template>
 
 <script>
-    export default {
-        name: 'app',
-        data() {
-            return {
-                editorData: '<p>Blog Content...</p>',
-                editorConfig: {
-                    toolbar: [
-                        {name: 'utils', items: ['Source', 'Scayt']},
-                        {name: 'styling', items: ['Bold', 'Italic', 'Underline','Strike']},
-                        {name: 'formatting', items: ['NumberedList', 'BulletedList', 'Blockquote']},
-                        {name: 'linking', items: ['Link', 'Unlink', 'Image', "Iframe"]}
-                        
-                    ],
-                    height: "400px",
-                    allowedContent: true,
-                    
-                },
-                title: "",
-                category: "AllThingsGreat",
-                imgPath: "src/assets/images/missing_img.jpeg",
-                isDisabled: true
-            }
+export default {
+    name: 'BlogEditComponent',
+    props: ['blog'],
+    data() {
+        return {
+            editorConfig: {
+                toolbar: [
+                    {name: 'utils', items: ['Source', 'Scayt']},
+                    {name: 'styling', items: ['Bold', 'Italic', 'Underline','Strike']},
+                    {name: 'formatting', items: ['NumberedList', 'BulletedList', 'Blockquote']},
+                    {name: 'linking', items: ['Link', 'Unlink', 'Image', "Iframe"]}
+                ],
+                height: "400px",
+                allowedContent: true,
+            },
+            editorData: this.blog ? this.blog.bodyHTML : "<p>Write your masterpiece...",
+            title: this.blog ? this.blog.title : "",
+            category: this.blog ? this.blog.category : "AllThingsGreat",
+            isDisabled: this.blog ? false : true,
+            btnText: this.blog ? "Update" : "Create",
+            imgPath: this.blog ? this.blog.imageUrl : "/src/assets/images/missing_img.jpeg"
+
+        }
+    },
+
+    methods: {
+        onFileChange(e) {
+            const file = e.target.files[0];
+            const filename = file.name;
+            const extension = filename.split(".").pop()
+
+            if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'gif' || extension.toLowerCase() == 'jpeg') {
+                this.imgPath = window.URL.createObjectURL(file)
+                this.isDisabled = false
+                return true
+            } else {
+                return false
+            }  
         },
 
-        methods: {
-            onFileChange(e) {
-                const file = e.target.files[0];
-                const filename = file.name;
-                const extension = filename.split(".").pop()
-                
-                if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'gif' || extension.toLowerCase() == 'jpeg') {
-                    this.imgPath = window.URL.createObjectURL(file)
-                    this.isDisabled = false
-                    return true
-                } else {
-                    return false
-                }  
-            },
-
-            handleSubmit(e) {
-                console.log("submit")
-            }
+        handleSubmit(e) {
+            console.log("submit")
         }
+    },
+
+    mounted() {
+        console.log("Blog Editor Component Mounted")
     }
+}
 </script>

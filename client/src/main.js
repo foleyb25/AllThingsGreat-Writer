@@ -6,8 +6,11 @@ import App from './App.vue'
 import NavComponent from "./components/global/NavComponent.vue"
 import SideNavComponent from "./components/global/SideNavComponent.vue"
 import SideNavDrawerComponent from "./components/global/SideNavDrawerComponent.vue"
-import AddBlogView from "./views/AddBlogView.vue";
-import BlogsView from "./views/BlogsView.vue";
+import AddBlogView from "./views/Blog/AddBlogView.vue";
+import EditBlogView from "./views/Blog/EditBlogView.vue";
+import BlogsView from "./views/Blog/BlogsView.vue";
+import SearchScreenplayView from "./views/Screenplay/SearchScreenplayView.vue";
+import ScreenplayDetailsView from "./views/Screenplay/ScreenplayDetailsView.vue";
 import MetricsView from "./views/MetricsView.vue";
 import TweetsView from "./views/TweetsView.vue";
 import AccountsView from "./views/AccountsView.vue";
@@ -21,12 +24,17 @@ const router = createRouter({
         {
             path: "/",
             name: "home",
-            component: AddBlogView,
+            component: BlogsView,
         },
         {
             path: "/addBlog",
             name: "AddBlogView",
             component: AddBlogView,
+        },
+        {
+            path: "/editBlog/:id",
+            name: "EditBlogView",
+            component: EditBlogView,
         },
         {
             path: "/blogs",
@@ -47,6 +55,16 @@ const router = createRouter({
             path: "/account",
             name: "AccountView",
             component: AccountsView,
+        },
+        {
+            path: "/searchscreenplay",
+            name: "SearchScreenplayView",
+            component: SearchScreenplayView,
+        },
+        {
+            path: "/searchscreenplay/:id",
+            name: "ScreenplayDetailsView",
+            component: ScreenplayDetailsView,
         },
     ]
 })
