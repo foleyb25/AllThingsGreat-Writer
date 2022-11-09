@@ -11,6 +11,7 @@ import EditBlogView from "./views/Blog/EditBlogView.vue";
 import BlogsView from "./views/Blog/BlogsView.vue";
 import SearchScreenplayView from "./views/Screenplay/SearchScreenplayView.vue";
 import ScreenplayDetailsView from "./views/Screenplay/ScreenplayDetailsView.vue";
+import ImageManagerView from "./views/ImageManager/ImageManagerView.vue";
 import MetricsView from "./views/MetricsView.vue";
 import TweetsView from "./views/TweetsView.vue";
 import AccountsView from "./views/AccountsView.vue";
@@ -65,6 +66,11 @@ const router = createRouter({
             path: "/searchscreenplay/:id",
             name: "ScreenplayDetailsView",
             component: ScreenplayDetailsView,
+        },
+        {
+            path: "/imagemanager",
+            name: "ImageManagerView",
+            component: ImageManagerView,
         },
     ]
 })
