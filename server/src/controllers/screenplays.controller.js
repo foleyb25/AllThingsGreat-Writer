@@ -27,6 +27,17 @@ const screenplayService = require("../services/screenplays.service.js")
         }
     }
 
+    async function searchScreenplays(req, res) {
+        const pageNum = req.params.pageNum
+        const searchString = req.params.searchString
+        try {
+            const screenplays = await screenplayService.getMultipleSearch(searchString, pageNum)
+            res.status(200).json(screenplays)
+        } catch (err) {
+            res.status(404).json({message: err.message})
+        }
+    }
+
     async function create(req,res) {
         const screenplay = req.body;
         try {
@@ -62,5 +73,6 @@ module.exports = {
     getById,
     create,
     update,
+    searchScreenplays,
     // remove
 }

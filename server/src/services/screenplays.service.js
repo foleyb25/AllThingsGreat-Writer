@@ -7,7 +7,9 @@ More information on the Controller-Service relationship can be found here:
 https://www.coreycleary.me/what-is-the-difference-between-controllers-and-services-in-node-rest-apis
 */
 
+const searchbytitle = require("../utils/helpers/moviedatabasealternative/searchbytitle");
 const Screenplay = require("../models/Screenplay.model")
+
 // const db = require('./db.service');
 // const helper = require('../utils/helper.util');
 // const config = require('../configs/general.config');
@@ -22,6 +24,32 @@ async function getSingle(id) {
     const screenplay = await Screenplay.findById(id)
         .populate("writer");
     return screenplay
+}
+
+async function getMultipleSearch(searchString, page = 1) {
+    var isMorescreenplays = true;
+    var noResults = false;
+    var isMore = false;
+    try {
+        var screenplayList = await searchbytitle.searchbytitle(searchString, page)
+        if (!screenplayList) {
+            noResults = true 
+            isMorescreenplays = false
+        } else {
+            isMore = (screenplayList.length == 10)
+        }
+
+        return {
+            screenplayList: screenplayList,
+            pageNum: page,
+            morescreenplays: screenplayList,
+            isMore: isMore,
+            noResults: noResults,
+        }
+    } catch(err) {
+        return err.message
+    }
+    
 }
 
 async function create(screenplay){
@@ -42,6 +70,7 @@ async function remove(id){
 module.exports = {
   getMultiple,
   getSingle,
+  getMultipleSearch,
   create,
   update,
   remove

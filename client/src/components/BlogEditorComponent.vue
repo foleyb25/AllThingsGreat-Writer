@@ -24,7 +24,7 @@
             <label for="img" class="block m-2 text-sm font-medium text-gray-900 dark:text-gray-300">Blog Thumbnail Preview</label>
             <div class="aspect-[14/15] bg-blue-300 border border-black w-1/3">
                 <div class="h-[47%] w-full relative overflow-hidden">
-                    <img class="h-full w-full object-cover" :src="imgPath" alt="">
+                    <img class="h-full w-full object-cover" :src="imagePath" alt="">
                 </div>
                 <div class="p-3 h-[53%]">
                     <div class="h-[65%] font-semibold p-1">
@@ -46,10 +46,13 @@
             </div>
         </div>
         <div class="mt-4">
-            <input :v-on="imgPath" type="file" @change="onFileChange">
+            <input :v-on="imagePath" type="file" @change="onFileChange">
         </div>
         <div class="mt-4">
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25" :disabled="isDisabled" @click="handleSubmit()">{{btnText}}</button>
+            <button v-if="!blog" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25" :disabled="isDisabled" @click="handleSubmit()">Create</button>
+        </div>
+        <div class="mt-4">
+            <button v-if="blog" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25" :disabled="isDisabled" @click="handleUpdate()">Update</button>
         </div>
         <label for="img" class="block m-2 mt-20 text-sm font-medium text-gray-900 dark:text-gray-300">Blog Preview</label>
         <div class="bg-white">
@@ -59,6 +62,8 @@
 </template>
 
 <script>
+import Axios from 'axios'
+
 export default {
     name: 'BlogEditComponent',
     props: ['blog'],
@@ -79,7 +84,7 @@ export default {
             category: this.blog ? this.blog.category : "AllThingsGreat",
             isDisabled: this.blog ? false : true,
             btnText: this.blog ? "Update" : "Create",
-            imgPath: this.blog ? this.blog.imageUrl : "/src/assets/images/missing_img.jpeg"
+            imagePath: this.blog ? this.blog.imageUrl : "/src/assets/images/missing_img.jpeg"
 
         }
     },
@@ -91,7 +96,7 @@ export default {
             const extension = filename.split(".").pop()
 
             if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'gif' || extension.toLowerCase() == 'jpeg') {
-                this.imgPath = window.URL.createObjectURL(file)
+                this.imagePath = window.URL.createObjectURL(file)
                 this.isDisabled = false
                 return true
             } else {
@@ -99,8 +104,16 @@ export default {
             }  
         },
 
-        handleSubmit(e) {
-            console.log("submit")
+        async handleSubmit(e) {
+            // const formData = new FormData()
+
+            // formData.append("blog")
+            const res = await Axios.post("http://localhost:5002/api/blogs", {title: this.title, bodyHTML: this.editorData, category: this.category, imagePath: this.imagePath}, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+        
+        },
+
+        async handleUpdate(e) {
+            console.log("update")
         }
     },
 
