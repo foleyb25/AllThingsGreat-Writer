@@ -8,6 +8,7 @@ https://www.coreycleary.me/what-is-the-difference-between-controllers-and-servic
 */
 
 const Blog = require("../models/Blog.model")
+const fileUploader = require("../utils/fileUploader.helper")
 // const db = require('./db.service');
 // const helper = require('../utils/helper.util');
 // const config = require('../configs/general.config');
@@ -24,7 +25,22 @@ async function getSingle(id) {
     return blog
 }
 
-async function create(blog){
+async function create(blog, localImage){
+
+    
+    if (localImage.isNoop) {
+        localImage.upload({noop: true})
+        throw "A file must be selected"
+    } else {
+        if (blogBody == "") {
+            throw "Must include content in blog"
+        }
+        const fileUrl = await fileUploader.uploadfile(file)
+        blog.imagePath = fileUrl
+    }     
+    // const userId = req.session.userId
+
+    
     const result = await Blog.create(blog);
     return result
 }

@@ -29,8 +29,9 @@ const blogService = require("../services/blogs.service.js")
 
     async function create(req,res) {
         const blog = req.body;
+        const localImage = req.file(blog.imagePath)
         try {
-            const status = await blogService.create(blog)
+            const status = await blogService.create(blog, localImage)
             res.status(201).json({message: "Blog created successfully!"})
         } catch (err) {
             res.status(400).json({ message: err.message});

@@ -6,7 +6,7 @@ const { application } = require('express');
 
 const app = express();
 const port = process.env.PORT ? process.env.PORT : 5002
-const db_uri = process.env.DB_URI ? process.env.DB_URI : ""
+const db_uri = process.env.DB_URI ? process.env.DB_URI : "mongodb+srv://drsourceadmin:B184you2!@cluster0.ygsuq.mongodb.net/ATGDB-Stag?retryWrites=true&w=majority"
 
 //middleware
 app.use(cors());

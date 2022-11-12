@@ -5,7 +5,7 @@
             <div v-if="loading">Page Results Are Loading</div>
             <button v-if="!loading" @click="search()"  class="mt-8 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25">Search</button>
         </div>
-        <div class="screenplay-list grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+        <div class="grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
             <div v-for="screenplay in screenplayList" class="h-full w-full flex justify-center items-center">
                 <ScreenplayComponent v-if="screenplayList.length > 0" :screenplay="screenplay" class="font-sans aspect-[2/3] w-full mt-2 mb-2 shadow-2xl"></ScreenplayComponent>
             </div>
@@ -34,7 +34,7 @@ export default {
 
     methods: {
         clearContents: async function() {
-            $('.screenplay-list div').empty();
+            this.screenplayList = [];
             this.pageNum = 1;
             this.isMore = false;
         },

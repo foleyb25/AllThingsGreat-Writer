@@ -105,10 +105,12 @@ export default {
         },
 
         async handleSubmit(e) {
-            // const formData = new FormData()
-
-            // formData.append("blog")
-            const res = await Axios.post("http://localhost:5002/api/blogs", {title: this.title, bodyHTML: this.editorData, category: this.category, imagePath: this.imagePath}, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+            try {
+                const res = await Axios.post("http://localhost:5002/api/blogs", {title: this.title, bodyHTML: this.editorData, category: this.category, imagePath: this.imagePath}, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+            } catch(err) {
+                console.log(err)
+            }
+            
         
         },
 
