@@ -6,7 +6,7 @@ const { application } = require('express');
 
 const app = express();
 const port = process.env.PORT ? process.env.PORT : 5002
-const db_uri = process.env.DB_URI ? process.env.DB_URI : "mongodb+srv://drsourceadmin:B184you2!@cluster0.ygsuq.mongodb.net/ATGDB-Stag?retryWrites=true&w=majority"
+const db_uri = process.env.DB_URI ? process.env.DB_URI : ""
 
 //middleware
 app.use(cors());
@@ -29,12 +29,5 @@ app.use('', require("./src/routes/screenplays.route"));
 app.use('', require("./src/routes/users.route"));
 app.use('', require("./src/routes/watchservice.route"));
 app.use('', require("./src/routes/writers.route"));
-
-if(process.env.NODE_ENV === 'production') {
-    app.use(express.static(__dirname+"/dist/"));
-    app.get("*", (req,res) => {
-        res.sendFile(__dirname+"/dist/index.html")
-    })
-}
 
 app.listen(port, () => console.log(`server is running at http://localhost:${port}`));
