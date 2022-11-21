@@ -13,20 +13,37 @@
   </div>
 </template>
 
-<script >
-import SideNavDrawerComponent from './components/global/SideNavDrawerComponent.vue';
 
-export default {
-    name: "App",
-    components: { SideNavDrawerComponent },
-    data() {
-        return {
-            isLoggedIn: false
-        }
+<script >
+  import { useAuth0 } from '@auth0/auth0-vue';
+  import SideNavDrawerComponent from './components/global/SideNavDrawerComponent.vue';
+  
+  export default {
+      name: "App",
+      components: { SideNavDrawerComponent },
+      setup() {
+      const auth0 = useAuth0();
       
-    },
-}
-</script>
+      return {
+        isAuthenticated: auth0.isAuthenticated,
+        isLoading: auth0.isLoading,
+        user: auth0.user,
+        login() {
+          auth0.loginWithRedirect({
+            appState: {
+              target: "/"
+            }
+          });
+        },
+        logout() {
+          auth0.logout({
+            returnTo: import.meta.env.VITE_AUTH0_CALLBACK_URL+"/loggedout"
+          });
+        }
+      }
+    }
+  }
+  </script>
 
 <style scoped>
 .logo {
