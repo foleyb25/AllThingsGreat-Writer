@@ -9,6 +9,6 @@
   
   const handleLogout = () =>
     logout({
-      returnTo: import.meta.env.VITE_AUTH0_CALLBACK_URL+"/loggedout"
+      returnTo: window.location.origin+"/loggedout"
     });
   </script>

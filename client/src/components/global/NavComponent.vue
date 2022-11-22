@@ -6,7 +6,11 @@
       <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">ATGU</span>
   </a>
   <div class="flex justify-center items-center md:order-2">
-    <button id="dropdownDefault" data-dropdown-toggle="dropdown" class="w-8 h-8 bg-gray-300 rounded-full" type="button"></button>
+    <div>
+      <button id="dropdownDefault" data-dropdown-toggle="dropdown" class="w-8 h-8 bg-gray-300 rounded-full overflow-hidden" type="button">
+        <img  class="z-[-1]" :src="user.picture" alt="">
+      </button>
+    </div>
     <!-- Dropdown menu -->
     <div id="dropdown" class="hidden z-10 w-44 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700">
         <ul class="py-1 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefault">
@@ -24,8 +28,8 @@
       <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
     </button> 
   </div>
-  <div class="hidden justify-between items-center w-full md:flex md:w-auto md:order-1" id="navbar-sticky">
-    Welcome, Writer
+  <div v-if="user.given_name !== undefined">
+    Welcome, {{user.given_name}}
   </div>
   </div>
 </nav>
@@ -40,12 +44,14 @@
       name: "NavComponent",
       components: {LoginButtonComponent, LogoutButtonComponent},
       setup() {
-      const auth0 = useAuth0();
+      const {isAuthenticated} = useAuth0();
+      const {isLoading} = useAuth0();
+      const {user} = useAuth0();
       
       return {
-        isAuthenticated: auth0.isAuthenticated,
-        isLoading: auth0.isLoading,
-        user: auth0.user,
+        isAuthenticated: isAuthenticated,
+        isLoading: isLoading,
+        user: user,
       }
     }
   }

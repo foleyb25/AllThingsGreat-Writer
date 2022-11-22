@@ -4,10 +4,11 @@
       <NavComponent></NavComponent>
     </header>
     <div class="flex flex-row">
-      <SideNavComponent v-if="isLoggedIn" class="w-1/4 hidden md:block"></SideNavComponent>
-      <SideNavDrawerComponent v-if="isLoggedIn" class="md:hidden"></SideNavDrawerComponent>
+      <SideNavComponent v-show="isAuthenticated" class="w-1/4 hidden md:block"></SideNavComponent>
+      <SideNavDrawerComponent v-show="isAuthenticated" class="md:hidden"></SideNavDrawerComponent>
       <main class="w-full max-h-screen h-screen bg-gray-50 overflow-scroll shadow-2xl">
-        <router-view class="p-4"></router-view>
+        <div v-if="isLoading">Loading</div>
+        <router-view v-else class="p-4"></router-view>
       </main>
     </div>
   </div>
@@ -28,18 +29,6 @@
         isAuthenticated: auth0.isAuthenticated,
         isLoading: auth0.isLoading,
         user: auth0.user,
-        login() {
-          auth0.loginWithRedirect({
-            appState: {
-              target: "/"
-            }
-          });
-        },
-        logout() {
-          auth0.logout({
-            returnTo: import.meta.env.VITE_AUTH0_CALLBACK_URL+"/loggedout"
-          });
-        }
       }
     }
   }

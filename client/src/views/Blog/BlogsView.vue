@@ -3,7 +3,9 @@
         <!-- <div v-for="blog in state.blogs" class="h-full w-full flex justify-center items-center">
             <a :href="'editBlog/'+blog._id"><BlogComponent :title="blog.title" :numcomments="blog.numComments" :category="blog.category" :imageUrl="blog.imageUrl" class="font-sans aspect-[14/15] w-full mt-2 mb-2 shadow-2xl"></BlogComponent></a>
         </div> -->
-        <button class="bg-blue-500" @click="logout">Log out</button>
+        Test
+        {{user}}
+        {{isAuthenticated}}
     </div>
     
 </template>
@@ -16,24 +18,14 @@
      name: "BlogsView",
      components: {BlogComponent},
       setup() {
-      const auth0 = useAuth0();
+      const {isAuthenticated} = useAuth0();
+      const {user} = useAuth0();
+      const {isLoading} = useAuth0();
       
       return {
-        isAuthenticated: auth0.isAuthenticated,
-        isLoading: auth0.isLoading,
-        user: auth0.user,
-        login() {
-          auth0.loginWithRedirect({
-            appState: {
-              target: "/"
-            }
-          });
-        },
-        logout() {
-          auth0.logout({
-            returnTo: import.meta.env.VITE_AUTH0_CALLBACK_URL+"/loggedout"
-          });
-        }
+        isAuthenticated: isAuthenticated,
+        isLoading: isLoading,
+        user: user,
       }
     }
   }

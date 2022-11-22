@@ -13,6 +13,7 @@ import SearchScreenplayView from "./views/Screenplay/SearchScreenplayView.vue";
 import ScreenplayDetailsView from "./views/Screenplay/ScreenplayDetailsView.vue";
 import LoggedOutView from "./views/LoggedOutView.vue";
 import ImageManagerView from "./views/ImageManager/ImageManagerView.vue";
+import LoadingView from "./views/Splash/LoadingView.vue";
 import MetricsView from "./views/MetricsView.vue";
 import TweetsView from "./views/TweetsView.vue";
 import AccountsView from "./views/AccountsView.vue";
@@ -65,26 +66,35 @@ const router = createRouter({
             path: "/account",
             name: "AccountView",
             component: AccountsView,
+            beforeEnter: authGuard
         },
         {
             path: "/searchscreenplay",
             name: "SearchScreenplayView",
             component: SearchScreenplayView,
+            beforeEnter: authGuard
         },
         {
             path: "/searchscreenplay/:id",
             name: "ScreenplayDetailsView",
             component: ScreenplayDetailsView,
+            beforeEnter: authGuard
         },
         {
             path: "/imagemanager",
             name: "ImageManagerView",
             component: ImageManagerView,
+            beforeEnter: authGuard
         },
         {
             path: "/loggedout",
             name: "LoggedOutView",
             component: LoggedOutView,
+        },
+        {
+            path: '/loading',
+            name: "LoadingView",
+            component: LoadingView,
         }
     ]
 })
