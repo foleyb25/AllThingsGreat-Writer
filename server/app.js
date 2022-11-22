@@ -44,6 +44,7 @@ app.use(
           'https://*.fly.dev',
           'http://localhost:8000',
           `http://localhost:${process.env.PORT}`,
+          `http://localhost:30*`
         ],
         'default-src': ["'self'"],
         'font-src': ["'self'", 'https://fonts.gstatic.com'],
@@ -72,12 +73,12 @@ app.use((req, res, next) => {
 app.use(compression()); //added the compression middleware to help compress text and JSON responses
 
 //Routes prefix
-app.use(``, require("./src/routes/blogs.route"));
-app.use(``, require("./src/routes/comments.route"));
+// app.use(``, require("./src/routes/blogs.route"));
+// app.use(``, require("./src/routes/comments.route"));
 app.use(``, require("./src/routes/screenplayreviews.route"));
 app.use(``, require("./src/routes/screenplays.route"));
-app.use(``, require("./src/routes/users.route"));
-app.use(``, require("./src/routes/watchservices.route"));
+// app.use(``, require("./src/routes/users.route"));
+// app.use(``, require("./src/routes/watchservices.route"));
 app.use(``, require("./src/routes/writers.route"));
 
 if (process.env.NODE_ENV !== 'production') {

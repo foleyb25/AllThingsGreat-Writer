@@ -28,12 +28,12 @@ const doc = {
 
 //Init Swagger
 const endpointFiles = [
-  './src/routes/blogs.route.js',
-  './src/routes/comments.route.js',
+  // './src/routes/blogs.route.js',
+  // './src/routes/comments.route.js',
   './src/routes/screenplayreviews.route.js',
   './src/routes/screenplays.route.js',
-  './src/routes/users.route.js',
-  './src/routes/watchservices.route.js',
+  // './src/routes/users.route.js',
+  // './src/routes/watchservices.route.js',
   './src/routes/writers.route.js',
 ];
 
