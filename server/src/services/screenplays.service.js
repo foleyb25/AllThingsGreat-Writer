@@ -30,24 +30,20 @@ async function getMultipleSearch(searchString, page = 1) {
     var isMorescreenplays = true;
     var noResults = false;
     var isMore = false;
-    try {
-        var screenplayList = await searchbytitle.searchbytitle(searchString, page)
-        if (!screenplayList) {
-            noResults = true 
-            isMorescreenplays = false
-        } else {
-            isMore = (screenplayList.length == 10)
-        }
+    var screenplayList = await searchbytitle.searchbytitle(searchString, page)
+    if (!screenplayList) {
+        noResults = true 
+        isMorescreenplays = false
+    } else {
+        isMore = (screenplayList.length == 10)
+    }
 
-        return {
-            screenplayList: screenplayList,
-            pageNum: page,
-            morescreenplays: screenplayList,
-            isMore: isMore,
-            noResults: noResults,
-        }
-    } catch(err) {
-        return err.message
+    return {
+        screenplayList: screenplayList,
+        pageNum: page,
+        morescreenplays: screenplayList,
+        isMore: isMore,
+        noResults: noResults,
     }
     
 }

@@ -6,45 +6,32 @@ More information on the Controller-Service relationship can be found here:
 https://www.coreycleary.me/what-is-the-difference-between-controllers-and-services-in-node-rest-apis
 */
 
+const autoCatch = require("../lib/auto_catch.lib")
+const AppError = require("../lib/app_error.lib");
+const { ERROR_400, ERROR_500, OK_CREATED } = require('../lib/constants.lib');
 const writerService = require("../services/writers.service.js")
 
     async function getAll(req,res) {
-        try {
-            const data = await writerService.getMultiple(0);
-            res.status(200).json(data);
-        } catch (err) {
-            res.status(404).json({message: err.message})
-        }
+        const data = await writerService.getMultiple(0);
+        return res.status(200).json(data);
     }
 
     async function getById(req,res) {
         const id = req.params.id;
-        try {
-            const writer = await writerService.getSingle(id)
-            res.status(200).json(writer);
-        } catch (err) {
-            res.status(404).json({ message: err.message})
-        }
+        const writer = await writerService.getSingle(id)
+        return res.status(200).json(writer);
     }
 
     async function create(req,res) {
         const writer = req.body;
-        try {
-            const status = await writerService.create(writer)
-            res.status(201).json({message: "Writer created successfully!"})
-        } catch (err) {
-            res.status(400).json({ message: err.message});
-        }
+        const status = await writerService.create(writer)
+        return res.status(201).json({message: "Writer created successfully!"})
     }
 
     async function update(req,res) {
         const newWriter = req.body
-        try {
-            const status = await writerService.update(id, newWriter)
-            res.status(200).json({message: "Writer Updated Successfully"})
-        } catch (err) {
-            res.status(404).json({message: err.message})
-        }
+        const status = await writerService.update(id, newWriter)
+        return res.status(200).json({message: "Writer Updated Successfully"})
     }
 
     // async function remove(req,res) {
@@ -57,10 +44,10 @@ const writerService = require("../services/writers.service.js")
     //     }
     // }
 
-module.exports = {
+module.exports = autoCatch({
     getAll,
     getById,
     create,
     update,
     // remove
-}
+})

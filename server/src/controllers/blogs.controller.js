@@ -6,46 +6,33 @@ More information on the Controller-Service relationship can be found here:
 https://www.coreycleary.me/what-is-the-difference-between-controllers-and-services-in-node-rest-apis
 */
 
+const autoCatch = require("../lib/auto_catch.lib")
+const AppError = require("../lib/app_error.lib");
+const { ERROR_400, ERROR_500, OK_CREATED } = require('../lib/constants.lib');
 const blogService = require("../services/blogs.service.js")
 
     async function getAll(req,res) {
-        try {
-            const data = await blogService.getMultiple(0);
-            res.status(200).json(data);
-        } catch (err) {
-            res.status(404).json({message: err.message})
-        }
+        const data = await blogService.getMultiple(0);
+        return res.status(200).json(data);
     }
 
     async function getById(req,res) {
         const id = req.params.id;
-        try {
-            const blog = await blogService.getSingle(id)
-            res.status(200).json(blog);
-        } catch (err) {
-            res.status(404).json({ message: err.message})
-        }
+        const blog = await blogService.getSingle(id)
+        return res.status(200).json(blog);
     }
 
     async function create(req,res) {
         const blog = req.body;
         const localImage = req.file(blog.imagePath)
-        try {
-            const status = await blogService.create(blog, localImage)
-            res.status(201).json({message: "Blog created successfully!"})
-        } catch (err) {
-            res.status(400).json({ message: err.message});
-        }
+        const status = await blogService.create(blog, localImage)
+        return res.status(201).json({message: "Blog created successfully!"})
     }
 
     async function update(req,res) {
         const newBlog = req.body
-        try {
-            const status = await blogService.update(id, newBlog)
-            res.status(200).json({message: "Blog Updated Successfully"})
-        } catch (err) {
-            res.status(404).json({message: err.message})
-        }
+        const status = await blogService.update(id, newBlog)
+        return res.status(200).json({message: "Blog Updated Successfully"})
     }
 
     // async function remove(req,res) {
@@ -58,10 +45,10 @@ const blogService = require("../services/blogs.service.js")
     //     }
     // }
 
-module.exports = {
+module.exports = autoCatch({
     getAll,
     getById,
     create,
     update,
     // remove
-}
+})

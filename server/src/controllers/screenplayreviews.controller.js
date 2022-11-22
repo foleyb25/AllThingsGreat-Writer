@@ -6,45 +6,32 @@ More information on the Controller-Service relationship can be found here:
 https://www.coreycleary.me/what-is-the-difference-between-controllers-and-services-in-node-rest-apis
 */
 
+const autoCatch = require("../lib/auto_catch.lib")
+const AppError = require("../lib/app_error.lib");
+const { ERROR_400, ERROR_500, OK_CREATED } = require('../lib/constants.lib');
 const screenplayreviewService = require("../services/screenplayreviews.service.js")
 
     async function getAll(req,res) {
-        try {
-            const data = await screenplayreviewService.getMultiple(0);
-            res.status(200).json(data);
-        } catch (err) {
-            res.status(404).json({message: err.message})
-        }
+        const data = await screenplayreviewService.getMultiple(0);
+        return res.status(200).json(data);
     }
 
     async function getById(req,res) {
         const id = req.params.id;
-        try {
-            const screenplayreview = await screenplayreviewService.getSingle(id)
-            res.status(200).json(screenplayreview);
-        } catch (err) {
-            res.status(404).json({ message: err.message})
-        }
+        const screenplayreview = await screenplayreviewService.getSingle(id)
+        return res.status(200).json(screenplayreview);
     }
 
     async function create(req,res) {
         const screenplayreview = req.body;
-        try {
-            const status = await screenplayreviewService.create(screenplayreview)
-            res.status(201).json({message: "screenplayreview created successfully!"})
-        } catch (err) {
-            res.status(400).json({ message: err.message});
-        }
+        const status = await screenplayreviewService.create(screenplayreview)
+        return res.status(201).json({message: "screenplayreview created successfully!"})
     }
 
     async function update(req,res) {
         const newscreenplayreview = req.body
-        try {
-            const status = await screenplayreviewService.update(id, newscreenplayreview)
-            res.status(200).json({message: "screenplayreview Updated Successfully"})
-        } catch (err) {
-            res.status(404).json({message: err.message})
-        }
+        const status = await screenplayreviewService.update(id, newscreenplayreview)
+        return res.status(200).json({message: "screenplayreview Updated Successfully"})
     }
 
     // async function remove(req,res) {
@@ -57,10 +44,10 @@ const screenplayreviewService = require("../services/screenplayreviews.service.j
     //     }
     // }
 
-module.exports = {
+module.exports = autoCatch({
     getAll,
     getById,
     create,
     update,
     // remove
-}
+})

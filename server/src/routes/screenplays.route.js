@@ -6,13 +6,13 @@ here and the router is registered for app use in app.js
 const express = require('express');
 const router = express.Router();
 const Screenplays = require("../controllers/screenplays.controller");
-const screenplays_slug = "/api/screenplays"
+const API_V2 = "/api/v2/screenplays"
 
-router.get(`${screenplays_slug}`, Screenplays.getAll)
-router.get(`${screenplays_slug}/:id`, Screenplays.getById);
-router.get(`${screenplays_slug}/search/:pageNum/:searchString`, Screenplays.searchScreenplays);
-router.post(`${screenplays_slug}`, Screenplays.create);
-router.patch(`${screenplays_slug}/:id`, Screenplays.update);
+router.get(`${API_V2}`, Screenplays.getAll)
+router.get(`${API_V2}/:id`, Screenplays.getById);
+router.get(`${API_V2}/:pageNum/:searchString`, Screenplays.searchScreenplays);
+router.post(`${API_V2}`, Screenplays.create);
+router.patch(`${API_V2}/:id`, Screenplays.update);
 // router.delete(`${screenplays_slug}:id`, Screenplays.remove);
 
 module.exports = router;

@@ -45,7 +45,7 @@ export default {
             }
             try {
                 this.loading = true
-                const res = await Axios.get(`http://localhost:5002/api/screenplays/search/${this.pageNum}/${this.searchString}`)
+                const res = await Axios.get(`http://localhost:5002/api/v2/screenplays/${this.pageNum}/${this.searchString}`)
                 this.loading = false
                 this.morescreenplays = res.data.morescreenplays
                 if (this.screenplayList!=undefined) {
