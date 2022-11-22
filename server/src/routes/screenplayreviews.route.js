@@ -6,12 +6,12 @@ here and the router is registered for app use in app.js
 const express = require('express');
 const router = express.Router();
 const Screenplayreview = require("../controllers/screenplayreviews.controller");
-const screenplayreview_slug = "/api/screenplayreviews/"
+const API_V2 = "/api/v2/screenplayreviews"
 
-router.get(`${screenplayreview_slug}`, Screenplayreview.getAll)
-router.get(`${screenplayreview_slug}:id`, Screenplayreview.getById);
-router.post(`${screenplayreview_slug}`, Screenplayreview.create);
-router.patch(`${screenplayreview_slug}:id`, Screenplayreview.update);
+router.get(`${API_V2}`, Screenplayreview.getAll)
+router.get(`${API_V2}/:id`, Screenplayreview.getById);
+router.post(`${API_V2}`, Screenplayreview.create);
+router.patch(`${API_V2}/:id`, Screenplayreview.update);
 // router.delete(`${screenplayreview_slug}:id`, Screenplayreview.remove);
 
 module.exports = router;

@@ -6,45 +6,32 @@ More information on the Controller-Service relationship can be found here:
 https://www.coreycleary.me/what-is-the-difference-between-controllers-and-services-in-node-rest-apis
 */
 
+const autoCatch = require("../lib/auto_catch.lib")
+const AppError = require("../lib/app_error.lib");
+const { ERROR_400, ERROR_500, OK_CREATED } = require('../lib/constants.lib');
 const userService = require("../services/users.service.js")
 
     async function getAll(req,res) {
-        try {
-            const data = await userService.getMultiple(0);
-            res.status(200).json(data);
-        } catch (err) {
-            res.status(404).json({message: err.message})
-        }
+        const data = await userService.getMultiple(0);
+        return res.status(200).json(data);
     }
 
     async function getById(req,res) {
         const id = req.params.id;
-        try {
-            const user = await userService.getSingle(id)
-            res.status(200).json(user);
-        } catch (err) {
-            res.status(404).json({ message: err.message})
-        }
+        const user = await userService.getSingle(id)
+        return res.status(200).json(user);
     }
 
     async function create(req,res) {
         const user = req.body;
-        try {
-            const status = await userService.create(user)
-            res.status(201).json({message: "user created successfully!"})
-        } catch (err) {
-            res.status(400).json({ message: err.message});
-        }
+        const status = await userService.create(user)
+        return res.status(201).json({message: "user created successfully!"})
     }
 
     async function update(req,res) {
         const newuser = req.body
-        try {
-            const status = await userService.update(id, newuser)
-            res.status(200).json({message: "user Updated Successfully"})
-        } catch (err) {
-            res.status(404).json({message: err.message})
-        }
+        const status = await userService.update(id, newuser)
+        return res.status(200).json({message: "user Updated Successfully"})
     }
 
     // async function remove(req,res) {
@@ -57,10 +44,10 @@ const userService = require("../services/users.service.js")
     //     }
     // }
 
-module.exports = {
+module.exports = autoCatch({
     getAll,
     getById,
     create,
     update,
     // remove
-}
+})

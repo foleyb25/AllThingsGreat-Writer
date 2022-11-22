@@ -6,56 +6,39 @@ More information on the Controller-Service relationship can be found here:
 https://www.coreycleary.me/what-is-the-difference-between-controllers-and-services-in-node-rest-apis
 */
 
+const autoCatch = require("../lib/auto_catch.lib")
+const AppError = require("../lib/app_error.lib");
+const { ERROR_400, ERROR_500, OK_CREATED } = require('../lib/constants.lib');
 const screenplayService = require("../services/screenplays.service.js")
 
     async function getAll(req,res) {
-        try {
-            const data = await screenplayService.getMultiple(0);
-            res.status(200).json(data);
-        } catch (err) {
-            res.status(404).json({message: err.message})
-        }
+        const data = await screenplayService.getMultiple(0);
+        return res.status(200).json(data);
     }
 
     async function getById(req,res) {
         const id = req.params.id;
-        try {
-            const screenplay = await screenplayService.getSingle(id)
-            res.status(200).json(screenplay);
-        } catch (err) {
-            res.status(404).json({ message: err.message})
-        }
+        const screenplay = await screenplayService.getSingle(id)
+        return res.status(200).json(screenplay);
     }
 
     async function searchScreenplays(req, res) {
         const pageNum = req.params.pageNum
         const searchString = req.params.searchString
-        try {
-            const screenplays = await screenplayService.getMultipleSearch(searchString, pageNum)
-            res.status(200).json(screenplays)
-        } catch (err) {
-            res.status(404).json({message: err.message})
-        }
+        const screenplays = await screenplayService.getMultipleSearch(searchString, pageNum)
+        return res.status(200).json(screenplays)
     }
 
     async function create(req,res) {
         const screenplay = req.body;
-        try {
-            const status = await screenplayService.create(screenplay)
-            res.status(201).json({message: "screenplay created successfully!"})
-        } catch (err) {
-            res.status(400).json({ message: err.message});
-        }
+        const status = await screenplayService.create(screenplay)
+        return res.status(201).json({message: "screenplay created successfully!"})
     }
 
     async function update(req,res) {
         const newscreenplay = req.body
-        try {
-            const status = await screenplayService.update(id, newscreenplay)
-            res.status(200).json({message: "screenplay Updated Successfully"})
-        } catch (err) {
-            res.status(404).json({message: err.message})
-        }
+        const status = await screenplayService.update(id, newscreenplay)
+        return res.status(200).json({message: "screenplay Updated Successfully"})
     }
 
     // async function remove(req,res) {
@@ -68,11 +51,11 @@ const screenplayService = require("../services/screenplays.service.js")
     //     }
     // }
 
-module.exports = {
+module.exports = autoCatch({
     getAll,
     getById,
     create,
     update,
     searchScreenplays,
     // remove
-}
+})
