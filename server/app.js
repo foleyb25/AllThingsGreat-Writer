@@ -12,11 +12,12 @@ const rateLimit = require('express-rate-limit');
 const AppError = require('./src/lib/app_error.lib');
 const globalErrorHandler = require('./src/controllers/error.controller');
 const { ERROR_404 } = require('./src/lib/constants.lib');
-const swagger_output_file = require('./swagger-output.json');
 const swaggerUI = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc')
+const {API_V2} = require("./src/lib/constants.lib")
 
 const app = express();
-dotenv.config({ path: './server/.env' }); //load environment variables
+dotenv.config({ path: './.env' }); //load environment variables
 app.enable('trust proxy');
 //middleware
 app.use(cors());
@@ -75,15 +76,27 @@ app.use(compression()); //added the compression middleware to help compress text
 //Routes prefix
 // app.use(``, require("./src/routes/blogs.route"));
 // app.use(``, require("./src/routes/comments.route"));
-app.use(``, require("./src/routes/screenplayreviews.route"));
-app.use(``, require("./src/routes/screenplays.route"));
+app.use(`${API_V2}/screenplayreviews`, require("./src/routes/screenplayreviews.route"));
+app.use(`${API_V2}/screenplays`, require("./src/routes/screenplays.route"));
 // app.use(``, require("./src/routes/users.route"));
 // app.use(``, require("./src/routes/watchservices.route"));
-app.use(``, require("./src/routes/writers.route"));
+app.use(`${API_V2}/writers`, require("./src/routes/writers.route"));
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    info: {
+      title: "All Things Great API",
+      version: "1.0.0",
+    }
+  },
+  apis: ["./src/controllers/*.controller.js"]
+}
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions)
 
 if (process.env.NODE_ENV !== 'production') {
     app.use(morgan('dev')); //using the morgan logging middleware for development
-    app.use('/swagger', swaggerUI.serve, swaggerUI.setup(swagger_output_file));
+    app.use('/swagger', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
   }
   if (process.env.NODE_ENV !== 'test') {
     const { createLogger } = require('./src/lib/logger.lib');

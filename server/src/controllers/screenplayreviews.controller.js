@@ -11,6 +11,19 @@ const AppError = require("../lib/app_error.lib");
 const { ERROR_400, ERROR_500, OK_CREATED } = require('../lib/constants.lib');
 const screenplayreviewService = require("../services/screenplayreviews.service.js")
 
+    /**
+     * @swagger
+     * /api/v2/screenplayreviews:
+     *  get:
+     *      summary: Get all screenplay reviews
+     *      description: Get all screenplay reviews from Database
+     *      responses:
+     *          200:
+     *              description: OK
+     *              content:
+     *                  application/json
+     * 
+     */
     async function getAll(req,res) {
         const data = await screenplayreviewService.getMultiple(0);
         return res.status(200).json(data);
