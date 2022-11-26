@@ -1,9 +1,9 @@
 <template>
-    <div class="flex flex-col">
-        <div class="h-[47%] w-full relative overflow-hidden">
-            <img class="h-full w-full object-fill" :src="props.imageUrl" alt="">
+     <div class="aspect-[14/15] bg-blue-300 border border-black w-1/3">
+        <div class="h-[62%] w-full relative overflow-hidden">
+            <img class="h-full w-full object-cover" :src="props.imageUrl" alt="">
         </div>
-        <div class="p-3 h-[53%]">
+        <div class="p-3 h-[60%]"> 
             <div class="h-[65%] font-semibold p-1">
                 {{props.title}}
             </div>

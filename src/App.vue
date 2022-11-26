@@ -33,7 +33,6 @@
         isAuthenticated: auth0.isAuthenticated,
         isLoading: auth0.isLoading,
         user: auth0.user,
-
       }
     }
   }

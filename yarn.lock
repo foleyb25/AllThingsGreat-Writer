@@ -283,6 +283,11 @@
   "resolved" "https://registry.npmjs.org/ckeditor4-integrations-common/-/ckeditor4-integrations-common-1.0.0.tgz"
   "version" "1.0.0"
 
+"classnames@^2.2.6":
+  "integrity" "sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw=="
+  "resolved" "https://registry.npmjs.org/classnames/-/classnames-2.3.2.tgz"
+  "version" "2.3.2"
+
 "color-name@^1.1.4":
   "integrity" "sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA=="
   "resolved" "https://registry.npmjs.org/color-name/-/color-name-1.1.4.tgz"
@@ -309,6 +314,11 @@
   "integrity" "sha512-Z1PhmomIfypOpoMjRQB70jfvy/wxT50qW08YXO5lMIJkrdq4yOTR+AW7FqutScmB9NkLwxo+jU+kZLbofZZq/w=="
   "resolved" "https://registry.npmjs.org/csstype/-/csstype-2.6.21.tgz"
   "version" "2.6.21"
+
+"debounce@^1.2.0":
+  "integrity" "sha512-XRRe6Glud4rd/ZGQfiV1ruXSfbvfJedlV9Y6zOlP+2K04vBYiJEte6stfFkCP03aMnY5tsipamumUjL14fofug=="
+  "resolved" "https://registry.npmjs.org/debounce/-/debounce-1.2.1.tgz"
+  "version" "1.2.1"
 
 "defined@^1.0.0":
   "integrity" "sha512-hsBd2qSVCRE+5PmNdHt1uzyrFu5d3RwmFDKzyNZMFq/EwDNJF7Ee5+D5oEKF0hU6LhtoUF1macFvOe4AskQC1Q=="
@@ -343,6 +353,11 @@
   "integrity" "sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ=="
   "resolved" "https://registry.npmjs.org/dotenv/-/dotenv-16.0.3.tgz"
   "version" "16.0.3"
+
+"easy-bem@^1.0.2":
+  "integrity" "sha512-GJRqdiy2h+EXy6a8E6R+ubmqUM08BK0FWNq41k24fup6045biQ8NXxoXimiwegMQvFFV3t1emADdGNL1TlS61A=="
+  "resolved" "https://registry.npmjs.org/easy-bem/-/easy-bem-1.1.1.tgz"
+  "version" "1.1.1"
 
 "electron-to-chromium@^1.4.251":
   "integrity" "sha512-M8WEXFuKXMYMVr45fo8mq0wUrrJHheiKZf6BArTKk9ZBYCKJEOU5H8cdWgDT+qCVZf7Na4lVUaZsA+h6uA9+PA=="
@@ -453,6 +468,11 @@
   "integrity" "sha512-MhLuK+2gUcnZe8ZHlaaINnQLl0xRIGRfcGk2yl8xoQAfHrSsL3rYu6FCmBdkdbhc9EPlwyGHewaRsvwRMJtAlA=="
   "resolved" "https://registry.npmjs.org/fraction.js/-/fraction.js-4.2.0.tgz"
   "version" "4.2.0"
+
+"fs@^0.0.1-security":
+  "integrity" "sha512-3XY9e1pP0CVEUCdj5BmfIZxRBTSDycnbqhIOGec9QYtmVH2fbLpj86CFWkrNOkt/Fvty4KZG5lTglL9j/gJ87w=="
+  "resolved" "https://registry.npmjs.org/fs/-/fs-0.0.1-security.tgz"
+  "version" "0.0.1-security"
 
 "fsevents@~2.3.2":
   "integrity" "sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA=="
@@ -830,6 +850,15 @@
   optionalDependencies:
     "fsevents" "~2.3.2"
 
+"vue-advanced-cropper@^2.8.6":
+  "integrity" "sha512-R1vkXG/Vam3OEd3vMJsVSJkXUc9ejM9l/NzPcPvkyzKGHwF69c2v1lh2Kqj2A5MCqrTmk76bmzmWFuYj+AcwmA=="
+  "resolved" "https://registry.npmjs.org/vue-advanced-cropper/-/vue-advanced-cropper-2.8.6.tgz"
+  "version" "2.8.6"
+  dependencies:
+    "classnames" "^2.2.6"
+    "debounce" "^1.2.0"
+    "easy-bem" "^1.0.2"
+
 "vue-router@^4.0.12", "vue-router@^4.1.6":
   "integrity" "sha512-DYWYwsG6xNPmLq/FmZn8Ip+qrhFEzA14EI12MsMgVxvHFDYvlr4NXpVF5hrRH1wVcDP8fGi5F4rxuJSl8/r+EQ=="
   "resolved" "https://registry.npmjs.org/vue-router/-/vue-router-4.1.6.tgz"
@@ -837,7 +866,12 @@
   dependencies:
     "@vue/devtools-api" "^6.4.5"
 
-"vue@^3.2.0", "vue@^3.2.25", "vue@^3.2.30", "vue@^3.2.35", "vue@^3.2.41", "vue@3.2.41":
+"vue-upload-drop-images@^1.0.7":
+  "integrity" "sha512-O1G+iy0oTK9EaD6XHI5vjZQzdy+PeVCui7ty5Ja8ipw3bBWcY1o5+7JxofMZSXPQbr++Go0hWHtyb7xwQZOpQA=="
+  "resolved" "https://registry.npmjs.org/vue-upload-drop-images/-/vue-upload-drop-images-1.0.7.tgz"
+  "version" "1.0.7"
+
+"vue@^3.0.0", "vue@^3.2.0", "vue@^3.2.25", "vue@^3.2.30", "vue@^3.2.35", "vue@^3.2.41", "vue@3.2.41":
   "integrity" "sha512-uuuvnrDXEeZ9VUPljgHkqB5IaVO8SxhPpqF2eWOukVrBnRBx2THPSGQBnVRt0GrIG1gvCmFXMGbd7FqcT1ixNQ=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-3.2.41.tgz"
   "version" "3.2.41"
