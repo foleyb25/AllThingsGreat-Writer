@@ -1,7 +1,6 @@
 <template>
-    <div class="main">
       <div
-        class="dropzone-container"
+        class="dropzone-container w-[90%] h-[200px] bg-gray-200 rounded-md border-2 border-black border-dotted flex flex-col justify-center items-center"
         @dragover="dragover"
         @dragleave="dragleave"
         @drop="drop"
@@ -21,11 +20,8 @@
           <div v-if="isDragging">Release to drop files here.</div>
           <div v-else>Drop file here or <u>click here</u> to upload.</div>
         </label>
-        {{isDragging}}
-        {{filename}}
 
       </div>
-    </div>
   </template>
   
   <script>
@@ -33,17 +29,15 @@
     data() {
       return {
         isDragging: false,
-        file: "",
-        filename: ""
       };
     },
 
 
     methods: {
       onChange() {
-        this.file = this.$refs.file.files[0];
-        this.filename = this.file.name
-        this.$emit(this.filename, "fileSelected")
+        const file = this.$refs.file.files[0];
+        const filePath = window.URL.createObjectURL(file)
+        this.$emit("fileSelected", {path: filePath, name:file.name})
 
       },
       dragover(e) {

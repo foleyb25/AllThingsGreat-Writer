@@ -22,7 +22,7 @@
         </div>
         <div>
             <label for="img" class="block m-2 text-sm font-medium text-gray-900 dark:text-gray-300">Article Thumbnail Preview</label>
-            <ArticleComponent :title="title" numcomments="XX" :category="category" :imageUrl="imagePath"></ArticleComponent>
+            <ArticleComponent class="border border-black rounded-md " :title="title" numcomments="XX" :category="category" :imageUrl="imagePath"></ArticleComponent>
         </div>
         <div class="mt-4">
             <input :v-on="imagePath" type="file" @change="onFileChange">
@@ -65,7 +65,7 @@ export default {
             category: this.article ? this.article.category : "AllThingsGreat",
             isDisabled: this.article ? false : true,
             btnText: this.article ? "Update" : "Create",
-            imagePath: this.article ? this.article.imageUrl : "/src/assets/images/missing_img.jpeg"
+            imagePath: this.article ? this.article.imageUrl : "/src/assets/images/1669432796163-181228722+missing_img.jpeg"
 
         }
     },
