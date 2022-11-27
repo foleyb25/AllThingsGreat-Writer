@@ -7,10 +7,6 @@ export default defineConfig( ({command, mode}) => {
 
   return {
     plugins: [vue()],
-    server: {
-      port: env.VITE_PORT,
-      // proxy: "http://localhost:3001"
-    }
   }
   
 })
