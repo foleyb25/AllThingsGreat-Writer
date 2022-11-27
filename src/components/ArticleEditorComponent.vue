@@ -86,11 +86,7 @@ export default {
         },
 
         async handleSubmit(e) {
-            try {
-                const res = await Axios.post("http://localhost:8080/api/articles", {title: this.title, bodyHTML: this.editorData, category: this.category, imagePath: this.imagePath}, {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
-            } catch(err) {
-                console.log(err)
-            }
+            
             
         
         },

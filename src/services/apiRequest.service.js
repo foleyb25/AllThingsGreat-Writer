@@ -21,6 +21,7 @@ export const getPublicResource = async () => {
   };
 };
 
+
 export const imageUploader = async (getAccessTokenSilently, blob, imageName) => {
   return new Promise((resolve, reject) => {
     //we could use some compression
