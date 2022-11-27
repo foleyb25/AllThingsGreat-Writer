@@ -8,11 +8,13 @@
     <div class="flex flex-row">
       <SideNavComponent v-show="isAuthenticated" class="w-1/4 hidden md:block"></SideNavComponent>
       <SideNavDrawerComponent v-show="isAuthenticated" class="md:hidden"></SideNavDrawerComponent>
+      
+     
       <main class="w-full max-h-screen h-screen bg-gray-100 overflow-scroll shadow-2xl">
         <div v-if="isLoading && isAuthenticated">Loading {{isLoading}}</div>
-        
-        <router-view v-else class="p-4"></router-view>
+          <router-view v-else class="p-4"></router-view>
       </main>
+    
     </div>
   </div>
 </template>
