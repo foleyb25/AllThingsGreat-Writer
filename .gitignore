@@ -26,3 +26,4 @@ dist-ssr
 # Images
 sample_images
 
+.env
