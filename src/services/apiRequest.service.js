@@ -4,24 +4,6 @@ import Compressor from "compressorjs"
 
 const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
 
-export const getPublicResource = async () => {
-  const config = {
-    url: `${apiServerUrl}/api/messages/public`,
-    method: "GET",
-    headers: {
-      "content-type": "application/json",
-    },
-  };
-
-  const { data, error } = await callExternalApi({ config });
-
-  return {
-    data: data || null,
-    error,
-  };
-};
-
-
 export const imageUploader = async (getAccessTokenSilently, blob, imageName) => {
   return new Promise((resolve, reject) => {
     //we could use some compression
@@ -47,19 +29,31 @@ export const imageUploader = async (getAccessTokenSilently, blob, imageName) => 
           reject(err)
         })
       },
-
-      
-
       error(err) {
         reject(err)
       }
     })
   })
-  
-  
-
-
-  
-  
-
 };
+
+export const getImageUrls = async (getAccessTokenSilently) => {
+  return new Promise((resolve, reject) => {
+      
+        getAccessTokenSilently()
+          .then( (token) => {
+            axios.get(`${apiServerUrl}/api/v2/articles/getImageUrls/12345`, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+              },
+            }).then((data) => {
+              resolve(data)
+            }).catch((err) => {
+              reject(err)
+            })
+        }).catch( (err) => {
+          console.log(err)
+        })
+        
+    })
+}

@@ -30,7 +30,6 @@
 <script>
 import {Cropper, Preview} from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
-import axios from "axios"
 import { useAuth0 } from "@auth0/auth0-vue";
 import { defineComponent, ref, reactive} from "vue"
 import DropFile from "../../components/ImageManager/DropFile.vue"
@@ -96,7 +95,6 @@ export default defineComponent({
             } catch (error) {
                 console.log(error)
             }
-            
         }
 
         

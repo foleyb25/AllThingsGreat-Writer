@@ -25,7 +25,7 @@
             <ArticleComponent class="border border-black rounded-md " :title="title" numcomments="XX" :category="category" :imageUrl="imagePath"></ArticleComponent>
         </div>
         <div class="mt-4">
-            <input :v-on="imagePath" type="file" @change="onFileChange">
+            <input :v-on="imagePath" @click.native.prevent="handleGetAwsImages" type="file" @change="onFileChange">
         </div>
         <div class="mt-4">
             <button v-if="!article" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25" :disabled="isDisabled" @click="handleSubmit()">Create</button>
@@ -37,17 +37,28 @@
         <div class="bg-white">
             <span v-html="editorData"></span>
         </div>
+
+         <!-- Modal component -->
+         <transition name="modal">
+            <ImagePickerModalComponent v-if="showModal" v-model:imageUrls="awsImageUrls" @close-modal="showModal = false" @select-image="selectImage"/>
+         </transition>
+       
     </div>
 </template>
 
 <script>
 import Axios from 'axios'
 import ArticleComponent from "../components/ArticleComponent.vue"
+import ImagePickerModalComponent from "./article/ImagePickerModalComponent.vue"
+import { useAuth0 } from '@auth0/auth0-vue';
+import { getImageUrls } from "../services/apiRequest.service";
+import { defineComponent } from 'vue';
 
-export default {
+export default defineComponent({
     name: 'ArticleEditComponent',
     props: ['article'],
-    components: {ArticleComponent},
+    components: {ArticleComponent, ImagePickerModalComponent},
+
     data() {
         return {
             editorConfig: {
@@ -65,39 +76,75 @@ export default {
             category: this.article ? this.article.category : "AllThingsGreat",
             isDisabled: this.article ? false : true,
             btnText: this.article ? "Update" : "Create",
-            imagePath: this.article ? this.article.imageUrl : "/src/assets/images/1669432796163-181228722+missing_img.jpeg"
-
+            imagePath: this.article ? this.article.imageUrl : "/src/assets/images/1669432796163-181228722+missing_img.jpeg",
+            awsImageUrls: [],
+            accessToken: useAuth0().getAccessTokenSilently,
+            showModal: false
         }
     },
 
     methods: {
         onFileChange(e) {
-            const file = e.target.files[0];
-            const filename = file.name;
-            const extension = filename.split(".").pop()
+            
+        },
 
-            if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'gif' || extension.toLowerCase() == 'jpeg') {
-                this.imagePath = window.URL.createObjectURL(file)
-                this.isDisabled = false
-                return true
-            } else {
-                return false
-            }  
+        handleGetAwsImages(e) {
+            if(this.awsImageUrls.length > 0) {
+                this.showModal = true
+                return
+            }
+            getImageUrls(this.accessToken)
+            .then((result) => {
+                if(result.status >= 200 && result.status < 300)
+                    console.log(result)
+                    this.awsImageUrls = result.data
+                    this.showModal = true
+            }).catch( (err) => {
+                console.log(err)
+            })
         },
 
         async handleSubmit(e) {
-            
-            
         
         },
 
         async handleUpdate(e) {
             console.log("update")
+        },
+
+        selectImage(url) {
+            this.imagePath = url
+            this.isDisabled = false
         }
     },
 
     mounted() {
         console.log("Article Editor Component Mounted")
     }
-}
+})
 </script>
+
+<style scoped>
+    .modal-enter {
+    /* Define the starting state for the enter transition */
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  .modal-enter-active {
+    /* Define the ending state for the enter transition */
+    transform: scale(1);
+    opacity: 1;
+    transition: all 0.3s ease-out;
+  }
+  .modal-leave {
+    /* Define the starting state for the leave transition */
+    transform: scale(1);
+    opacity: 1;
+  }
+  .modal-leave-active {
+    /* Define the ending state for the leave transition */
+    transform: scale(0.9);
+    opacity: 0;
+    transition: all 0.3s ease-out;
+  }
+</style>
