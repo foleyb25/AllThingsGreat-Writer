@@ -63,13 +63,13 @@ npm install
 ---
 
 ### 4. Run on your localhost
-```
+```bash
 npm run start:dev
 ```
 
 ### 5. Create a .env file
 #### Create the .env file in the root of the repository
-```
+```bash
 touch .env
 ```
 #### Copy the following contents into your .env file
@@ -86,8 +86,8 @@ VITE_ENV=
 
 You can follow the [vueJS Auth0 Guide](https://developer.auth0.com/resources/guides/spa/vue/basic-authentication?_ga=2.206481627.994626085.1671747367-310607164.1670727635&_gl=1*rhesnb*rollup_ga*MzEwNjA3MTY0LjE2NzA3Mjc2MzU.*rollup_ga_F1G3E656YZ*MTY3MTc0NzM2Ny4yLjAuMTY3MTc0NzM2Ny42MC4wLjA.) to determine the VITE_AUTH0... variables above.
 
-The VITE_API_SERVER_URL_PROD is reserved for the production url such as fly.io or heroku url.
+The VITE_API_SERVER_URL_PROD is reserved for the production url where the API is ran such as fly.io or heroku url.
 
-The VITE_API_SERVER_URL_DEV is reserved for your localhost url. For example, http://localhost:8080
+The VITE_API_SERVER_URL_DEV is reserved for where your API is running in a development environment. For example: localhost:8080
 
 The VITE_ENV can be either 'production' or 'development'. If working in a development or sandbox environment use development. If pushing to a live server, use development

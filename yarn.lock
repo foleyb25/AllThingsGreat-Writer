@@ -889,11 +889,6 @@
   dependencies:
     "@vue/devtools-api" "^6.4.5"
 
-"vue-upload-drop-images@^1.0.7":
-  "integrity" "sha512-O1G+iy0oTK9EaD6XHI5vjZQzdy+PeVCui7ty5Ja8ipw3bBWcY1o5+7JxofMZSXPQbr++Go0hWHtyb7xwQZOpQA=="
-  "resolved" "https://registry.npmjs.org/vue-upload-drop-images/-/vue-upload-drop-images-1.0.7.tgz"
-  "version" "1.0.7"
-
 "vue@^3.0.0", "vue@^3.2.0", "vue@^3.2.25", "vue@^3.2.30", "vue@^3.2.35", "vue@^3.2.41", "vue@3.2.41":
   "integrity" "sha512-uuuvnrDXEeZ9VUPljgHkqB5IaVO8SxhPpqF2eWOukVrBnRBx2THPSGQBnVRt0GrIG1gvCmFXMGbd7FqcT1ixNQ=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-3.2.41.tgz"
