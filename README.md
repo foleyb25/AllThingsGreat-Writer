@@ -16,7 +16,7 @@ Currently, the application is going through a complete revamp ranging from the f
 
 This is one of two front-end applications that communicate with our API. The front end applications consist of a user-side (what the public user engages with) and a writer-side (what a selected authenticated writer interacts with). This is the writer-side application. Writer's are able to read blogs, explore reviews, comment on blogs, and rate blogs.
 
-All Things Great is written in VueJS. It uses Vite as a build tool and Tailwind for styling.
+All Things Great front-end applications are written in VueJS. They use Vite as a build tool and Tailwind for styling.
 
 ## Dependencies
 All Things Great API
