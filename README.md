@@ -7,8 +7,6 @@ All Things Great is a place where people go to escape the the BS of the Main Str
 
 We indulge in locker room talk and walk on the hot coals of twisted humor. Covering sports, achievements, history, entertainment, and topics that make up of greatness - with our own unique tone behind it.
 
-This is a place where, unapologetically, guys can be dudes and girls can be chicks.
-
 This is the All Things Great experience.
 
 ## Application
