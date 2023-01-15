@@ -1,7 +1,7 @@
 <template>
-     <div class="aspect-[14/15] bg-blue-300 w-1/3 ">
+     <div class="aspect-[14/15] bg-white shadow-xl rounded border border-black">
         <div class="h-[62%] w-full relative overflow-hidden">
-            <img class="h-full w-full object-cover rounded-md" :src="props.imageUrl" alt="">
+            <img class="h-full w-full object-cover rounded-t" :src="props.imageUrl" alt="">
         </div>
         <div class="p-3 h-[60%]"> 
             <div class="text-xs sm:text-sm md:text-md lg:text-lg break-words line-clamp-3 font-semibold p-1">

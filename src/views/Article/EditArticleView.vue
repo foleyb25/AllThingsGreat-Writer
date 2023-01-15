@@ -1,32 +1,26 @@
 <template>
-    <ArticleEditorComponent v-if=article :article="article"></ArticleEditorComponent>
+    <ArticleEditorComponent v-if="state.article" :article="state.article"></ArticleEditorComponent>
 </template>
 
-<script>
+<script setup>
+import { reactive, onMounted } from 'vue'
+import { useRoute } from 'vue-router';
 import ArticleEditorComponent from '../../components/ArticleEditorComponent.vue'
-import Axios from 'axios'
-export default {
-    name: 'EditArticleView',
-    components: {ArticleEditorComponent},
-    data() {
-        return {
-            article: undefined
-        }
-    },
+import { getSingleArticle } from '../../services/apiRequest.service';
 
-    async created() {
-        this.article = await Axios.get("http://localhost:8080/api/articles/"+this.$route.params.id).then((respone) => {
-            console.log("Article returned from API")
-            return respone.data
-            
-        })
-    }
+const props = defineProps(['id'])
 
-}
-
-            
+const state = reactive({
+    article: null
+})
 
 
+onMounted(async () => {
+    console.log(props.id)
+    const response = await getSingleArticle(props.id)
+    state.article = response.data
+    console.log(state.article)
+})
 </script>
 
 

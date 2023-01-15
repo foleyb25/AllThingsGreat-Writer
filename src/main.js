@@ -41,6 +41,7 @@ const router = createRouter({
             path: "/editArticle/:id",
             name: "EditArticleView",
             component: EditArticleView,
+            props: true,
             beforeEnter: authGuard
         },
         {

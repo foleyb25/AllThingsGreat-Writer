@@ -1,4 +1,3 @@
-import { callExternalApi } from "./api.service";
 import axios from "axios"
 import Compressor from "compressorjs"
 
@@ -55,5 +54,55 @@ export const getImageUrls = async (getAccessTokenSilently) => {
           console.log(err)
         })
         
+    })
+}
+
+export const createNewArticle = async (getAccessTokenSilently, formData) => {
+  return new Promise((resolve, reject) => {
+        getAccessTokenSilently()
+          .then( (token) => {
+            axios.post(`${apiServerUrl}/api/v2/articles/create`, formData, {
+              "Content-Type": "multipart/form-data",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }).then((data) => {
+              resolve(data)
+            }).catch((err) => {
+              reject(err)
+            })
+        }).catch( (err) => {
+          console.log(err)
+        })
+    })
+}
+
+export const getArticlesByUserId = async (getAccessTokenSilently, userId) => {
+  return new Promise((resolve, reject) => {
+        getAccessTokenSilently()
+          .then( (token) => {
+            axios.get(`${apiServerUrl}/api/v2/articles/user/${userId}`, {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }).then((data) => {
+              resolve(data)
+            }).catch((err) => {
+              reject(err)
+            })
+        }).catch( (err) => {
+          console.log(err)
+        })
+    })
+}
+
+export const getSingleArticle = async (articleId) => {
+  return new Promise((resolve, reject) => {
+      axios.get(`${apiServerUrl}/api/v2/articles/${articleId}`, {
+      }).then((data) => {
+        resolve(data)
+      }).catch((err) => {
+        reject(err)
+      })
     })
 }
