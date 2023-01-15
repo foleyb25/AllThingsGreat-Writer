@@ -29,12 +29,13 @@
         <div class="mt-4">
             <input :v-on="state.imagePath" @click.prevent="handleGetAwsImages" type="file" @change="onFileChange">
         </div>
-        <div class="mt-4">
+        <div v-if="error">Error: {{error}}</div>
+        <div v-if="!loading" class="mt-4 flex flex-row">
             <button v-if="!props.article" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25" :disabled="state.isDisabled" @click="handleSubmit()">Create</button>
-        </div>
-        <div class="mt-4">
             <button v-if="props.article" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25" :disabled="state.isDisabled" @click="handleUpdate()">Update</button>
+            <button class=" ml-8 bg-yellow-200 hover:bg-yellow-400 text-black font-bold py-2 px-4 border border-yellow-400 rounded disabled:opacity-25" @click="handleSaveDraft">Save Draft</button>
         </div>
+        
         <label for="img" class="block m-2 mt-20 text-sm font-medium text-gray-900 dark:text-gray-300">Article Preview</label>
         <div class="bg-white">
             <span v-html="state.editorData"></span>
@@ -49,12 +50,16 @@
 </template>
 
 <script setup> 
-import Axios from 'axios'
 import ArticleComponent from "../components/ArticleComponent.vue"
 import ImagePickerModalComponent from "./article/ImagePickerModalComponent.vue"
 import { useAuth0 } from '@auth0/auth0-vue';
-import { getImageUrls, createNewArticle } from "../services/apiRequest.service";
+import { getImageUrls, createNewArticle} from "../services/apiRequest.service";
 import { reactive } from 'vue';
+import { storeToRefs } from 'pinia'
+import { useWriterStore } from '../stores/writerStore'
+
+const {error, loading } = storeToRefs(useWriterStore())
+const { saveDraft } = useWriterStore()
 
 const props = defineProps(['article'])
 
@@ -69,7 +74,7 @@ const state = reactive({
         height: "400px",
         allowedContent: true,
     },
-    editorData: props.article ? props.article.bodyHTML : "<p>Write your masterpiece...",
+    editorData: props.article ? props.article.bodyHTML : "<p>Write your masterpiece...</p>",
     title: props.article ? props.article.title : "",
     moods: [],
     tags: [],
@@ -117,12 +122,26 @@ const handleSubmit = async () => {
     }
     
     createNewArticle(state.accessToken, formdata)
+    console.log(useAuth0())
     .then( (res) => {
         console.log(res.data)
     }).catch( (err) => {
         console.log(err)
     })
 
+}
+
+const handleSaveDraft = async (e) => {
+    //Patch request
+    const body = {
+        title: state.title,
+        bodyHTML: state.editorData,
+        imageUrl: state.imagePath,
+        category: state.category,
+        tags: state.tags,
+        moods: state.moods
+    }
+    const response = await saveDraft(body)
 }
 
 const handleUpdate = async (e) => {

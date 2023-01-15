@@ -18,8 +18,9 @@ import MetricsView from "./views/MetricsView.vue";
 import TweetsView from "./views/TweetsView.vue";
 import AccountsView from "./views/AccountsView.vue";
 import CKEditor from '@mayasabha/ckeditor4-vue3'
-import { createAuth0 } from '@auth0/auth0-vue'
+import {auth0} from './auth0'
 import { authGuard } from "@auth0/auth0-vue";
+import { createPinia } from 'pinia'
 
 const router = createRouter({
 
@@ -93,17 +94,16 @@ const router = createRouter({
         }
     ]
 })
+
+router.beforeEach( (to, from) => {
+
+})
+
 createApp(App)
     .use(router)
+    .use(createPinia())
+    .use(auth0)
     .use(CKEditor)
-    .use(
-        createAuth0({
-            domain: import.meta.env.VITE_AUTH0_DOMAIN,
-            client_id: import.meta.env.VITE_AUTH0_CLIENT_ID,
-            redirect_uri: import.meta.env.VITE_AUTH0_CALLBACK_URL,
-            audience: import.meta.env.VITE_AUTH0_AUDIENCE
-        })
-    )
     .component('NavComponent', NavComponent)
     .component("SideNavComponent", SideNavComponent)
     .component("SideNavDrawerComponent", SideNavDrawerComponent)
