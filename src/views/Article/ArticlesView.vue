@@ -1,6 +1,6 @@
 <template>
     <div class="grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-        <div v-for="article in state.articles" class="flex flex-col items-center justify-center">
+        <div v-for="(article, index) in state.articles" v-bind:key="index" class="flex flex-col items-center justify-center">
             <a  :href="'editArticle/'+article._id"><ArticleComponent :title="article.title" :numcomments="article.numComments" :category="article.category" :imageUrl="article.imageUrl"/></a>
         </div>  
     </div>

@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class="mt-4">
-            <input :v-on="state.imagePath" @click.native.prevent="handleGetAwsImages" type="file" @change="onFileChange">
+            <input :v-on="state.imagePath" @click.prevent="handleGetAwsImages" type="file" @change="onFileChange">
         </div>
         <div class="mt-4">
             <button v-if="!props.article" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25" :disabled="state.isDisabled" @click="handleSubmit()">Create</button>
