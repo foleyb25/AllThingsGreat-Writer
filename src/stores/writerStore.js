@@ -18,15 +18,28 @@ export const useWriterStore = defineStore('writerStore', {
       },
     },
     actions: {
-      async getWriter() {
+      async getWriter(authId) {
         this.loading = true
-  
-        // get data from json file using json server
-        const res = await axios.get('http://localhost:3000/tasks')
-        const data = await res.json()
-  
-        this.tasks = data
+        
+        auth0.getAccessTokenSilently()
+        .then( (token) => {
+          axios.get(`${apiServerUrl}/api/v2/writers/authID/${authId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }).then((data) => {
+            this.writer = data.data
+            this.loading = false
+          }).catch((err) => {
+            this.error = err
+            this.loading = false
+            console.log(err)
+          })
+      }).catch( (err) => {
+        this.error = err
         this.loading = false
+        console.log(err)
+      })
       },
 
       async saveDraft(body) {
@@ -57,11 +70,13 @@ export const useWriterStore = defineStore('writerStore', {
       },
 
       async checkWriter() {
-        if (!auth0.isAuthenticated.value) {
-          console.log("writer not authenticated with Auth0")
-        } else {
-          console.log("Writer authenticated with auth0")
-        }
+        if (auth0.isAuthenticated.value) {
+          //See if writer object already exists above
+          if(!this.writer) {
+            //writer does not exist and we are authenticate with auth0. Call DB to get single user
+            await this.getWriter(auth0.user.value.sub)
+          } 
+        } 
       },
       // async addTask(task) {
       //   this.tasks.push(task)

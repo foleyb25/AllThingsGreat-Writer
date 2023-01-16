@@ -20,7 +20,6 @@ const state = reactive({
 
 onMounted(async () => {
     const response = await getArticlesByUserId(state.getAccessTokenSilently, state.user.mongoId)
-    console.log(response)
     state.articles = response.data
 })
 </script>
