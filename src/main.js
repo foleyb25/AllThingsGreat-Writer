@@ -21,6 +21,15 @@ import CKEditor from '@mayasabha/ckeditor4-vue3'
 import {auth0} from './auth0'
 import { authGuard } from "@auth0/auth0-vue";
 import { createPinia } from 'pinia'
+import {useWriterStore} from './stores/writerStore'
+
+//Check for writer in conjunction with auth0's auth guard. This will let the application
+//know whether it needs to bring back the writer state (from mongoDB) and persist it through
+// all the routes in the Pinia writer store. This function has to go above the route definitions.
+const checkForWriter = () => {
+    const {checkWriter} = useWriterStore()
+    checkWriter()
+}
 
 const router = createRouter({
 
@@ -36,56 +45,56 @@ const router = createRouter({
             path: "/addArticle",
             name: "AddArticleView",
             component: AddArticleView,
-            beforeEnter: authGuard
+            beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/editArticle/:id",
             name: "EditArticleView",
             component: EditArticleView,
             props: true,
-            beforeEnter: authGuard
+            beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/articles",
             name: "ArticlesView",
             component: ArticlesView,
-            beforeEnter: authGuard
+            beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/metrics",
             name: "MetricsView",
             component: MetricsView,
-            beforeEnter: authGuard
+            beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/tweets",
             name: "TweetsView",
             component: TweetsView,
-            beforeEnter: authGuard
+            beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/account",
             name: "AccountView",
             component: AccountsView,
-            beforeEnter: authGuard
+            beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/searchscreenplay",
             name: "SearchScreenplayView",
             component: SearchScreenplayView,
-            beforeEnter: authGuard
+            beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/searchscreenplay/:id",
             name: "ScreenplayDetailsView",
             component: ScreenplayDetailsView,
-            beforeEnter: authGuard
+            beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/imagemanager",
             name: "ImageManagerView",
             component: ImageManagerView,
-            beforeEnter: authGuard
+            beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: '/callback',
@@ -95,13 +104,9 @@ const router = createRouter({
     ]
 })
 
-router.beforeEach( (to, from) => {
-
-})
-
 createApp(App)
-    .use(router)
     .use(createPinia())
+    .use(router)
     .use(auth0)
     .use(CKEditor)
     .component('NavComponent', NavComponent)

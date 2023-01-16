@@ -1,6 +1,8 @@
 import axios from "axios"
 import Compressor from "compressorjs"
 
+const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
+
 export const imageUploader = async (getAccessTokenSilently, blob, imageName) => {
   return new Promise((resolve, reject) => {
     //we could use some compression

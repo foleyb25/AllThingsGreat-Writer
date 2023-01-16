@@ -1,7 +1,8 @@
 // state management guide: https://blog.logrocket.com/complex-vue-3-state-management-pinia/
 import { defineStore } from 'pinia'
 import axios from 'axios'
-import {auth0} from '../auth0'
+import { auth0 } from '../auth0'
+import {unref} from 'vue'
 
 const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
 
@@ -31,6 +32,7 @@ export const useWriterStore = defineStore('writerStore', {
       async saveDraft(body) {
         this.loading = true
         const mongoId = auth0.user.value.mongoId
+        console.log(auth0.user)
         auth0.getAccessTokenSilently()
         .then( (token) => {
           axios.patch(`${apiServerUrl}/api/v2/writers/${mongoId}/draft`, body, {
@@ -54,16 +56,11 @@ export const useWriterStore = defineStore('writerStore', {
 
       },
 
-      async checkWriter(isAuthenticated) {
-        console.log(this.writer)
-        if( isAuthenticated ) {
-          if (!writer) {
-            //is authenticated but writer doesn't exist. set the authenticated writer 
-          }
+      async checkWriter() {
+        if (!auth0.isAuthenticated.value) {
+          console.log("writer not authenticated with Auth0")
         } else {
-          this.writer = {}
-          this.error = false
-          this.loading = false 
+          console.log("Writer authenticated with auth0")
         }
       },
       // async addTask(task) {
