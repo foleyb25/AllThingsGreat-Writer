@@ -2,7 +2,6 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { auth0 } from '../auth0'
-import {unref} from 'vue'
 
 const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
 
@@ -16,6 +15,11 @@ export const useWriterStore = defineStore('writerStore', {
       getNumberOfDrafts() {
         return this.writer.drafts.length
       },
+
+      getDrafts() {
+        console.log(this.writer)
+        return this.writer.drafts
+      }
     },
     actions: {
       async getWriter(authId) {
@@ -55,6 +59,9 @@ export const useWriterStore = defineStore('writerStore', {
           }).then((data) => {
             // What to do with the data here?
             this.loading = false
+            this.writer.drafts.push(data.data.draft)
+            console.log("DRAFT: ", data.data.draft)
+            console.log("DATA: ", data)
             return data
           }).catch((err) => {
             this.error = err

@@ -21,7 +21,7 @@ import CKEditor from '@mayasabha/ckeditor4-vue3'
 import {auth0} from './auth0'
 import { authGuard } from "@auth0/auth0-vue";
 import { createPinia } from 'pinia'
-import {useWriterStore} from './stores/writerStore'
+import {useWriterStore} from './stores/writer.store.js'
 
 //Check for writer in conjunction with auth0's auth guard. This will let the application
 //know whether it needs to bring back the writer state (from mongoDB) and persist it through

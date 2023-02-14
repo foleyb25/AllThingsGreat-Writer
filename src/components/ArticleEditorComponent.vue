@@ -56,7 +56,7 @@ import { useAuth0 } from '@auth0/auth0-vue';
 import { getImageUrls, createNewArticle} from "../services/apiRequest.service";
 import { reactive } from 'vue';
 import { storeToRefs } from 'pinia'
-import { useWriterStore } from '../stores/writerStore'
+import { useWriterStore } from '../stores/writer.store'
 
 const {error, loading } = storeToRefs(useWriterStore())
 const { saveDraft } = useWriterStore()
