@@ -1,7 +1,5 @@
 // state management guide: https://blog.logrocket.com/complex-vue-3-state-management-pinia/
 import { defineStore } from 'pinia'
-import axios from 'axios'
-import { auth0 } from '../auth0'
 
 const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
 

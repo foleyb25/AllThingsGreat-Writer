@@ -1,5 +1,6 @@
 import axios from "axios"
 import Compressor from "compressorjs"
+import { auth0 } from '../auth0'
 
 const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
 
@@ -107,11 +108,11 @@ export const getSingleArticle = async (articleId) => {
     })
 }
 
-export const getWriterById = async (getAccessTokenSilently, authId) => {
+export const getAuthenticatedWriter = async () => {
   return new Promise((resolve, reject) => {
-    getAccessTokenSilently()
+    auth0.getAccessTokenSilently()
       .then( (token) => {
-        axios.get(`${apiServerUrl}/api/v2/writers/authID/${authId}`, {
+        axios.get(`${apiServerUrl}/api/v2/writers/authID/${auth0.user.value.sub}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -126,9 +127,9 @@ export const getWriterById = async (getAccessTokenSilently, authId) => {
   })
 }
 
-export const saveDraftState = async (getAccessTokenSilently, mongoId, body) => {
+export const saveDraftState = async (mongoId, body) => {
   return new Promise((resolve, reject) => {
-    getAccessTokenSilently()
+    auth0.getAccessTokenSilently()
         .then( (token) => {
           axios.patch(`${apiServerUrl}/api/v2/writers/${mongoId}/draft`, body, {
             headers: {
