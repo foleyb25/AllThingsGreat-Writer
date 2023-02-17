@@ -112,7 +112,7 @@ const selectImage = (url) => {
 
 const handleSubmit = async () => {
     const mongoId = state.user.mongoId
-    const formdata ={
+    const formdata = {
         title: state.title,
         bodyHTML: state.editorData,
         imageUrl: state.imagePath,
@@ -147,46 +147,8 @@ const handleSaveDraft = async (e) => {
 const handleUpdate = async (e) => {
 
 }
+
 </script>
-
-<!-- <script>
-import Axios from 'axios'
-import ArticleComponent from "../components/ArticleComponent.vue"
-import ImagePickerModalComponent from "./article/ImagePickerModalComponent.vue"
-import { useAuth0 } from '@auth0/auth0-vue';
-import { getImageUrls } from "../services/apiRequest.service";
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    name: 'ArticleEditComponent',
-    props: ['article'],
-    components: {ArticleComponent, ImagePickerModalComponent},
-
-    data() {
-        return {
-            editorConfig: {
-                toolbar: [
-                    {name: 'utils', items: ['Source', 'Scayt']},
-                    {name: 'styling', items: ['Bold', 'Italic', 'Underline','Strike']},
-                    {name: 'formatting', items: ['NumberedList', 'BulletedList', 'Blockquote']},
-                    {name: 'linking', items: ['Link', 'Unlink', 'Image', "Iframe"]}
-                ],
-                height: "400px",
-                allowedContent: true,
-            },
-            editorData: props.article ? props.article.bodyHTML : "<p>Write your masterpiece...",
-            title: props.article ? props.article.title : "",
-            category: props.article ? props.article.category : "AllThingsGreat",
-            isDisabled: props.article ? false : true,
-            btnText: props.article ? "Update" : "Create",
-            imagePath: props.article ? props.article.imageUrl : "/src/assets/images/1669432796163-181228722+missing_img.jpeg",
-            awsImageUrls: [],
-            accessToken: useAuth0().getAccessTokenSilently,
-            showModal: false
-        }
-    },
-})
-</script> -->
 
 <style>
 .fade-enter-active,

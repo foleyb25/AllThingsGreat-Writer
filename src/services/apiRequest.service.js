@@ -107,3 +107,43 @@ export const getSingleArticle = async (articleId) => {
     })
 }
 
+export const getWriterById = async (getAccessTokenSilently, authId) => {
+  return new Promise((resolve, reject) => {
+    getAccessTokenSilently()
+      .then( (token) => {
+        axios.get(`${apiServerUrl}/api/v2/writers/authID/${authId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((data) => {
+          resolve(data)
+        }).catch((err) => {
+          reject(err)
+        })
+    }).catch( (err) => {
+      reject(err)
+    })
+  })
+}
+
+export const saveDraftState = async (getAccessTokenSilently, mongoId, body) => {
+  return new Promise((resolve, reject) => {
+    getAccessTokenSilently()
+        .then( (token) => {
+          axios.patch(`${apiServerUrl}/api/v2/writers/${mongoId}/draft`, body, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }).then((data) => {
+            // What to do with the data here?
+            resolve(data)
+          }).catch((err) => {
+            reject(err)
+          })
+      }).catch( (err) => {
+        reject(err)
+      })
+  })
+}
+
+

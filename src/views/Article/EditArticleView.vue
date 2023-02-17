@@ -4,7 +4,6 @@
 
 <script setup>
 import { reactive, onMounted } from 'vue'
-import { useRoute } from 'vue-router';
 import ArticleEditorComponent from '../../components/ArticleEditorComponent.vue'
 import { getSingleArticle } from '../../services/apiRequest.service';
 
@@ -16,10 +15,8 @@ const state = reactive({
 
 
 onMounted(async () => {
-    console.log(props.id)
     const response = await getSingleArticle(props.id)
     state.article = response.data
-    console.log(state.article)
 })
 </script>
 

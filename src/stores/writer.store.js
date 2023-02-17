@@ -1,7 +1,7 @@
 // state management guide: https://blog.logrocket.com/complex-vue-3-state-management-pinia/
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { auth0 } from '../auth0'
+import { getWriterById, saveDraftState } from '../services/apiRequest.service'
 
 const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
 
@@ -17,63 +17,33 @@ export const useWriterStore = defineStore('writerStore', {
       },
 
       getDrafts() {
-        console.log(this.writer)
         return this.writer.drafts
       }
     },
+    
     actions: {
-      async getWriter(authId) {
+      async retrieveWriter(authId) {
         this.loading = true
-        
-        auth0.getAccessTokenSilently()
-        .then( (token) => {
-          axios.get(`${apiServerUrl}/api/v2/writers/authID/${authId}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }).then((data) => {
-            this.writer = data.data
-            this.loading = false
-          }).catch((err) => {
-            this.error = err
-            this.loading = false
-            console.log(err)
-          })
-      }).catch( (err) => {
-        this.error = err
-        this.loading = false
-        console.log(err)
-      })
+        getWriterById(auth0.getAccessTokenSilently, authId).then((data) => {
+          this.writer = data.data
+          console.log(this.writer.drafts.length)
+          this.loading = false
+        }).catch( (err) => {
+          this.error = err
+          this.loading = false
+        })
       },
 
       async saveDraft(body) {
         this.loading = true
         const mongoId = auth0.user.value.mongoId
-        console.log(auth0.user)
-        auth0.getAccessTokenSilently()
-        .then( (token) => {
-          axios.patch(`${apiServerUrl}/api/v2/writers/${mongoId}/draft`, body, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }).then((data) => {
-            // What to do with the data here?
-            this.loading = false
-            this.writer.drafts.push(data.data.draft)
-            console.log("DRAFT: ", data.data.draft)
-            console.log("DATA: ", data)
-            return data
-          }).catch((err) => {
-            this.error = err
-            this.loading = false
-            console.log(err)
-          })
-      }).catch( (err) => {
-        this.error = err
-        this.loading = false
-        console.log(err)
-      })
-
+        saveDraftState(auth0.getAccessTokenSilently, this.writer._id, body).then( (data) => {
+          this.writer.drafts.push(data.data.draft)
+          this.loading = false
+        }).catch( (err) => {
+          this.loading = false 
+          this.error = err
+        })
       },
 
       async checkWriter() {
@@ -81,56 +51,9 @@ export const useWriterStore = defineStore('writerStore', {
           //See if writer object already exists above
           if(!this.writer) {
             //writer does not exist and we are authenticate with auth0. Call DB to get single user
-            await this.getWriter(auth0.user.value.sub)
+            await this.retrieveWriter(auth0.user.value.sub)
           } 
         } 
       },
-      // async addTask(task) {
-      //   this.tasks.push(task)
-  
-      //   const res = await fetch('http://localhost:3000/tasks', {
-      //     method: 'POST',
-      //     body: JSON.stringify(task),
-      //     headers: {'Content-Type': 'application/json'}
-      //   })
-  
-      //   if (res.error) {
-      //     console.log(res.error)
-      //   }
-      // },
-      // async deleteTask(id) {
-      //   this.tasks = this.tasks.filter(t => {
-      //     return t.id !== id
-      //   })
-  
-      //   const res = await fetch('http://localhost:3000/tasks/' + id, {
-      //     method: 'DELETE',
-      //   })
-  
-      //   if (res.error) {
-      //     console.log(res.error)
-      //   }
-      // },
-      // async toggleFav(id) {
-      //   const task = this.tasks.find(t => t.id === id)
-      //   task.isFav = !task.isFav
-  
-      //   const res = await fetch('http://localhost:3000/tasks/' + id, {
-      //     method: 'PATCH',
-      //     body: JSON.stringify({ isFav: task.isFav }),
-      //     headers: {'Content-Type': 'application/json'}
-      //   })
-  
-      //   if (res.error) {
-      //     console.log(res.error)
-      //   }
-      // }
     }
   })
-
-
-  // export const saveDraft = async (getAccessTokenSilently, writerId, body) => {
-  //   return new Promise((resolve, reject) => {
-      
-  // })
-  // }

@@ -15,6 +15,7 @@ import HomeView from "./views/HomeView.vue";
 import ImageManagerView from "./views/ImageManager/ImageManagerView.vue";
 import CallbackView from "./views/Splash/Callback.vue";
 import MetricsView from "./views/MetricsView.vue";
+import DraftView from "./views/Article/DraftView.vue";
 import TweetsView from "./views/TweetsView.vue";
 import AccountsView from "./views/AccountsView.vue";
 import CKEditor from '@mayasabha/ckeditor4-vue3'
@@ -22,6 +23,7 @@ import {auth0} from './auth0'
 import { authGuard } from "@auth0/auth0-vue";
 import { createPinia } from 'pinia'
 import {useWriterStore} from './stores/writer.store.js'
+
 
 //Check for writer in conjunction with auth0's auth guard. This will let the application
 //know whether it needs to bring back the writer state (from mongoDB) and persist it through
@@ -58,6 +60,12 @@ const router = createRouter({
             path: "/articles",
             name: "ArticlesView",
             component: ArticlesView,
+            beforeEnter: [authGuard, checkForWriter]
+        },
+        {
+            path: "/draft",
+            name: "DraftView",
+            component: DraftView,
             beforeEnter: [authGuard, checkForWriter]
         },
         {

@@ -2,14 +2,8 @@
     <ArticleEditorComponent></ArticleEditorComponent>
 </template>
 
-<script>
+<script setup>
+
 import ArticleEditorComponent from '../../components/ArticleEditorComponent.vue'
 
-    export default {
-        name: 'AddArticleView',
-        components: {ArticleEditorComponent},
-        setup() {
-            
-        }
-    }
 </script>
