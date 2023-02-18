@@ -23,7 +23,7 @@
         <div>
             <label for="img" class="block m-2 text-sm font-medium text-gray-900 dark:text-gray-300">Article Thumbnail Preview</label>
             <div class="grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-                <ArticleComponent :title="title" numcomments="XX" :category="category" :imageUrl="state.imagePath"></ArticleComponent>
+                <ArticleComponent :title="state.title" numcomments="XX" :category="state.category" :imageUrl="state.imagePath"></ArticleComponent>
             </div>
         </div>
         <div class="mt-4">
@@ -61,7 +61,7 @@ import { useWriterStore } from '../stores/writer.store'
 const {error, loading } = storeToRefs(useWriterStore())
 const { saveDraft } = useWriterStore()
 
-const props = defineProps(['article'])
+const props = defineProps(['article', 'draft'])
 
 const state = reactive({
     editorConfig: {
@@ -74,27 +74,27 @@ const state = reactive({
         height: "400px",
         allowedContent: true,
     },
-    editorData: props.article ? props.article.bodyHTML : "<p>Write your masterpiece...</p>",
-    title: props.article ? props.article.title : "",
-    moods: [],
-    tags: [],
-    category: props.article ? props.article.category : "AllThingsGreat",
+    editorData: props.article ? props.article.bodyHTML : props.draft  ? props.draft.bodyHTML : "<p>Write your masterpiece...</p>",
+    title: props.article ? props.article.title : props.draft ? props.draft.title : "",
+    moods: props.article ? props.article.moods : props.draft ? props.draft.moods : [],
+    tags: props.article ? props.article.tags : props.draft ? props.draft.tags : [],
+    category: props.article ? props.article.category : props.draft ? props.draft.category : "AllThingsGreat",
     isDisabled: props.article ? false : true,
     btnText: props.article ? "Update" : "Create",
     imagePath: props.article ? props.article.imageUrl : "/src/assets/images/1669432796163-181228722+missing_img.jpeg",
     awsImageUrls: [],
-    accessToken: useAuth0().getAccessTokenSilently,
     showModal: false,
     user: useAuth0().user
 })
 
+console.log("EDITOR DATA: ", state.editorData)
+
 const handleGetAwsImages = () => {
-    console.log("HANDLE AWS IMAGE GET")
     if(state.awsImageUrls.length > 0) {
         state.showModal = true
         return
     }
-    getImageUrls(state.accessToken)
+    getImageUrls()
     .then((result) => {
         if(result.status >= 200 && result.status < 300)
             console.log(result)
@@ -121,14 +121,12 @@ const handleSubmit = async () => {
         tags: state.tags
     }
     
-    createNewArticle(state.accessToken, formdata)
-    console.log(useAuth0())
-    .then( (res) => {
-        console.log(res.data)
+    createNewArticle(formdata)
+        .then( (data) => {
+        console.log(data.data)
     }).catch( (err) => {
         console.log(err)
     })
-
 }
 
 const handleSaveDraft = async (e) => {
@@ -141,7 +139,8 @@ const handleSaveDraft = async (e) => {
         tags: state.tags,
         moods: state.moods
     }
-    const response = await saveDraft(body)
+    console.log("BODYHTML: ", body.bodyHTML)
+    await saveDraft(body)
 }
 
 const handleUpdate = async (e) => {

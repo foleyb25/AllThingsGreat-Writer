@@ -1,22 +1,16 @@
 <template>
-    <ArticleEditorComponent v-if="draft" 
-        :bodyHTML="draft.bodyHTML"
-        :imageUrl="draft.imageUrl"
-        :tags="draft.tags"
-        :moods="draft.moods"
-        :title="draft.title"
-        :category="draft.category"
-        >
-    
+    <ArticleEditorComponent v-if="writer" :draft="getDraftById(route.params.id)" :key="route.params.id">
     </ArticleEditorComponent>
 </template>
 
 <script setup>
 import ArticleEditorComponent from '../../components/ArticleEditorComponent.vue'
 import { useWriterStore } from '../../stores/writer.store'
+import { storeToRefs } from 'pinia'
+import { useRoute } from 'vue-router'
 
-const {error, loading } = storeToRefs(useWriterStore())
-const writerStore = useWriterStore()
-const draft = writerStore.getDrafts()
+const {error, loading, writer, getDraftById } = storeToRefs(useWriterStore())
+const route = useRoute()
+
 
 </script>

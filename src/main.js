@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import {createRouter, createWebHistory} from 'vue-router'
+import {createRouter, createWebHistory, useRoute} from 'vue-router'
 import './style.css'
 import 'flowbite'
 import App from './App.vue'
@@ -33,6 +33,10 @@ const checkForWriter = () => {
     checkWriter()
 }
 
+const setDraft = () => {
+    console.log("SET DRAFT")
+}
+
 const router = createRouter({
 
     history: createWebHistory(),
@@ -63,10 +67,11 @@ const router = createRouter({
             beforeEnter: [authGuard, checkForWriter]
         },
         {
-            path: "/draft",
+            path: "/draft/:id",
             name: "DraftView",
-            component: DraftView,
-            beforeEnter: [authGuard, checkForWriter]
+            component: () => import("./views/Article/DraftView.vue"),
+            beforeEnter: [authGuard, checkForWriter],
+            beforeRouteUpdate: [setDraft]
         },
         {
             path: "/metrics",

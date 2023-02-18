@@ -17,7 +17,7 @@ export const imageUploader = async (getAccessTokenSilently, blob, imageName) => 
         const formData = new FormData()
         formData.append('file', result, imageName);
       
-        const token = await getAccessTokenSilently()
+        const token = await auth0.getAccessTokenSilently()
         axios.post(`${apiServerUrl}/api/v2/articles/uploadImage`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -36,10 +36,10 @@ export const imageUploader = async (getAccessTokenSilently, blob, imageName) => 
   })
 };
 
-export const getImageUrls = async (getAccessTokenSilently) => {
+export const getImageUrls = async () => {
   return new Promise((resolve, reject) => {
       
-        getAccessTokenSilently()
+        auth0.getAccessTokenSilently()
           .then( (token) => {
             axios.get(`${apiServerUrl}/api/v2/articles/getImageUrls/12345`, {
               headers: {
@@ -54,13 +54,12 @@ export const getImageUrls = async (getAccessTokenSilently) => {
         }).catch( (err) => {
           console.log(err)
         })
-        
     })
 }
 
-export const createNewArticle = async (getAccessTokenSilently, formData) => {
+export const createNewArticle = async (formData) => {
   return new Promise((resolve, reject) => {
-        getAccessTokenSilently()
+        auth0.getAccessTokenSilently()
           .then( (token) => {
             axios.post(`${apiServerUrl}/api/v2/articles/create`, formData, {
               "Content-Type": "multipart/form-data",
@@ -80,7 +79,7 @@ export const createNewArticle = async (getAccessTokenSilently, formData) => {
 
 export const getArticlesByUserId = async (getAccessTokenSilently, userId) => {
   return new Promise((resolve, reject) => {
-        getAccessTokenSilently()
+        auth0.getAccessTokenSilently()
           .then( (token) => {
             axios.get(`${apiServerUrl}/api/v2/articles/user/${userId}`, {
               headers: {

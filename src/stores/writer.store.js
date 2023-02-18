@@ -8,16 +8,22 @@ const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.en
 export const useWriterStore = defineStore('writerStore', {
     state: () => ({
       writer: null,
+      drafts: null,
+      draft : null,
       loading: false,
       error: null
     }),
     getters: {
-      getNumberOfDrafts() {
-        return this.writer.drafts.length
+      getNumberOfDrafts: (state) => {
+          return state.writer.drafts.length
       },
 
-      getDrafts() {
-        return this.writer.drafts
+      getDrafts: (state) => {
+          return state.writer.drafts
+      },
+
+      getDraftById: (state) => {
+        return (draftId) => state.writer.drafts.find((draft) => draft._id === draftId)
       }
     },
 

@@ -3,7 +3,5 @@
 </template>
 
 <script setup>
-
 import ArticleEditorComponent from '../../components/ArticleEditorComponent.vue'
-
 </script>
