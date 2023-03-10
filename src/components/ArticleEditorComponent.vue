@@ -59,18 +59,29 @@
 					:value="mood"
 					class="mr-1"
 				/>
-				<label :for="mood"> {{ mood }}</label
+				<label :for="mood" class="p-1 rounded"> {{ mood }}</label
 				><br />
 			</div>
-			<div v-for="mood in state.moods">
-				{{ mood }}
+			<div>
+				<div
+					v-for="mood in state.moods"
+					:class="
+						'm-2 inline-block p-1 border border-black rounded ' +
+						getColor(mood)
+					"
+				>
+					<div :class="' ' + getColor(mood)">
+						{{ mood }}
+					</div>
+				</div>
 			</div>
 
 			<div>
 				<label
 					for="tags"
 					class="block m-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-					>Tags</label
+					>Tags (meaningful tags will enhance your google page
+					rank)</label
 				>
 				<input
 					type="text"
@@ -80,7 +91,7 @@
 					v-on:keyup.enter="clearInputField"
 					v-on:keyup.,="clearInputField"
 					class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-					placeholder="Enter tags seperated by commas or enter..."
+					placeholder="Enter tags separated by commas or enter..."
 					required
 				/>
 			</div>
@@ -293,6 +304,33 @@ const removeTag = (index) => {
 
 const clearInputField = (e) => {
 	e.target.value = "";
+};
+
+const getColor = (mood) => {
+	switch (mood) {
+		case "Sarcastic":
+			return "bg-sarcastic-gray";
+		case "Mind-blowing":
+			return "bg-mindBlowing-gold";
+		case "Inspirational":
+			return "bg-inspirational-pink";
+		case "Informative":
+			return "bg-informative-teal";
+		case "Humorous":
+			return "bg-humorous-pink";
+		case "Analytical":
+			return "bg-analytical-green";
+		case "Creative":
+			return "bg-creative-orange";
+		case "Provocative":
+			return "bg-provocative-red";
+		case "Introspective":
+			return "bg-introspective-purple text-white";
+		case "Nostalgic":
+			return "bg-nostalgic-beige";
+		default:
+			return "bg-gray-500";
+	}
 };
 
 const handleSubmit = async () => {

@@ -9,31 +9,31 @@ module.exports = {
     extend: {
       colors: {
         sarcastic: {
-          gray: "#7F8C8D",
+          gray: "#959595",
         },
         mindBlowing: {
-          gold: "#FFD700",
+          gold: "#ffff00",
         },
         inspirational: {
-          turquoise: "#00CED1",
+          pink: "#ff00ff",
         },
         informative: {
-          teal: "#008080"
+          teal: "#40e0d0"
         },
         humorous: {
-          diamond: "#F8F8FF"
+          pink: "#ff6ec7"
         },
         analytical: {
-          gray: "#808080"
+          green: "#00ff00"
         },
         creative: {
           orange: "#FFA500"
         },
         provocative: {
-          red: "#800000"
+          red: "#ff0000"
         },
         introspective: {
-          purple: "#483D8B"
+          purple: "#800080"
         },
         nostalgic: {
           beige: "#F5DEB3"
