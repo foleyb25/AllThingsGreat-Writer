@@ -96,7 +96,7 @@ export const updateArticle = async (id, formData) => {
     })
 }
 
-export const getArticlesByUserId = async (getAccessTokenSilently, userId) => {
+export const getArticlesByUserId = async (userId) => {
   return new Promise((resolve, reject) => {
         auth0.getAccessTokenSilently()
           .then( (token) => {
@@ -127,22 +127,17 @@ export const getSingleArticle = async (articleId) => {
 }
 
 export const getAuthenticatedWriter = async () => {
-  return new Promise((resolve, reject) => {
-    auth0.getAccessTokenSilently()
-      .then( (token) => {
-        axios.get(`${apiServerUrl}/api/v2/writers/authID/${auth0.user.value.sub}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }).then((data) => {
-          resolve(data)
-        }).catch((err) => {
-          reject(err)
-        })
-    }).catch( (err) => {
-      reject(err)
-    })
-  })
+    
+        try {
+          const token = await auth0.getAccessTokenSilently()
+          const data = await axios.get(`${apiServerUrl}/api/v2/writers/authID/${auth0.user.value.sub}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+          }})
+          return data
+        } catch (err) {
+          return err
+        }
 }
 
 export const saveDraftState = async (mongoId, body) => {

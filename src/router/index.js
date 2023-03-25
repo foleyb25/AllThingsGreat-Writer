@@ -1,27 +1,20 @@
-import HomeView from "../views/HomeView.vue";
-import {createRouter, createWebHistory, useRoute} from 'vue-router'
-import AddArticleView from "../views/Article/AddArticleView.vue";
-import EditArticleView from "../views/Article/EditArticleView.vue";
-import ArticlesView from "../views/Article/ArticlesView.vue";
-import SearchScreenplayView from "../views/Screenplay/SearchScreenplayView.vue";
-import ScreenplayDetailsView from "../views/Screenplay/ScreenplayDetailsView.vue";
-import ImageManagerView from "../views/ImageManager/ImageManagerView.vue";
+import {createRouter, createWebHistory} from 'vue-router'
 import CallbackView from "../views/Splash/Callback.vue";
-import MetricsView from "../views/MetricsView.vue";
-import DraftView from "../views/Article/DraftView.vue";
-import TweetsView from "../views/TweetsView.vue";
-import AccountsView from "../views/AccountsView.vue";
 import { authGuard } from "@auth0/auth0-vue";
 import {useWriterStore} from '../stores/writer.store.js'
-
-
+import {useArticleStore} from '../stores/article.store.js'
 
 //Check for writer in conjunction with auth0's auth guard. This will let the application
 //know whether it needs to bring back the writer state (from mongoDB) and persist it through
 // all the routes in the Pinia writer store. This function has to go above the route definitions.
-const checkForWriter = () => {
+const checkForWriter = async () => {
     const {checkWriter} = useWriterStore()
-    checkWriter()
+    await checkWriter()
+}
+
+const getArticles = async () => {
+    const { retrieveArticlesByWriterId } = useArticleStore();
+    await retrieveArticlesByWriterId();
 }
 
 const setDraft = () => {
@@ -36,74 +29,80 @@ const router = createRouter({
         {
             path: "/",
             name: "home",
-            component: HomeView,
+            component: () => import('../views/HomeView.vue'),
         },
         {
             path: "/addArticle",
             name: "AddArticleView",
-            component: AddArticleView,
+            component: () => import('../views/Article/AddArticleView.vue'),
             beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/editArticle/:id",
             name: "EditArticleView",
-            component: EditArticleView,
+            component: () => import('../views/Article/EditArticleView.vue'),
             props: true,
             beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/articles",
             name: "ArticlesView",
-            component: ArticlesView,
-            beforeEnter: [authGuard, checkForWriter]
+            component: () => import('../views/Article/ArticlesView.vue'),
+            beforeEnter: [authGuard, checkForWriter, getArticles]
         },
         {
             path: "/draft/:id",
             name: "DraftView",
-            component: DraftView,
+            component: () => import('../views/Article/DraftView.vue'),
             beforeEnter: [authGuard, checkForWriter],
             beforeRouteUpdate: [setDraft]
         },
         {
             path: "/metrics",
             name: "MetricsView",
-            component: MetricsView,
+            component: () => import('../views/MetricsView.vue'),
             beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/tweets",
             name: "TweetsView",
-            component: TweetsView,
+            component: () => import('../views/TweetsView.vue'),
             beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/account",
             name: "AccountView",
-            component: AccountsView,
+            component: () => import('../views/AccountView.vue'),
             beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/searchscreenplay",
             name: "SearchScreenplayView",
-            component: SearchScreenplayView,
+            component: () => import('../views/Screenplay/SearchScreenplayView.vue'),
             beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/searchscreenplay/:id",
             name: "ScreenplayDetailsView",
-            component: ScreenplayDetailsView,
+            component: () => import('../views/Screenplay/ScreenplayDetailsView.vue'),
             beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: "/imagemanager",
             name: "ImageManagerView",
-            component: ImageManagerView,
+            component: () => import('../views/ImageManager/ImageManagerView.vue'),
             beforeEnter: [authGuard, checkForWriter]
         },
         {
             path: '/callback',
             name: "Callback",
             component: CallbackView,
+        },
+        {
+            path: '/reviewArticles',
+            name: 'ReviewArticlesView',
+            component: () => import('../views/Article/ReviewArticlesView.vue'),
+            beforeEnter: [authGuard, checkForWriter]
         }
     ]
 })

@@ -1,6 +1,7 @@
 // state management guide: https://blog.logrocket.com/complex-vue-3-state-management-pinia/
-import { defineStore } from 'pinia'
-import { createNewArticle, updateArticle } from '../services/apiRequest.service'
+import { defineStore, storeToRefs } from 'pinia'
+import { createNewArticle, updateArticle, getArticlesByUserId } from '../services/apiRequest.service'
+import { useWriterStore } from "./writer.store";
 
 const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
 
@@ -28,8 +29,14 @@ export const useArticleStore = defineStore('articleStore', {
 
       },
 
-      async retrieveArticle(id) {
-
+      async retrieveArticlesByWriterId() {
+        try {
+          const {  writer } = storeToRefs(useWriterStore());
+          const response = await getArticlesByUserId(writer.value._id)
+          this.articles = response.data
+        } catch (err) {
+          this.error = err
+        }
       },
 
       async submitArticle(formData) {

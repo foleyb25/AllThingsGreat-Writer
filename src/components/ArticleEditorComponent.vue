@@ -68,10 +68,10 @@
 					v-for="mood in state.moods"
 					:class="
 						'm-2 inline-block p-1 border border-black rounded ' +
-						getColor(mood)
+						getMoodColor(mood)
 					"
 				>
-					<div :class="' ' + getColor(mood)">
+					<div :class="' ' + getMoodColor(mood)">
 						{{ mood }}
 					</div>
 				</div>
@@ -122,9 +122,14 @@
 			>
 				<ArticleComponent
 					:title="state.title"
-					numcomments="XX"
 					:category="state.category"
 					:imageUrl="state.imagePath"
+					:isPinned="state.isPinned"
+					:isArchived="state.isArchived"
+					:isReviewed="state.isReviewed"
+					:rating="state.rating"
+					:numberOfRatings="state.numberOfRatings"
+					:moods="state.moods"
 				></ArticleComponent>
 			</div>
 		</div>
@@ -193,6 +198,7 @@ import { storeToRefs } from "pinia";
 import { useWriterStore } from "../stores/writer.store";
 import { useArticleStore } from "../stores/article.store";
 import router from "../router/index.js";
+import { renderMoodColor } from "../utils/colors.util";
 
 const { error, loading } = storeToRefs(useWriterStore());
 const { saveDraft } = useWriterStore();
@@ -259,6 +265,11 @@ const state = reactive({
 		? props.draft.category
 		: "AllThingsGreat",
 	isDisabled: props.article ? false : true,
+	isPinned: props.article ? props.article.isPinned : false,
+	isArchived: props.article ? props.article.isArchived : false,
+	rating: props.article ? props.article.rating : 0,
+	isReviewed: props.article ? props.article.isReviewed : false,
+	numberOfRatings: props.article ? props.article.numberOfRatings : 0,
 	btnText: props.article ? "Update" : "Create",
 	imagePath: props.article
 		? props.article.imageUrl
@@ -267,8 +278,6 @@ const state = reactive({
 	showModal: false,
 	user: useAuth0().user,
 });
-
-console.log("EDITOR DATA: ", state.editorData);
 
 const handleGetAwsImages = () => {
 	if (state.awsImageUrls.length > 0) {
@@ -312,31 +321,8 @@ const clearInputField = (e) => {
 	e.target.value = "";
 };
 
-const getColor = (mood) => {
-	switch (mood) {
-		case "Sarcastic":
-			return "bg-sarcastic-gray";
-		case "Mind-blowing":
-			return "bg-mindBlowing-gold";
-		case "Inspirational":
-			return "bg-inspirational-pink";
-		case "Informative":
-			return "bg-informative-teal";
-		case "Humorous":
-			return "bg-humorous-pink";
-		case "Analytical":
-			return "bg-analytical-green";
-		case "Creative":
-			return "bg-creative-orange";
-		case "Provocative":
-			return "bg-provocative-red";
-		case "Introspective":
-			return "bg-introspective-purple text-white";
-		case "Nostalgic":
-			return "bg-nostalgic-beige";
-		default:
-			return "bg-gray-500";
-	}
+const getMoodColor = (mood) => {
+	return renderMoodColor(mood);
 };
 
 const handleSubmit = async () => {
@@ -375,6 +361,7 @@ const handleUpdate = async (e) => {
 		tags: state.tags,
 	};
 	await updateArticle(props.article._id, formData);
+	router.push("/articles");
 };
 </script>
 

@@ -15,6 +15,12 @@
 				>
 					Article Created Successfully</NotificationBannerComponent
 				>
+				<NotificationBannerComponent
+					v-if="articleUpdateSuccess"
+					color="bg-green-300"
+				>
+					Article Updated Successfully</NotificationBannerComponent
+				>
 			</TransitionGroup>
 		</header>
 
@@ -46,7 +52,9 @@ import SideNavDrawerComponent from "./components/global/SideNavDrawerComponent.v
 import NotificationBannerComponent from "./components/global/NotificationBannerComponent.vue";
 import { storeToRefs } from "pinia";
 import { useArticleStore } from "./stores/article.store";
-const { error, loading, articleCreateSuccess } = storeToRefs(useArticleStore());
+const { articleCreateSuccess, articleUpdateSuccess } = storeToRefs(
+	useArticleStore()
+);
 const auth0 = useAuth0();
 const isAuthenticated = auth0.isAuthenticated;
 const isLoading = auth0.isLoading;

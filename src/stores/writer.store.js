@@ -30,14 +30,14 @@ export const useWriterStore = defineStore('writerStore', {
     actions: {
       async retrieveWriter() {
         this.loading = true
-        getAuthenticatedWriter().then((data) => {
-          this.writer = data.data
-          console.log(this.writer.drafts.length)
+        try {
+          const response = await getAuthenticatedWriter()
+          this.writer = response.data
           this.loading = false
-        }).catch( (err) => {
+        } catch (err) {
           this.error = err
           this.loading = false
-        })
+        }
       },
 
       async saveDraft(body) {
