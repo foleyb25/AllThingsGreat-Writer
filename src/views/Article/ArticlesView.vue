@@ -19,6 +19,7 @@
 					:rating="article.rating"
 					:numberOfRatings="article.numberOfRatings"
 					:moods="article.moods"
+					:author="article.writer.nickName"
 			/></a>
 		</div>
 	</div>

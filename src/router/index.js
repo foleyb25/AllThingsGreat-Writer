@@ -12,9 +12,14 @@ const checkForWriter = async () => {
     await checkWriter()
 }
 
-const getArticles = async () => {
+const getArticlesByUserId = async () => {
     const { retrieveArticlesByWriterId } = useArticleStore();
     await retrieveArticlesByWriterId();
+}
+
+const getAllArticles = async () => {
+    const { retrieveAllArticles} = useArticleStore();
+    await retrieveAllArticles();
 }
 
 const setDraft = () => {
@@ -48,7 +53,7 @@ const router = createRouter({
             path: "/articles",
             name: "ArticlesView",
             component: () => import('../views/Article/ArticlesView.vue'),
-            beforeEnter: [authGuard, checkForWriter, getArticles]
+            beforeEnter: [authGuard, checkForWriter, getArticlesByUserId]
         },
         {
             path: "/draft/:id",

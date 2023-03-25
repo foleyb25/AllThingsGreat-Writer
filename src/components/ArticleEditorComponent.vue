@@ -130,6 +130,7 @@
 					:rating="state.rating"
 					:numberOfRatings="state.numberOfRatings"
 					:moods="state.moods"
+					:author="article.writer.nickName"
 				></ArticleComponent>
 			</div>
 		</div>

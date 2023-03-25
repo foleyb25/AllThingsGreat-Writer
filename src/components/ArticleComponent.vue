@@ -62,7 +62,7 @@
 					{{ moods[0] }}
 				</div>
 			</div>
-			<div class="h-[10%]">Article Author</div>
+			<div class="h-[10%]">{{ author }}</div>
 			<div
 				id="article-status-box"
 				class="h-[10%] flex flex-row justify-between items-between"
@@ -96,6 +96,7 @@ const props = defineProps([
 	"numberOfRatings",
 	"rating",
 	"moods",
+	"author",
 ]);
 
 const getMoodColor = (mood) => {
