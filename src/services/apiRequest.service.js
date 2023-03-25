@@ -41,7 +41,7 @@ export const getImageUrls = async () => {
       
         auth0.getAccessTokenSilently()
           .then( (token) => {
-            axios.get(`${apiServerUrl}/api/v2/articles/getImageUrls/12345`, {
+            axios.get(`${apiServerUrl}/api/v2/articles/getImageUrls`, {
               headers: {
                 "Content-Type": "multipart/form-data",
                 Authorization: `Bearer ${token}`,
