@@ -11,7 +11,7 @@ export const useWriterStore = defineStore('writerStore', {
       drafts: null,
       draft : null,
       loading: false,
-      error: null
+      error: null,
     }),
     getters: {
       getNumberOfDrafts: (state) => {

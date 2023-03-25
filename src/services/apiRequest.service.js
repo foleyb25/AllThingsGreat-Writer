@@ -77,6 +77,26 @@ export const createNewArticle = async (formData) => {
     })
 }
 
+export const updateArticle = async (id, formData) => {
+  return new Promise((resolve, reject) => {
+        auth0.getAccessTokenSilently()
+          .then( (token) => {
+            axios.patch(`${apiServerUrl}/api/v2/articles/update/`+id, formData, {
+              "Content-Type": "multipart/form-data",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }).then((data) => {
+              resolve(data)
+            }).catch((err) => {
+              reject(err)
+            })
+        }).catch( (err) => {
+          console.log(err)
+        })
+    })
+}
+
 export const getArticlesByUserId = async (getAccessTokenSilently, userId) => {
   return new Promise((resolve, reject) => {
         auth0.getAccessTokenSilently()

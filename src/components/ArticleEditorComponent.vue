@@ -7,6 +7,7 @@
 				>Title</label
 			>
 			<input
+				autocomplete="off"
 				type="text"
 				id="title"
 				v-model="state.title"
@@ -84,6 +85,7 @@
 					rank)</label
 				>
 				<input
+					autocomplete="off"
 					type="text"
 					id="tags"
 					v-on:keydown.enter="pushTag"
@@ -185,13 +187,17 @@
 import ArticleComponent from "../components/ArticleComponent.vue";
 import ImagePickerModalComponent from "./article/ImagePickerModalComponent.vue";
 import { useAuth0 } from "@auth0/auth0-vue";
-import { getImageUrls, createNewArticle } from "../services/apiRequest.service";
+import { getImageUrls } from "../services/apiRequest.service";
 import { reactive } from "vue";
 import { storeToRefs } from "pinia";
 import { useWriterStore } from "../stores/writer.store";
+import { useArticleStore } from "../stores/article.store";
+import router from "../router/index.js";
 
 const { error, loading } = storeToRefs(useWriterStore());
 const { saveDraft } = useWriterStore();
+
+const { submitArticle, updateArticle } = useArticleStore();
 
 const props = defineProps(["article", "draft"]);
 
@@ -334,28 +340,21 @@ const getColor = (mood) => {
 };
 
 const handleSubmit = async () => {
-	const mongoId = state.user.mongoId;
-	const formdata = {
+	const formData = {
 		title: state.title,
 		bodyHTML: state.editorData,
 		imageUrl: state.imagePath,
-		writer: mongoId,
+		writer: state.user.mongoId,
 		moods: state.moods,
 		tags: state.tags,
 	};
-
-	createNewArticle(formdata)
-		.then((data) => {
-			console.log(data.data);
-		})
-		.catch((err) => {
-			console.log(err);
-		});
+	await submitArticle(formData);
+	router.push("/articles");
 };
 
 const handleSaveDraft = async (e) => {
 	//Patch request
-	const body = {
+	const draftState = {
 		title: state.title,
 		bodyHTML: state.editorData,
 		imageUrl: state.imagePath,
@@ -363,11 +362,20 @@ const handleSaveDraft = async (e) => {
 		tags: state.tags,
 		moods: state.moods,
 	};
-	console.log("BODYHTML: ", body.bodyHTML);
-	await saveDraft(body);
+	await saveDraft(draftState);
 };
 
-const handleUpdate = async (e) => {};
+const handleUpdate = async (e) => {
+	const formData = {
+		title: state.title,
+		bodyHTML: state.editorData,
+		imageUrl: state.imagePath,
+		writer: state.user.mongoId,
+		moods: state.moods,
+		tags: state.tags,
+	};
+	await updateArticle(props.article._id, formData);
+};
 </script>
 
 <style>
