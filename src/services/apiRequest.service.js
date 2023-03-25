@@ -43,7 +43,6 @@ export const getImageUrls = async () => {
           .then( (token) => {
             axios.get(`${apiServerUrl}/api/v2/articles/getImageUrls`, {
               headers: {
-                "Content-Type": "multipart/form-data",
                 Authorization: `Bearer ${token}`,
               },
             }).then((data) => {
