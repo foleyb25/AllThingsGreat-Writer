@@ -52,6 +52,7 @@ import SideNavDrawerComponent from "./components/global/SideNavDrawerComponent.v
 import NotificationBannerComponent from "./components/global/NotificationBannerComponent.vue";
 import { storeToRefs } from "pinia";
 import { useArticleStore } from "./stores/article.store";
+import { onMounted } from "vue";
 const { articleCreateSuccess, articleUpdateSuccess } = storeToRefs(
 	useArticleStore()
 );
@@ -59,6 +60,10 @@ const auth0 = useAuth0();
 const isAuthenticated = auth0.isAuthenticated;
 const isLoading = auth0.isLoading;
 const user = auth0.user;
+
+onMounted(() => {
+	twttr.widgets.load();
+});
 </script>
 
 <style scoped>

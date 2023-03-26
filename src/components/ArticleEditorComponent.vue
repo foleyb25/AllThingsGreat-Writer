@@ -171,7 +171,8 @@
 		<label
 			for="img"
 			class="block m-2 mt-20 text-sm font-medium text-gray-900 dark:text-gray-300"
-			>Article Preview</label
+			>Article Preview (Click anywhere to load your embedded
+			tweets)</label
 		>
 		<div class="bg-white">
 			<span v-html="state.editorData"></span>
@@ -194,12 +195,13 @@ import ArticleComponent from "../components/ArticleComponent.vue";
 import ImagePickerModalComponent from "./article/ImagePickerModalComponent.vue";
 import { useAuth0 } from "@auth0/auth0-vue";
 import { getImageUrls } from "../services/apiRequest.service";
-import { reactive } from "vue";
+import { reactive, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useWriterStore } from "../stores/writer.store";
 import { useArticleStore } from "../stores/article.store";
 import router from "../router/index.js";
 import { renderMoodColor } from "../utils/colors.util";
+import CKEditor from "@mayasabha/ckeditor4-vue3";
 
 const { error, loading } = storeToRefs(useWriterStore());
 const { saveDraft } = useWriterStore();
@@ -363,6 +365,15 @@ const handleUpdate = async (e) => {
 	};
 	await updateArticle(props.article._id, formData);
 	router.push("/articles");
+};
+
+onMounted(() => {
+	twttr.widgets.load();
+	document.addEventListener("click", onClick);
+});
+
+const onClick = (event) => {
+	twttr.widgets.load();
 };
 </script>
 
