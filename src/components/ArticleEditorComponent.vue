@@ -130,7 +130,9 @@
 					:rating="state.rating"
 					:numberOfRatings="state.numberOfRatings"
 					:moods="state.moods"
-					:author="article.writer.nickName"
+					:author="
+						article ? article.writer.nickname : writer.nickName
+					"
 				></ArticleComponent>
 			</div>
 		</div>
@@ -203,7 +205,7 @@ import router from "../router/index.js";
 import { renderMoodColor } from "../utils/colors.util";
 import CKEditor from "@mayasabha/ckeditor4-vue3";
 
-const { error, loading } = storeToRefs(useWriterStore());
+const { error, loading, writer } = storeToRefs(useWriterStore());
 const { saveDraft } = useWriterStore();
 
 const { submitArticle, updateArticle } = useArticleStore();
