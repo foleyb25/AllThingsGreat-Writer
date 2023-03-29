@@ -12,7 +12,7 @@ const checkForWriter = async () => {
     await checkWriter()
 }
 
-const getArticlesByUserId = async () => {
+const getArticlesByWriterId = async () => {
     const { retrieveArticlesByWriterId } = useArticleStore();
     await retrieveArticlesByWriterId();
 }
@@ -20,6 +20,13 @@ const getArticlesByUserId = async () => {
 const getAllArticles = async () => {
     const { retrieveAllArticles} = useArticleStore();
     await retrieveAllArticles();
+}
+
+const getSingleArticle = async (to, from) => {
+    const id = to.params.id;
+    const { retrieveSingleArticle} = useArticleStore();
+    await retrieveSingleArticle(id)
+    return true
 }
 
 const setDraft = () => {
@@ -53,7 +60,7 @@ const router = createRouter({
             path: "/articles",
             name: "ArticlesView",
             component: () => import('../views/Article/ArticlesView.vue'),
-            beforeEnter: [authGuard, checkForWriter, getArticlesByUserId]
+            beforeEnter: [authGuard, checkForWriter, getArticlesByWriterId]
         },
         {
             path: "/draft/:id",
@@ -99,16 +106,23 @@ const router = createRouter({
             beforeEnter: [authGuard, checkForWriter]
         },
         {
+            path: '/reviewArticles',
+            name: 'ReviewArticlesView',
+            component: () => import('../views/Article/ReviewArticlesView.vue'),
+            beforeEnter: [authGuard, checkForWriter, getAllArticles]
+        },
+        {
+            path: '/reviewArticle/:id',
+            name: 'ReviewArticleView',
+            props: true,
+            component: () => import('../views/Article/ReviewArticleView.vue'),
+            beforeEnter: [authGuard, checkForWriter, getSingleArticle]
+        },
+        {
             path: '/callback',
             name: "Callback",
             component: CallbackView,
         },
-        {
-            path: '/reviewArticles',
-            name: 'ReviewArticlesView',
-            component: () => import('../views/Article/ReviewArticlesView.vue'),
-            beforeEnter: [authGuard, checkForWriter]
-        }
     ]
 })
   

@@ -96,11 +96,11 @@ export const updateArticle = async (id, formData) => {
     })
 }
 
-export const getArticlesByUserId = async (userId) => {
+export const getArticlesByWriterId = async (userId) => {
   return new Promise((resolve, reject) => {
         auth0.getAccessTokenSilently()
           .then( (token) => {
-            axios.get(`${apiServerUrl}/api/v2/articles/user/${userId}`, {
+            axios.get(`${apiServerUrl}/api/v2/articles/writer/${userId}`, {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -115,29 +115,38 @@ export const getArticlesByUserId = async (userId) => {
     })
 }
 
-export const getSingleArticle = async (articleId) => {
-  return new Promise((resolve, reject) => {
-      axios.get(`${apiServerUrl}/api/v2/articles/${articleId}`, {
-      }).then((data) => {
-        resolve(data)
-      }).catch((err) => {
-        reject(err)
-      })
+export const getAllArticles = async () => {
+  try {
+    const token = auth0.getAccessTokenSilently()
+    return await axios.get(`${apiServerUrl}/api/v2/articles/writer`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
+  } catch (err) {
+    return err
+  }   
+}
+
+export const getSingleArticle = async (articleId) => {
+  try {
+    return axios.get(`${apiServerUrl}/api/v2/articles/${articleId}`)
+  } catch (err) {
+    return err
+  }
 }
 
 export const getAuthenticatedWriter = async () => {
-    
-        try {
-          const token = await auth0.getAccessTokenSilently()
-          const data = await axios.get(`${apiServerUrl}/api/v2/writers/authID/${auth0.user.value.sub}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-          }})
-          return data
-        } catch (err) {
-          return err
-        }
+  try {
+    const token = await auth0.getAccessTokenSilently()
+    const data = await axios.get(`${apiServerUrl}/api/v2/writers/authID/${auth0.user.value.sub}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+    }})
+    return data
+  } catch (err) {
+    return err
+  }
 }
 
 export const saveDraftState = async (mongoId, body) => {
@@ -157,6 +166,55 @@ export const saveDraftState = async (mongoId, body) => {
       }).catch( (err) => {
         reject(err)
       })
+  })
+}
+
+export const approveArticle = async (mongoId) => {
+  auth0.getAccessTokenSilently().then( (token) => {
+    return axios.patch(`${apiServerUrl}/api/v2/articles/${mongoId}/approve`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  }).catch( (err) => {
+    return err
+  })
+
+}
+
+export const unApproveArticle = async (mongoId) => {
+  auth0.getAccessTokenSilently().then( (token) => {
+    return axios.patch(`${apiServerUrl}/api/v2/articles/${mongoId}/unapprove`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  }).catch( (err) => {
+    return err
+  })
+}
+
+export const archiveArticle = async (mongoId) => {
+  auth0.getAccessTokenSilently().then( (token) => {
+    return axios.patch(`${apiServerUrl}/api/v2/articles/${mongoId}/archive`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  }).catch( (err) => {
+    return err
+  })
+}
+
+export const unArchiveArticle = async (mongoId) => {
+  auth0.getAccessTokenSilently().then( (token) => {
+    return axios.patch(`${apiServerUrl}/api/v2/articles/${mongoId}/unarchive`, {}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  }).catch( (err) => {
+    return err
   })
 }
 

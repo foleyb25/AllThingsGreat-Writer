@@ -1,14 +1,15 @@
 // state management guide: https://blog.logrocket.com/complex-vue-3-state-management-pinia/
 import { defineStore, storeToRefs } from 'pinia'
-import { createNewArticle, updateArticle, getArticlesByUserId } from '../services/apiRequest.service'
+import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles, getSingleArticle, approveArticle, unApproveArticle, archiveArticle, unArchiveArticle } from '../services/apiRequest.service'
 import { useWriterStore } from "./writer.store";
 
 const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
 
 export const useArticleStore = defineStore('articleStore', {
     state: () => ({
-      articles: null,
-      article: null,
+      allArticles: {},
+      writerArticles: {},
+      article: {},
       loading: false,
       error: null,
       articleCreateSuccess: null,
@@ -16,24 +17,47 @@ export const useArticleStore = defineStore('articleStore', {
     }),
 
     getters: {
-      getArticles() {
-        return this.articles
+      getWriterArticles: (state) => () => {
+        return state.writerArticles
       },
 
-      getArticle() {
-        return this.article
+      getAllArticles: (state) => () => {
+        return state.allArticles
+      },
+
+      getArticle: (state) => () => {
+        return state.article
+      },
+
+      getWriterArticle(id) {
+        return this.writerArticles.find(article => article._id === id)
       }
+
     },
     actions: {
-      async retrieveArticles() {
-
-      },
-
       async retrieveArticlesByWriterId() {
         try {
           const {  writer } = storeToRefs(useWriterStore());
-          const response = await getArticlesByUserId(writer.value._id)
-          this.articles = response.data
+          const response = await getArticlesByWriterId(writer.value._id)
+          this.writerArticles = response.data
+        } catch (err) {
+          this.error = err
+        }
+      },
+
+      async retrieveAllArticles() {
+        try {
+          const response = await getAllArticles()
+          this.allArticles = response.data
+        } catch (err) {
+          this.error = err
+        }
+      },
+
+      async retrieveSingleArticle(id) {
+        try {
+          const response = await getSingleArticle(id)
+          this.article = response.data
         } catch (err) {
           this.error = err
         }
@@ -66,6 +90,47 @@ export const useArticleStore = defineStore('articleStore', {
         } catch (err) {
           this.error = err
         }
+      },
+
+      async archiveArticle(articleId) {
+        try {
+          await archiveArticle(articleId)
+          this.article.isArchived = !this.article.isArchived
+        } catch (err) {
+          console.log(err)
+        }
+        
+
+      },
+
+      async unArchiveArticle(articleId) {
+        try {
+          await unArchiveArticle(articleId)
+          this.article.isArchived = !this.article.isArchived
+        } catch (err) {
+          console.log(err)
+        }
+        
+      },
+
+      async approveArticle(articleId) {
+        try {
+          await approveArticle(articleId)
+          this.article.isReviewed = !this.article.isReviewed
+        } catch (err) {
+          console.log(err)
+        }
+        
+      },
+
+      async unApproveArticle(articleId) {
+        try {
+          await unApproveArticle(articleId)
+          this.article.isReviewed = !this.article.isReviewed
+        } catch (err) {
+          console.log(err)
+        }
+       
       }
     }
   })

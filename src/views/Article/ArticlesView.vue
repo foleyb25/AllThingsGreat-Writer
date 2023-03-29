@@ -3,7 +3,7 @@
 		class="grid gap-4 sm:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 	>
 		<div
-			v-for="(article, index) in getArticles"
+			v-for="(article, index) in getWriterArticles()"
 			v-bind:key="index"
 			class="flex flex-col items-center justify-center"
 		>
@@ -30,5 +30,5 @@ import ArticleComponent from "../../components/ArticleComponent.vue";
 import { storeToRefs } from "pinia";
 import { useArticleStore } from "../../stores/article.store";
 
-const { getArticles } = storeToRefs(useArticleStore());
+const { getWriterArticles } = storeToRefs(useArticleStore());
 </script>
