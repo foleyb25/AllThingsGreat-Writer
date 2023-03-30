@@ -86,7 +86,8 @@ onMounted(() => {
 
 .route-enter-from,
 .route-leave-to {
-	transform: translateX(120%);
+	/* opacity: 0; */
+	transform: translateX(100%);
 }
 
 /* ensure leaving items are taken out of layout flow so that moving

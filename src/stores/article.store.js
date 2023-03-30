@@ -50,13 +50,6 @@ export const useArticleStore = defineStore('articleStore', {
       },
 
       async retrieveAllArticles() {
-        // try {
-        //   const response = await getAllArticles()
-        //   this.allArticles = response.data
-        // } catch (err) {
-        //   this.error = err
-        // }
-
           await getAllArticles().then((response) => {
             this.allArticles = response.data
           }).catch((err) => {
@@ -65,12 +58,12 @@ export const useArticleStore = defineStore('articleStore', {
       },
 
       async retrieveSingleArticle(id) {
-        try {
-          const response = await getSingleArticle(id)
-          this.article = response.data
-        } catch (err) {
-          this.error = err
-        }
+          await getSingleArticle(id).then((response) => {
+            this.article = response.data
+          }).catch((err) => {
+            this.error = err
+          });
+          
       },
 
       async submitArticle(formData) {

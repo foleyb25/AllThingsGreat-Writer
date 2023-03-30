@@ -1,6 +1,6 @@
 <template>
-	<div>
-		<div class="bg-gray-100 h-full">
+	<div class="w-full">
+		<div class="bg-gray-100 w-full">
 			<div class="bg-white p-8 rounded-md shadow-lg">
 				<h1 class="text-2xl font-bold mb-4">Edit Profile</h1>
 				<form class="space-y-4">

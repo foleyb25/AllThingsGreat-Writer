@@ -1,7 +1,7 @@
 <template>
-    <ArticleEditorComponent></ArticleEditorComponent>
+	<ArticleEditorComponent></ArticleEditorComponent>
 </template>
 
 <script setup>
-import ArticleEditorComponent from '../../components/ArticleEditorComponent.vue'
+import ArticleEditorComponent from "../../components/ArticleEditorComponent.vue";
 </script>

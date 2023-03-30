@@ -1,41 +1,62 @@
 <template>
-  <div>
-    <!-- Modal trigger button -->
-    <button @click="showModal = true">Select an image</button>
+	<div>
+		<!-- Modal trigger button -->
+		<button @click="showModal = true">Select an image</button>
 
-    <!-- Modal component -->
-    <div>
-      <div class="modal-conten shadow-2xl bg-gradient-to-r from-[#000] to-[#555] rounded w-4/5 max-w-[500px] absolute top-[25%] left-[25%] p-[20px]">
-        <div class="text-white mb-8 flex flex-row items-between justify-between w-100">
-          <h2>Select an image</h2>
-          <span class="close-button cursor-pointer" @click="$emit('closeModal')">&times;</span>
-        </div>
-        <div>
-          <ul class="grid gap-4 sm:gap-8 grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
-            <!-- Image list -->
-            <li v-for="(url, index) in props.imageUrls" :key="index">
-              <img class="cursor-pointer w-[20vw]" :src="url" @click="selectImage(url)" />
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </div>
+		<!-- Modal component -->
+		<div>
+			<div
+				class="modal-content shadow-2xl bg-gradient-to-r from-[#000] to-[#555] rounded w-4/5 max-w-[500px] absolute top-[25%] left-[25%] p-[20px]"
+			>
+				<div
+					class="text-white mb-8 flex flex-row items-between justify-between w-100"
+				>
+					<h2>Select an image</h2>
+					<span
+						class="close-button cursor-pointer"
+						@click="$emit('closeModal')"
+						>&times;</span
+					>
+				</div>
+				<div>
+					<ul
+						class="grid gap-4 sm:gap-8 grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+					>
+						<!-- Image list -->
+						<li
+							v-for="(url, index) in props.imageUrls"
+							:key="index"
+						>
+							<img
+								class="cursor-pointer w-[20vw]"
+								:src="url"
+								@click="selectImage(url)"
+							/>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
-  
-<script setup>
-const props = defineProps(['imageUrls'])
-const emit = defineEmits(['selectImage'])
-      
-const selectImage = ((url) => {
-    // Handle image selection
-    const extension = url.slice(url.lastIndexOf(".") + 1)
 
-    if (extension.toLowerCase() == 'jpg' || extension.toLowerCase() == 'png' || extension.toLowerCase() == 'gif' || extension.toLowerCase() == 'jpeg') {
-        emit('selectImage', url)
-    } else {
-        return false
-    }  
-})
+<script setup>
+const props = defineProps(["imageUrls"]);
+const emit = defineEmits(["selectImage"]);
+
+const selectImage = (url) => {
+	// Handle image selection
+	const extension = url.slice(url.lastIndexOf(".") + 1);
+
+	if (
+		extension.toLowerCase() == "jpg" ||
+		extension.toLowerCase() == "png" ||
+		extension.toLowerCase() == "gif" ||
+		extension.toLowerCase() == "jpeg"
+	) {
+		emit("selectImage", url);
+	} else {
+		return false;
+	}
+};
 </script>
-  

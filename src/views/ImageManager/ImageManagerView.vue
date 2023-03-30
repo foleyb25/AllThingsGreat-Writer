@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="w-full">
 		<div class="flex flex-col justify-center items-center">
 			<div
 				id="cropper-container"
