@@ -203,7 +203,6 @@ import { useWriterStore } from "../stores/writer.store";
 import { useArticleStore } from "../stores/article.store";
 import router from "../router/index.js";
 import { renderMoodColor } from "../utils/colors.util";
-import CKEditor from "@mayasabha/ckeditor4-vue3";
 
 const { error, loading, writer } = storeToRefs(useWriterStore());
 const { saveDraft } = useWriterStore();
@@ -379,7 +378,7 @@ const onClick = (event) => {
 };
 </script>
 
-<style>
+<style scoped>
 .fade-enter-active,
 .fade-leave-active {
 	transition: opacity 0.4s linear;

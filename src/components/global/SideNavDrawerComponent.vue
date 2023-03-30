@@ -63,7 +63,7 @@
 							</button>
 						</router-link>
 					</li>
-					<li>
+					<!-- <li>
 						<button
 							class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
 							aria-controls="dropdown-reviews"
@@ -131,7 +131,8 @@
 								</router-link>
 							</li>
 						</ul>
-					</li>
+					</li> -->
+
 					<li>
 						<router-link to="/articles">
 							<button
@@ -160,7 +161,7 @@
 							</button>
 						</router-link>
 					</li>
-					<li>
+					<!-- <li>
 						<router-link to="/metrics">
 							<button
 								type="button"
@@ -254,7 +255,7 @@
 								</router-link>
 							</li>
 						</ul>
-					</li>
+					</li> -->
 					<li>
 						<button
 							class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"

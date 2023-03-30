@@ -1,27 +1,25 @@
 <template>
 	<div>
 		<header class="mt-[55px]">
-			<NavComponent></NavComponent>
-			<TransitionGroup>
-				<NotificationBannerComponent
-					color="bg-yellow-300"
-					v-if="user && !user.email_verified && isAuthenticated"
-				>
-					Please verify your email</NotificationBannerComponent
-				>
-				<NotificationBannerComponent
-					v-if="articleCreateSuccess"
-					color="bg-green-300"
-				>
-					Article Created Successfully</NotificationBannerComponent
-				>
-				<NotificationBannerComponent
-					v-if="articleUpdateSuccess"
-					color="bg-green-300"
-				>
-					Article Updated Successfully</NotificationBannerComponent
-				>
-			</TransitionGroup>
+			<NavComponent />
+			<NotificationBannerComponent
+				color="bg-yellow-300"
+				v-if="user && !user.email_verified && isAuthenticated"
+			>
+				Please verify your email</NotificationBannerComponent
+			>
+			<NotificationBannerComponent
+				v-if="articleCreateSuccess"
+				color="bg-green-300"
+			>
+				Article Created Successfully</NotificationBannerComponent
+			>
+			<NotificationBannerComponent
+				v-if="articleUpdateSuccess"
+				color="bg-green-300"
+			>
+				Article Updated Successfully</NotificationBannerComponent
+			>
 		</header>
 
 		<div class="flex flex-row">
@@ -37,10 +35,11 @@
 			<main
 				class="w-full max-h-screen h-screen bg-gray-100 overflow-scroll shadow-2xl"
 			>
-				<div v-if="isLoading && isAuthenticated">
-					Loading {{ isLoading }}
-				</div>
-				<router-view v-else class="p-4"></router-view>
+				<router-view class="p-4" v-slot="{ Component }">
+					<Transition name="route">
+						<component :is="Component" />
+					</Transition>
+				</router-view>
 			</main>
 		</div>
 	</div>
@@ -52,17 +51,17 @@ import SideNavDrawerComponent from "./components/global/SideNavDrawerComponent.v
 import NotificationBannerComponent from "./components/global/NotificationBannerComponent.vue";
 import { storeToRefs } from "pinia";
 import { useArticleStore } from "./stores/article.store";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
+
 const { articleCreateSuccess, articleUpdateSuccess } = storeToRefs(
 	useArticleStore()
 );
-const auth0 = useAuth0();
-const isAuthenticated = auth0.isAuthenticated;
-const isLoading = auth0.isLoading;
-const user = auth0.user;
+const { isAuthenticated, isLoading, user } = useAuth0();
+const isAuthenticatedRef = ref(isAuthenticated);
+const isLoadingRef = ref(isLoading);
 
 onMounted(() => {
-	twttr.widgets.load();
+	// perform any necessary setup logic here
 });
 </script>
 
@@ -79,14 +78,20 @@ onMounted(() => {
 	filter: drop-shadow(0 0 2em #42b883aa);
 }
 
-/* we will explain what these classes do next! */
-.v-enter-active,
-.v-leave-active {
-	transition: opacity 0.5s ease;
+.route-move, /* apply transition to moving elements */
+.route-enter-active,
+.route-leave-active {
+	transition: all 0.5s ease-in-out;
 }
 
-.v-enter-from,
-.v-leave-to {
-	opacity: 0;
+.route-enter-from,
+.route-leave-to {
+	transform: translateX(120%);
+}
+
+/* ensure leaving items are taken out of layout flow so that moving
+   animations can be calculated correctly. */
+.route-leave-active {
+	position: absolute;
 }
 </style>

@@ -40,42 +40,46 @@
 </template>
 
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useArticleStore } from "../../stores/article.store";
 
 const { getArticle } = storeToRefs(useArticleStore());
 
-const isDisabled = false;
+const isDisabled = ref(false);
 
-const props = defineProps(["id"]);
-console.log("PROP", props.id);
+const props = defineProps({
+	id: {
+		type: String,
+		required: true,
+	},
+});
 
 onMounted(async () => {
 	twttr.widgets.load();
 });
 
 const approveArticle = async () => {
-	isdisabled = true;
+	isDisabled = true;
 	await useArticleStore().approveArticle(props.id);
-	isdisabled = false;
+	isDisabled = false;
 };
 
 const unApproveArticle = async () => {
-	isdisabled = true;
+	isDisabled = true;
 	await useArticleStore().unApproveArticle(props.id);
-	isdisabled = false;
+	isDisabled = false;
 };
 
 const archiveArticle = async () => {
-	isdisabled = true;
+	isDisabled = true;
 	await useArticleStore().archiveArticle(props.id);
-	isdisabled = false;
+	isDisabled = false;
 };
 
 const unArchiveArticle = async () => {
-	isdisabled = true;
+	isDisabled = true;
 	await useArticleStore().unArchiveArticle(props.id);
-	isdisabled = false;
+	isDisabled = false;
 };
 </script>

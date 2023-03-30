@@ -10,22 +10,25 @@ import {useArticleStore} from '../stores/article.store.js'
 const checkForWriter = async () => {
     const {checkWriter} = useWriterStore()
     await checkWriter()
+    return true
 }
 
 const getArticlesByWriterId = async () => {
     const { retrieveArticlesByWriterId } = useArticleStore();
-    await retrieveArticlesByWriterId();
+    retrieveArticlesByWriterId();
+    return true
 }
 
 const getAllArticles = async () => {
     const { retrieveAllArticles} = useArticleStore();
-    await retrieveAllArticles();
+    retrieveAllArticles();
+    return true
 }
 
 const getSingleArticle = async (to, from) => {
     const id = to.params.id;
     const { retrieveSingleArticle} = useArticleStore();
-    await retrieveSingleArticle(id)
+    retrieveSingleArticle(id)
     return true
 }
 
@@ -54,7 +57,7 @@ const router = createRouter({
             name: "EditArticleView",
             component: () => import('../views/Article/EditArticleView.vue'),
             props: true,
-            beforeEnter: [authGuard, checkForWriter]
+            beforeEnter: [authGuard, checkForWriter, getSingleArticle]
         },
         {
             path: "/articles",
@@ -69,36 +72,36 @@ const router = createRouter({
             beforeEnter: [authGuard, checkForWriter],
             beforeRouteUpdate: [setDraft]
         },
-        {
-            path: "/metrics",
-            name: "MetricsView",
-            component: () => import('../views/MetricsView.vue'),
-            beforeEnter: [authGuard, checkForWriter]
-        },
-        {
-            path: "/tweets",
-            name: "TweetsView",
-            component: () => import('../views/TweetsView.vue'),
-            beforeEnter: [authGuard, checkForWriter]
-        },
+        // {
+        //     path: "/metrics",
+        //     name: "MetricsView",
+        //     component: () => import('../views/MetricsView.vue'),
+        //     beforeEnter: [authGuard, checkForWriter]
+        // },
+        // {
+        //     path: "/tweets",
+        //     name: "TweetsView",
+        //     component: () => import('../views/TweetsView.vue'),
+        //     beforeEnter: [authGuard, checkForWriter]
+        // },
         {
             path: "/account",
             name: "AccountView",
             component: () => import('../views/AccountView.vue'),
             beforeEnter: [authGuard, checkForWriter]
         },
-        {
-            path: "/searchscreenplay",
-            name: "SearchScreenplayView",
-            component: () => import('../views/Screenplay/SearchScreenplayView.vue'),
-            beforeEnter: [authGuard, checkForWriter]
-        },
-        {
-            path: "/searchscreenplay/:id",
-            name: "ScreenplayDetailsView",
-            component: () => import('../views/Screenplay/ScreenplayDetailsView.vue'),
-            beforeEnter: [authGuard, checkForWriter]
-        },
+        // {
+        //     path: "/searchscreenplay",
+        //     name: "SearchScreenplayView",
+        //     component: () => import('../views/Screenplay/SearchScreenplayView.vue'),
+        //     beforeEnter: [authGuard, checkForWriter]
+        // },
+        // {
+        //     path: "/searchscreenplay/:id",
+        //     name: "ScreenplayDetailsView",
+        //     component: () => import('../views/Screenplay/ScreenplayDetailsView.vue'),
+        //     beforeEnter: [authGuard, checkForWriter]
+        // },
         {
             path: "/imagemanager",
             name: "ImageManagerView",

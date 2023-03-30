@@ -3,8 +3,6 @@ import { defineStore } from 'pinia'
 import { auth0 } from '../auth0'
 import { getAuthenticatedWriter, saveDraftState } from '../services/apiRequest.service'
 
-const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
-
 export const useWriterStore = defineStore('writerStore', {
     state: () => ({
       writer: null,
@@ -13,19 +11,7 @@ export const useWriterStore = defineStore('writerStore', {
       loading: false,
       error: null,
     }),
-    getters: {
-      getNumberOfDrafts: (state) => {
-          return state.writer.drafts.length
-      },
-
-      getDrafts: (state) => {
-          return state.writer.drafts
-      },
-
-      getDraftById: (state) => {
-        return (draftId) => state.writer.drafts.find((draft) => draft._id === draftId)
-      }
-    },
+    getters: {},
 
     actions: {
       async retrieveWriter() {

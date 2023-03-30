@@ -1,25 +1,16 @@
 <template>
-    <ArticleEditorComponent v-if="state.article" :article="state.article"></ArticleEditorComponent>
+	<ArticleEditorComponent
+		v-if="getArticle()"
+		:article="getArticle()"
+	></ArticleEditorComponent>
 </template>
 
 <script setup>
-import { reactive, onMounted } from 'vue'
-import ArticleEditorComponent from '../../components/ArticleEditorComponent.vue'
-import { getSingleArticle } from '../../services/apiRequest.service';
+import ArticleEditorComponent from "../../components/ArticleEditorComponent.vue";
+import { storeToRefs } from "pinia";
+import { useArticleStore } from "../../stores/article.store";
 
-const props = defineProps(['id'])
+const { getArticle } = storeToRefs(useArticleStore());
 
-const state = reactive({
-    article: null
-})
-
-
-onMounted(async () => {
-    const response = await getSingleArticle(props.id)
-    state.article = response.data
-})
+const props = defineProps(["id"]);
 </script>
-
-
-
-

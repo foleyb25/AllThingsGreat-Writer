@@ -36,22 +36,32 @@ export const useArticleStore = defineStore('articleStore', {
     },
     actions: {
       async retrieveArticlesByWriterId() {
-        try {
-          const {  writer } = storeToRefs(useWriterStore());
-          const response = await getArticlesByWriterId(writer.value._id)
-          this.writerArticles = response.data
-        } catch (err) {
-          this.error = err
-        }
+          try {
+            const {  writer } = storeToRefs(useWriterStore());
+            getArticlesByWriterId(writer.value._id).then((response) => {
+              this.writerArticles = response.data
+            }).catch((err) => {
+              this.error = err
+            })
+          } catch (err) {
+            this.error = err
+          }
+        
       },
 
       async retrieveAllArticles() {
-        try {
-          const response = await getAllArticles()
-          this.allArticles = response.data
-        } catch (err) {
-          this.error = err
-        }
+        // try {
+        //   const response = await getAllArticles()
+        //   this.allArticles = response.data
+        // } catch (err) {
+        //   this.error = err
+        // }
+
+          await getAllArticles().then((response) => {
+            this.allArticles = response.data
+          }).catch((err) => {
+            this.error = err
+          })
       },
 
       async retrieveSingleArticle(id) {
