@@ -166,6 +166,13 @@
 			>
 				Save Draft
 			</button>
+			<button
+				v-if="props.draft"
+				class="ml-8 bg-red-800 hover:bg-red-600 text-black font-bold py-2 px-4 border border-red-900 rounded disabled:opacity-25"
+				@click="this.state.showDeleteModal = true"
+			>
+				Delete Draft
+			</button>
 		</div>
 
 		<label
@@ -179,20 +186,30 @@
 		</div>
 
 		<!-- Modal component -->
-		<transition name="fade" appear>
+		<Transition name="fade" appear>
 			<ImagePickerModalComponent
 				v-if="state.showModal"
 				v-model:imageUrls="state.awsImageUrls"
 				@close-modal="state.showModal = false"
 				@select-image="selectImage"
 			/>
-		</transition>
+		</Transition>
+		<Transition name="fade" appear>
+			<DeleteConfirmationModalComponent
+				v-if="state.showDeleteModal"
+				v-model:imageUrls="state.awsImageUrls"
+				@hideDeleteConfirmation="state.showDeleteModal = false"
+				@confirmDelete="handleDeleteDraft"
+				@select-image="selectImage"
+			/>
+		</Transition>
 	</div>
 </template>
 
 <script setup>
 import ArticleComponent from "../components/ArticleComponent.vue";
 import ImagePickerModalComponent from "./article/ImagePickerModalComponent.vue";
+import DeleteConfirmationModalComponent from "./article/DeleteConfirmationModalComponent.vue";
 import { useAuth0 } from "@auth0/auth0-vue";
 import { getImageUrls } from "../services/apiRequest.service";
 import { reactive, onMounted } from "vue";
@@ -203,7 +220,7 @@ import router from "../router/index.js";
 import { renderMoodColor } from "../utils/colors.util";
 
 const emit = defineEmits(["removeDraft"]);
-const { error, loading, writer } = storeToRefs(useWriterStore());
+const { error, loading } = storeToRefs(useWriterStore());
 const { saveDraft } = useWriterStore();
 
 const { submitArticle, updateArticle } = useArticleStore();
@@ -279,6 +296,7 @@ const state = reactive({
 		: "/src/assets/images/1669432796163-181228722+missing_img.jpeg",
 	awsImageUrls: [],
 	showModal: false,
+	showDeleteModal: false,
 	user: useAuth0().user,
 });
 
@@ -342,6 +360,11 @@ const handleSubmit = async () => {
 	if (props.draft) {
 		emit("removeDraft");
 	}
+	router.push("/articles");
+};
+
+const handleDeleteDraft = () => {
+	emit("removeDraft");
 	router.push("/articles");
 };
 

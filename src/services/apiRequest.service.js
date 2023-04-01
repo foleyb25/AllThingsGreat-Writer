@@ -96,6 +96,24 @@ export const updateArticle = async (id, formData) => {
     })
 }
 
+export const updateWriter = async (writer) => {
+  try {
+    const token = await auth0.getAccessTokenSilently()
+    const respone = await axios.patch(`${apiServerUrl}/api/v2/writers`, writer, {
+    "Content-Type": "multipart/form-data",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    return response
+  } catch (err) {
+    return err
+  }
+  
+}
+
+
+
 export const getArticlesByWriterId = async (userId) => {
   return new Promise((resolve, reject) => {
         auth0.getAccessTokenSilently()
@@ -150,9 +168,7 @@ export const getAuthenticatedWriter = async () => {
 }
 
 export const saveDraftState = async (mongoId, body) => {
-  return new Promise((resolve, reject) => {
-    auth0.getAccessTokenSilently()
-        .then( (token) => {
+    const token = auth0.getAccessTokenSilently()
           axios.patch(`${apiServerUrl}/api/v2/writers/${mongoId}/draft`, body, {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -163,10 +179,6 @@ export const saveDraftState = async (mongoId, body) => {
           }).catch((err) => {
             reject(err)
           })
-      }).catch( (err) => {
-        reject(err)
-      })
-  })
 }
 
 export const deleteDraft = async (writerId, draftId) => {
