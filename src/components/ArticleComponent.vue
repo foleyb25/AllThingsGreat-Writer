@@ -53,7 +53,7 @@
 				<div></div>
 				{{ props.category }}
 				<div
-					v-if="moods || moods.length > 0"
+					v-if="moods?.length > 0"
 					:class="
 						'm-2 inline-block p-1 border border-black rounded ' +
 						getMoodColor(moods[0])

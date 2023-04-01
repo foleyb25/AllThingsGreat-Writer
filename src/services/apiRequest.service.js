@@ -169,6 +169,20 @@ export const saveDraftState = async (mongoId, body) => {
   })
 }
 
+export const deleteDraft = async (writerId, draftId) => {
+  try {
+    const token = await auth0.getAccessTokenSilently()
+          await axios.delete(`${apiServerUrl}/api/v2/writers/${writerId}/draft/${draftId}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+    
+  } catch (err) {
+    return err
+  }
+}
+
 export const approveArticle = async (mongoId) => {
   auth0.getAccessTokenSilently().then( (token) => {
     return axios.patch(`${apiServerUrl}/api/v2/articles/${mongoId}/approve`, {}, {

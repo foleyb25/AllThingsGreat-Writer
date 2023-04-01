@@ -130,9 +130,7 @@
 					:rating="state.rating"
 					:numberOfRatings="state.numberOfRatings"
 					:moods="state.moods"
-					:author="
-						article ? article.writer.nickname : writer.nickName
-					"
+					:author="article?.writer?.nickName"
 				></ArticleComponent>
 			</div>
 		</div>
@@ -204,6 +202,7 @@ import { useArticleStore } from "../stores/article.store";
 import router from "../router/index.js";
 import { renderMoodColor } from "../utils/colors.util";
 
+const emit = defineEmits(["removeDraft"]);
 const { error, loading, writer } = storeToRefs(useWriterStore());
 const { saveDraft } = useWriterStore();
 
@@ -339,6 +338,10 @@ const handleSubmit = async () => {
 		tags: state.tags,
 	};
 	await submitArticle(formData);
+	//article submitted, check to see if it was a draft and delete it
+	if (props.draft) {
+		emit("removeDraft");
+	}
 	router.push("/articles");
 };
 

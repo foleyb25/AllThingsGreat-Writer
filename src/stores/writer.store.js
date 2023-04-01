@@ -1,7 +1,7 @@
 // state management guide: https://blog.logrocket.com/complex-vue-3-state-management-pinia/
 import { defineStore } from 'pinia'
 import { auth0 } from '../auth0'
-import { getAuthenticatedWriter, saveDraftState } from '../services/apiRequest.service'
+import { getAuthenticatedWriter, saveDraftState, deleteDraft } from '../services/apiRequest.service'
 
 export const useWriterStore = defineStore('writerStore', {
     state: () => ({
@@ -30,6 +30,17 @@ export const useWriterStore = defineStore('writerStore', {
         this.loading = true
         saveDraftState(this.writer._id, body).then( (data) => {
           this.writer.drafts.push(data.data.draft)
+          this.loading = false
+        }).catch( (err) => {
+          this.loading = false 
+          this.error = err
+        })
+      },
+
+      async deleteDraft(draftId) {
+        this.loading = true
+        deleteDraft(this.writer._id, draftId).then( (data) => {
+          this.writer.drafts = this.writer.drafts.filter(draft => draft._id !== draftId);
           this.loading = false
         }).catch( (err) => {
           this.loading = false 
