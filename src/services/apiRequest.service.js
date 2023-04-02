@@ -99,7 +99,7 @@ export const updateArticle = async (id, formData) => {
 export const updateWriter = async (writer) => {
   try {
     const token = await auth0.getAccessTokenSilently()
-    const respone = await axios.patch(`${apiServerUrl}/api/v2/writers`, writer, {
+    const response = await axios.patch(`${apiServerUrl}/api/v2/writers`, writer, {
     "Content-Type": "multipart/form-data",
     headers: {
       Authorization: `Bearer ${token}`,

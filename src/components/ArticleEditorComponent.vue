@@ -308,8 +308,7 @@ const handleGetAwsImages = () => {
 	getImageUrls()
 		.then((result) => {
 			if (result.status >= 200 && result.status < 300)
-				console.log(result);
-			state.awsImageUrls = result.data;
+				state.awsImageUrls = result.data;
 			state.showModal = true;
 		})
 		.catch((err) => {
@@ -327,14 +326,12 @@ const pushTag = (e) => {
 	if (e.key === "Enter" || e.key === ",") {
 		var tag = e.target.value.replace(/,/g, "");
 		tag = tag.trim();
-		console.log("Pressed enter");
 		state.tags.push(e.target.value);
 		e.target.value = "";
 	}
 };
 
 const removeTag = (index) => {
-	console.log("INDEX: ", index);
 	state.tags = state.tags.filter((item) => item !== index);
 };
 

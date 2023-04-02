@@ -9,8 +9,8 @@ import {useArticleStore} from '../stores/article.store.js'
 // all the routes in the Pinia writer store. This function has to go above the route definitions.
 const checkForWriter = async () => {
     const {checkWriter} = useWriterStore()
-    await checkWriter()
-    return true
+    const loggedIn = await checkWriter()
+    return loggedIn
 }
 
 const getArticlesByWriterId = async () => {

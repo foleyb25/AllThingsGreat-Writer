@@ -25,7 +25,6 @@
 						v-model="writer.nickName"
 					/>
 				</div>
-				{{ writer.nickName }}
 				<div class="flex flex-col">
 					<label for="bio" class="font-medium mb-1">Bio</label>
 					<textarea

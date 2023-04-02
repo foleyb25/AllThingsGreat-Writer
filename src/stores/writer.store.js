@@ -53,13 +53,20 @@ export const useWriterStore = defineStore('writerStore', {
           //See if writer object already exists above
           if(!this.writer) {
             //writer does not exist and we are authenticate with auth0. Call DB to get single user
-            await this.retrieveWriter()
-          } 
+            try {
+              await this.retrieveWriter()
+              return true
+            } catch (err) {
+              return false
+            }
+            
+          } else {
+            return true
+          }
         } 
       },
 
       async updateWriterInfo(writer) {
-        console.log(writer.value)
         await updateWriter(writer.value)
       }
     }
