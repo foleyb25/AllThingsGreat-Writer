@@ -40,12 +40,11 @@
 				required
 			>
 				<option value="AllThingsGreat">AllThingsGreat</option>
+				<option value="Cryptocurrency">Cryptocurrency</option>
+				<option value="A.I. & Technology">A.I. & Technology</option>
+				<option value="Health & Fitness">Health & Fitness</option>
+				<option value="Extraordinary">Extraordinary</option>
 				<option value="Sports">Sports</option>
-				<option value="Entertainment">Entertainment</option>
-				<option value="Outdoors">Outdoors</option>
-				<option value="Gaming">Gaming</option>
-				<option value="Investments">Investments</option>
-				<option value="History">History</option>
 			</select>
 			<label
 				for="moods"
@@ -263,16 +262,17 @@ const state = reactive({
 		? props.draft.moods
 		: [],
 	moodsOptions: [
-		"Sarcastic",
-		"Mind-blowing",
-		"Inspirational",
-		"Informative",
-		"Humorous",
-		"Analytical",
-		"Creative",
-		"Provocative",
-		"Introspective",
-		"Nostalgic",
+		"Satire",
+		// "Sarcastic",
+		// "Mind-blowing",
+		// "Inspirational",
+		// "Informative",
+		// "Humorous",
+		// "Analytical",
+		// "Creative",
+		// "Provocative",
+		// "Introspective",
+		// "Nostalgic",
 	],
 	tags: props.article
 		? props.article.tags

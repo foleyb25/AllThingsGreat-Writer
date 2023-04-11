@@ -37,6 +37,9 @@ module.exports = {
         },
         nostalgic: {
           beige: "#F5DEB3"
+        },
+        satire: {
+          blue: "#00ffff"
         }
       }
     },

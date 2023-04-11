@@ -20,6 +20,8 @@ export const renderMoodColor = (mood) => {
 			return "bg-introspective-purple text-white";
 		case "Nostalgic":
 			return "bg-nostalgic-beige";
+		case "Satire":
+			return "bg-satire-blue";
 		default:
 			return "bg-gray-500";
 	}
