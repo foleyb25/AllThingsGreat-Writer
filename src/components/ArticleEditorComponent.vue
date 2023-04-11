@@ -3,7 +3,7 @@
 		<div>
 			<label
 				for="title"
-				class="block m-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+				class="block m-2 text-sm font-medium text-primary-light dark:text-gray-300"
 				>Title</label
 			>
 			<input
@@ -11,7 +11,7 @@
 				type="text"
 				id="title"
 				v-model="state.title"
-				class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				class="bg-gray-50 border border-gray-300 text-primary-light text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				placeholder="Title..."
 				required
 			/>
@@ -19,7 +19,7 @@
 		<div>
 			<label
 				for="title"
-				class="block m-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+				class="block m-2 text-sm font-medium text-primary-light dark:text-gray-300"
 				>Body</label
 			>
 			<ckeditor
@@ -30,13 +30,13 @@
 		<div class="flex flex-col mt-4">
 			<label
 				for="category"
-				class="block m-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+				class="block m-2 text-sm font-medium text-primary-light dark:text-gray-300"
 				>Category</label
 			>
 			<select
 				name="category"
 				v-model="state.category"
-				class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				class="bg-gray-50 border border-gray-300 text-primary-light text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				required
 			>
 				<option value="AllThingsGreat">AllThingsGreat</option>
@@ -48,10 +48,13 @@
 			</select>
 			<label
 				for="moods"
-				class="block m-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+				class="block m-2 text-sm font-medium text-primary-light dark:text-gray-300"
 				>Moods</label
 			>
-			<div v-for="mood in state.moodsOptions" class="m-2">
+			<div
+				v-for="mood in state.moodsOptions"
+				class="m-2 text-primary-light"
+			>
 				<input
 					v-model="state.moods"
 					type="checkbox"
@@ -79,7 +82,7 @@
 			<div>
 				<label
 					for="tags"
-					class="block m-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+					class="block m-2 text-sm font-medium text-primary-light dark:text-gray-300"
 					>Tags (meaningful tags will enhance your google page
 					rank)</label
 				>
@@ -91,7 +94,7 @@
 					v-on:keydown.,="pushTag"
 					v-on:keyup.enter="clearInputField"
 					v-on:keyup.,="clearInputField"
-					class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					class="bg-gray-50 border border-gray-300 text-primary-light text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 					placeholder="Enter tags separated by commas or enter..."
 					required
 				/>
@@ -113,7 +116,7 @@
 		<div>
 			<label
 				for="img"
-				class="block m-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+				class="block m-2 text-sm font-medium text-primary-light dark:text-gray-300"
 				>Article Thumbnail Preview</label
 			>
 			<div
@@ -176,7 +179,7 @@
 
 		<label
 			for="img"
-			class="block m-2 mt-20 text-sm font-medium text-gray-900 dark:text-gray-300"
+			class="block m-2 mt-20 text-sm font-medium text-primary-light dark:text-gray-300"
 			>Article Preview (Click anywhere to load your embedded
 			tweets)</label
 		>

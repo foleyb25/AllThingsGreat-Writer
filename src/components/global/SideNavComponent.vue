@@ -1,14 +1,14 @@
 <template>
-	<div>
-		<aside class="w-full">
+	<div class="bg-primary-dark text-primary-light">
+		<aside class="w-full bg-primary-dark text-primary-light">
 			<div
-				class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-800"
+				class="bg-primary-dark text-primary-light overflow-y-auto py-4 px- rounded dark:bg-gray-800"
 			>
-				<ul class="space-y-2">
+				<ul class="space-y-2 bg-primary-dark text-primary-light">
 					<li>
 						<router-link to="/addArticle">
 							<button
-								class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+								class="flex text-primary-light items-center p-2 w-full text-base font-normal rounded-lg transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700"
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +34,7 @@
 					</li>
 					<!-- <li>
 						<button
-							class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+							class="flex items-center p-2 w-full text-base font-normal text-primary-LIGHT rounded-lg transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700"
 							aria-controls="dropdown-reviews"
 							data-collapse-toggle="dropdown-reviews"
 						>
@@ -76,7 +76,7 @@
 								<router-link to="/searchscreenplay">
 									<button
 										type="button"
-										class="flex items-center pl-11 p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+										class="flex items-center pl-11 p-2 w-full text-base font-normal text-primary-LIGHT rounded-lg transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700"
 									>
 										<svg
 											xmlns="http://www.w3.org/2000/svg"
@@ -105,7 +105,7 @@
 						<router-link to="/articles">
 							<button
 								type="button"
-								class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+								class="text-primary-light flex items-center p-2 w-full text-base font-normal rounded-lg transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700"
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -133,7 +133,7 @@
 						<router-link to="/metrics">
 							<button
 								type="button"
-								class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+								class="flex items-center p-2 w-full text-base font-normal text-primary-LIGHT rounded-lg transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700"
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -160,7 +160,7 @@
 					<!-- <li>
 						<button
 							type="button"
-							class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+							class="flex items-center p-2 w-full text-base font-normal text-primary-LIGHT rounded-lg transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700"
 							aria-controls="dropdown-news"
 							data-collapse-toggle="dropdown-news"
 						>
@@ -202,7 +202,7 @@
 								<router-link to="/tweets">
 									<button
 										type="button"
-										class="flex items-center pl-11 p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+										class="flex items-center pl-11 p-2 w-full text-base font-normal text-primary-LIGHT rounded-lg transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700"
 									>
 										<svg
 											class="w-5 h-5"
@@ -226,7 +226,7 @@
 					</li> -->
 					<li>
 						<button
-							class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+							class="flex text-primary-light items-center p-2 w-full text-base font-normal text-primary-LIGHT rounded-lg transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700"
 							aria-controls="dropdown-drafts"
 							data-collapse-toggle="dropdown-drafts"
 						>
@@ -274,7 +274,7 @@
 								<router-link :to="'/draft/' + draft._id">
 									<button
 										type="button"
-										class="flex items-center pl-11 p-2 w-full text-base font-normal text-gray-900 transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700 border-b border-gray-400"
+										class="flex items-center pl-11 p-2 w-full text-base font-normal text-primary-LIGHT transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700 border-b border-gray-400"
 									>
 										<span
 											class="flex-1 ml-3 text-left whitespace-nowrap"
@@ -288,7 +288,7 @@
 					<li>
 						<router-link to="/imagemanager">
 							<button
-								class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+								class="flex items-center p-2 w-full text-base font-normal text-primary-LIGHT rounded-lg transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700"
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -315,7 +315,7 @@
 					<li v-if="writer && writer.isSuperAdmin">
 						<router-link to="/reviewArticles">
 							<button
-								class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+								class="flex items-center p-2 w-full text-base font-normal text-primary-LIGHT rounded-lg transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700"
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
@@ -342,7 +342,7 @@
 					<li>
 						<router-link to="/account">
 							<button
-								class="flex items-center p-2 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+								class="flex items-center p-2 w-full text-base font-normal text-primary-LIGHT rounded-lg transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700"
 							>
 								<svg
 									xmlns="http://www.w3.org/2000/svg"

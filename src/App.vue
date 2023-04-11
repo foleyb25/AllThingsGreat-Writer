@@ -33,9 +33,12 @@
 			></SideNavDrawerComponent>
 
 			<main
-				class="w-full max-h-screen h-screen bg-gray-100 overflow-scroll shadow-2xl"
+				class="w-full max-h-screen h-screen overflow-scroll shadow-2xl"
 			>
-				<router-view class="p-4" v-slot="{ Component }">
+				<router-view
+					class="p-4 bg-gradient-to-r from-primary-dark to-primary-teal"
+					v-slot="{ Component }"
+				>
 					<Transition name="route">
 						<component :is="Component" />
 					</Transition>

@@ -40,6 +40,13 @@ module.exports = {
         },
         satire: {
           blue: "#00ffff"
+        },
+        primary: {
+          dark: "#2C2C2C",
+          light: "#F5F5F5",
+          darkPurple: "#8B56B4",
+          lightPurple: "#C6A3D8",
+          teal: "#4A8791",
         }
       }
     },
