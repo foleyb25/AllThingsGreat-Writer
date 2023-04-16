@@ -1,6 +1,6 @@
 // state management guide: https://blog.logrocket.com/complex-vue-3-state-management-pinia/
 import { defineStore, storeToRefs } from 'pinia'
-import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles, getSingleArticle, approveArticle, unApproveArticle, archiveArticle, unArchiveArticle } from '../services/apiRequest.service'
+import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles, getSingleArticle, approveArticle, unApproveArticle, archiveArticle, unArchiveArticle, uploadArticleImage, getArticleImageUrls } from '../services/apiRequest.service'
 import { useWriterStore } from "./writer.store";
 
 const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
@@ -9,7 +9,8 @@ export const useArticleStore = defineStore('articleStore', {
     state: () => ({
       allArticles: {},
       writerArticles: {},
-      article: {},
+      article: null,
+      articleImageUrls: [],
       loading: false,
       error: null,
       articleCreateSuccess: null,
@@ -17,23 +18,23 @@ export const useArticleStore = defineStore('articleStore', {
     }),
 
     getters: {
-      getWriterArticles: (state) => () => {
+      getWriterArticles: (state) => {
         return state.writerArticles
       },
 
-      getAllArticles: (state) => () => {
+      getAllArticles: (state) => {
         return state.allArticles
       },
 
-      getArticle: (state) => () => {
+      getArticle: (state) => {
         return state.article
       },
 
-      getWriterArticle(id) {
-        return this.writerArticles.find(article => article._id === id)
-      }
-
+      getImageUrls: (state) => {
+        return state.articleImageUrls
+      },
     },
+
     actions: {
       async retrieveArticlesByWriterId() {
           try {
@@ -63,7 +64,15 @@ export const useArticleStore = defineStore('articleStore', {
           }).catch((err) => {
             this.error = err
           });
-          
+      },
+
+      async retrieveArticleImageUrls() {
+        const response = await getArticleImageUrls()
+        if (response.status === 'success') {
+          this.articleImageUrls = response.data
+        } else {
+          console.log(response.message)
+        }
       },
 
       async submitArticle(formData) {
@@ -134,6 +143,15 @@ export const useArticleStore = defineStore('articleStore', {
           console.log(err)
         }
        
+      },
+
+      async uploadArticleImage(blob, imageName) {
+        try {
+          await uploadArticleImage(blob, imageName)
+        } catch (err) {
+          console.log(err)
+        }
+        
       }
     }
   })

@@ -4,7 +4,7 @@
 	>
 		<transition-group :css="false" @enter="onEnter">
 			<div
-				v-for="(article, index) in getWriterArticles()"
+				v-for="(article, index) in getWriterArticles"
 				:key="article._id"
 				:data-index="index"
 				class="flex flex-col items-center justify-center"

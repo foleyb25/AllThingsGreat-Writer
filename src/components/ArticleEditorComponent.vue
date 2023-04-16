@@ -3,7 +3,7 @@
 		<div>
 			<label
 				for="title"
-				class="block m-2 text-sm font-medium text-primary-light dark:text-gray-300"
+				class="block m-2 text-sm font-medium text-primary-light"
 				>Title</label
 			>
 			<input
@@ -11,7 +11,7 @@
 				type="text"
 				id="title"
 				v-model="state.title"
-				class="bg-gray-50 border border-gray-300 text-primary-light text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				class="bg-gray-50 border border-gray-300 text-primary-dark text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				placeholder="Title..."
 				required
 			/>
@@ -36,7 +36,7 @@
 			<select
 				name="category"
 				v-model="state.category"
-				class="bg-gray-50 border border-gray-300 text-primary-light text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				class="bg-gray-50 border border-gray-300 text-primary-dark text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				required
 			>
 				<option value="AllThingsGreat">AllThingsGreat</option>
@@ -139,7 +139,7 @@
 		<div class="mt-4">
 			<input
 				:v-on="state.imagePath"
-				@click.prevent="handleGetAwsImages"
+				@click.prevent="state.showModal = true"
 				type="file"
 				@change="onFileChange"
 			/>
@@ -191,7 +191,7 @@
 		<Transition name="fade" appear>
 			<ImagePickerModalComponent
 				v-if="state.showModal"
-				v-model:imageUrls="state.awsImageUrls"
+				v-model:imageUrls="getImageUrls"
 				@close-modal="state.showModal = false"
 				@select-image="selectImage"
 			/>
@@ -213,7 +213,6 @@ import ArticleComponent from "../components/ArticleComponent.vue";
 import ImagePickerModalComponent from "./article/ImagePickerModalComponent.vue";
 import DeleteConfirmationModalComponent from "./article/DeleteConfirmationModalComponent.vue";
 import { useAuth0 } from "@auth0/auth0-vue";
-import { getImageUrls } from "../services/apiRequest.service";
 import { reactive, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useWriterStore } from "../stores/writer.store";
@@ -223,6 +222,7 @@ import { renderMoodColor } from "../utils/colors.util";
 
 const emit = defineEmits(["removeDraft"]);
 const { error, loading } = storeToRefs(useWriterStore());
+const { getImageUrls } = storeToRefs(useArticleStore());
 const { saveDraft } = useWriterStore();
 
 const { submitArticle, updateArticle } = useArticleStore();
@@ -302,22 +302,6 @@ const state = reactive({
 	showDeleteModal: false,
 	user: useAuth0().user,
 });
-
-const handleGetAwsImages = () => {
-	if (state.awsImageUrls.length > 0) {
-		state.showModal = true;
-		return;
-	}
-	getImageUrls()
-		.then((result) => {
-			if (result.status >= 200 && result.status < 300)
-				state.awsImageUrls = result.data;
-			state.showModal = true;
-		})
-		.catch((err) => {
-			console.log(err);
-		});
-};
 
 const selectImage = (url) => {
 	state.imagePath = url;

@@ -48,10 +48,14 @@
 <script>
 import { Cropper, Preview } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
-import { useAuth0 } from "@auth0/auth0-vue";
 import { defineComponent, ref, reactive } from "vue";
 import DropFile from "../../components/ImageManager/DropFile.vue";
-import { imageUploader } from "../../services/apiRequest.service";
+import { storeToRefs } from "pinia";
+import { useArticleStore } from "../../stores/article.store";
+
+const { error, loading } = storeToRefs(useArticleStore());
+
+const { uploadArticleImage } = useArticleStore();
 
 export default defineComponent({
 	components: {
@@ -61,7 +65,6 @@ export default defineComponent({
 	},
 	setup() {
 		const cropper = ref();
-		const { getAccessTokenSilently } = useAuth0();
 
 		var img = reactive({
 			src: "/src/assets/images/1669432796163-181228722+missing_img.jpeg",
@@ -92,26 +95,12 @@ export default defineComponent({
 		}
 
 		const uploadImage = async () => {
-			try {
-				if (img.name == "") return;
-				if (cropper.value) {
-					const { canvas } = cropper.value.getResult();
-					canvas.toBlob((blob) => {
-						imageUploader(getAccessTokenSilently, blob, img.name)
-							.then((result) => {
-								if (result.status >= 200 && result.status < 300)
-									img.success = true;
-								img.failure = false;
-							})
-							.catch((err) => {
-								img.failure = true;
-								img.success = false;
-								img.failure_Message = err.message;
-							});
-					}, "image/jpeg");
-				}
-			} catch (error) {
-				console.log(error);
+			if (img.name == "") return;
+			if (cropper.value) {
+				const { canvas } = cropper.value.getResult();
+				await canvas.toBlob(async (blob) => {
+					await uploadArticleImage(blob, img.name);
+				}, "image/jpeg");
 			}
 		};
 
@@ -122,7 +111,6 @@ export default defineComponent({
 			state,
 			cropper,
 			img,
-			useAuth0,
 		};
 	},
 });

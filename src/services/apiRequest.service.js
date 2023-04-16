@@ -4,56 +4,56 @@ import { auth0 } from '../auth0'
 
 const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
 
-export const imageUploader = async (getAccessTokenSilently, blob, imageName) => {
-  return new Promise((resolve, reject) => {
+export const uploadArticleImage = async (blob, imageName) => {
     //we could use some compression
     new Compressor(blob, {
       quality: 0.6,
 
       async success(result){
         if(result.size > 110000) {
-          reject({message: "File Size Too Large, must be less than 110 KB"})
+          return {message: "File Size Too Large, must be less than 110 KB"}
         }
         const formData = new FormData()
         formData.append('file', result, imageName);
       
-        const token = await auth0.getAccessTokenSilently()
-        axios.post(`${apiServerUrl}/api/v2/articles/uploadImage`, formData, {
+        try {
+          const token = await auth0.getAccessTokenSilently()
+          const data = await axios.post(`${apiServerUrl}/api/v2/articles/uploadImage`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
           },
-        }).then((data) => {
-          resolve(data)
-        }).catch((err) => {
-          reject(err)
         })
+        return data
+        } catch (err) {
+          return err
+        }
+        
       },
-      error(err) {
-        reject(err)
-      }
     })
-  })
 };
 
-export const getImageUrls = async () => {
-  return new Promise((resolve, reject) => {
-      
-        auth0.getAccessTokenSilently()
-          .then( (token) => {
-            axios.get(`${apiServerUrl}/api/v2/articles/getImageUrls`, {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }).then((data) => {
-              resolve(data)
-            }).catch((err) => {
-              reject(err)
-            })
-        }).catch( (err) => {
-          console.log(err)
-        })
+export const getArticleImageUrls = async () => {
+    
+  try {
+    const token = await auth0.getAccessTokenSilently()
+    const response = await axios.get(`${apiServerUrl}/api/v2/articles/getImageUrls`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     })
+    return {
+      status: 'success',
+      data: response.data
+    }
+  } catch (err) {
+    return {
+      status: 'error',
+      message: err.message,
+      errorData: err.response.data
+    }
+
+  }    
 }
 
 export const createNewArticle = async (formData) => {
@@ -175,9 +175,9 @@ export const saveDraftState = async (mongoId, body) => {
             },
           }).then((data) => {
             // What to do with the data here?
-            resolve(data)
+            return data
           }).catch((err) => {
-            reject(err)
+            return err
           })
 }
 

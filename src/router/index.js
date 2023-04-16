@@ -32,6 +32,12 @@ const getSingleArticle = async (to, from) => {
     return true
 }
 
+const getArticleImageUrls = async (to, from) => {
+    const { retrieveArticleImageUrls} = useArticleStore();
+    retrieveArticleImageUrls()
+    return true
+}
+
 const setDraft = () => {
     console.log("SET DRAFT")
 }
@@ -50,7 +56,7 @@ const router = createRouter({
             path: "/addArticle",
             name: "AddArticleView",
             component: () => import('../views/Article/AddArticleView.vue'),
-            beforeEnter: [authGuard, checkForWriter]
+            beforeEnter: [authGuard, checkForWriter, getArticleImageUrls]
         },
         {
             path: "/editArticle/:id",
