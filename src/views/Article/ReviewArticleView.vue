@@ -1,12 +1,12 @@
 <template>
 	<div
 		class="flex flex-col items-center justify-center"
-		v-html="getArticle().bodyHTML"
+		v-html="getArticle.bodyHTML"
 	></div>
 	<div class="flex mt-8 flex-row justify-start items-center">
 		<button
 			:isdisabled="isDisabled"
-			v-if="!getArticle().isReviewed"
+			v-if="!getArticle.isReviewed"
 			@click="approveArticle"
 			class="p-1 m-2 flex items-center justify-center bg-green-500"
 		>
@@ -14,7 +14,7 @@
 		</button>
 		<button
 			:isdisabled="isDisabled"
-			v-if="getArticle().isReviewed"
+			v-if="getArticle.isReviewed"
 			@click="unApproveArticle"
 			class="p-1 m-2 flex items-center justify-center bg-green-300"
 		>
@@ -22,7 +22,7 @@
 		</button>
 		<button
 			:isdisabled="isDisabled"
-			v-if="!getArticle().isArchived"
+			v-if="!getArticle.isArchived"
 			@click="archiveArticle"
 			class="p-1 m-2 flex items-center justify-center bg-yellow-500"
 		>
@@ -30,7 +30,7 @@
 		</button>
 		<button
 			:isdisabled="isDisabled"
-			v-if="getArticle().isArchived"
+			v-if="getArticle.isArchived"
 			@click="unArchiveArticle"
 			class="p-1 m-2 flex items-center justify-center bg-yellow-300"
 		>

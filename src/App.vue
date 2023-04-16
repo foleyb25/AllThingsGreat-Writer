@@ -2,24 +2,6 @@
 	<div>
 		<header class="mt-[55px]">
 			<NavComponent />
-			<NotificationBannerComponent
-				color="bg-yellow-300"
-				v-if="user && !user.email_verified && isAuthenticated"
-			>
-				Please verify your email</NotificationBannerComponent
-			>
-			<NotificationBannerComponent
-				v-if="articleCreateSuccess"
-				color="bg-green-300"
-			>
-				Article Created Successfully</NotificationBannerComponent
-			>
-			<NotificationBannerComponent
-				v-if="articleUpdateSuccess"
-				color="bg-green-300"
-			>
-				Article Updated Successfully</NotificationBannerComponent
-			>
 		</header>
 
 		<div class="flex flex-row">
@@ -39,6 +21,13 @@
 					class="p-4 bg-gradient-to-r from-primary-dark to-primary-teal"
 					v-slot="{ Component }"
 				>
+					<NotificationBannerComponent
+						class="fixed z-50 w-[90%]"
+						v-if="notification"
+						:color="notification.color"
+					>
+						{{ notification.message }}</NotificationBannerComponent
+					>
 					<Transition name="route">
 						<component :is="Component" />
 					</Transition>
@@ -54,11 +43,11 @@ import SideNavDrawerComponent from "./components/global/SideNavDrawerComponent.v
 import NotificationBannerComponent from "./components/global/NotificationBannerComponent.vue";
 import { storeToRefs } from "pinia";
 import { useArticleStore } from "./stores/article.store";
+import { useGlobalNotificationStore } from "./stores/globalNotification.store";
 import { onMounted, ref } from "vue";
 
-const { articleCreateSuccess, articleUpdateSuccess } = storeToRefs(
-	useArticleStore()
-);
+const { notification } = storeToRefs(useGlobalNotificationStore());
+
 const { isAuthenticated, isLoading, user } = useAuth0();
 const isAuthenticatedRef = ref(isAuthenticated);
 const isLoadingRef = ref(isLoading);

@@ -2,19 +2,16 @@
 import { defineStore, storeToRefs } from 'pinia'
 import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles, getSingleArticle, approveArticle, unApproveArticle, archiveArticle, unArchiveArticle, uploadArticleImage, getArticleImageUrls } from '../services/apiRequest.service'
 import { useWriterStore } from "./writer.store";
+import { useGlobalNotificationStore } from './globalNotification.store';
 
 const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
 
 export const useArticleStore = defineStore('articleStore', {
     state: () => ({
-      allArticles: {},
-      writerArticles: {},
+      allArticles: null,
+      writerArticles: null,
       article: null,
-      articleImageUrls: [],
-      loading: false,
-      error: null,
-      articleCreateSuccess: null,
-      articleUpdateSuccess: null,
+      articleImageUrls: null,
     }),
 
     getters: {
@@ -37,121 +34,123 @@ export const useArticleStore = defineStore('articleStore', {
 
     actions: {
       async retrieveArticlesByWriterId() {
-          try {
-            const {  writer } = storeToRefs(useWriterStore());
-            getArticlesByWriterId(writer.value._id).then((response) => {
-              this.writerArticles = response.data
-            }).catch((err) => {
-              this.error = err
-            })
-          } catch (err) {
-            this.error = err
-          }
-        
+        const {setNotification} = useGlobalNotificationStore()
+        const {  writer } = storeToRefs(useWriterStore());
+        const response = await getArticlesByWriterId(writer.value._id)
+        if (response.status === 'success') {
+          this.writerArticles = response.data
+          // setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
+        }
       },
 
       async retrieveAllArticles() {
-          await getAllArticles().then((response) => {
-            this.allArticles = response.data
-          }).catch((err) => {
-            this.error = err
-          })
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await getAllArticles()
+        if (response.status === 'success') {
+          this.allArticles = response.data
+          // setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
+        }
       },
 
       async retrieveSingleArticle(id) {
-          await getSingleArticle(id).then((response) => {
-            this.article = response.data
-          }).catch((err) => {
-            this.error = err
-          });
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await getSingleArticle(id)
+        if (response.status === 'success') {
+          this.article = response.data
+          // setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
+        }
       },
 
       async retrieveArticleImageUrls() {
+        const {setNotification} = useGlobalNotificationStore()
         const response = await getArticleImageUrls()
         if (response.status === 'success') {
           this.articleImageUrls = response.data
+          // setNotification(response.message, 'success', 'bg-green-300')
         } else {
-          console.log(response.message)
+          setNotification(response.message, 'error', 'bg-red-300')
         }
       },
 
       async submitArticle(formData) {
-        try {
-          await createNewArticle(formData)
-          this.articleCreateSuccess = true;
-          if (this.articleCreateSuccess) {
-            setTimeout(() => {
-              this.articleCreateSuccess = null
-            }, 5000)
-          }
-        } catch (err) {
-          this.error = err
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await createNewArticle(formData)
+        if (response.status === 'success') {
+          setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
         }
       },
 
       async updateArticle(articleId, formData) {
-        try {
-          console.log(articleId)
-          await updateArticle(articleId, formData)
-          this.articleUpdateSuccess = true;
-          if (this.articleUpdateSuccess) {
-            setTimeout(() => {
-              this.articleUpdateSuccess = null
-            }, 5000)
+          const {setNotification} = useGlobalNotificationStore()
+          const response = await updateArticle(articleId, formData)
+          if (response.status === 'success') {
+            setNotification(response.message, 'success', 'bg-green-300')
+          } else {
+            setNotification(response.message, 'error', 'bg-red-300')
           }
-        } catch (err) {
-          this.error = err
-        }
       },
 
       async archiveArticle(articleId) {
-        try {
-          await archiveArticle(articleId)
-          this.article.isArchived = !this.article.isArchived
-        } catch (err) {
-          console.log(err)
-        }
-        
-
+        const {setNotification} = useGlobalNotificationStore()
+          const response = await archiveArticle(articleId)
+          if (response.status === 'success') {
+            this.article.isArchived = this.article.isArchived = true
+            setNotification(response.message, 'success', 'bg-green-300')
+          } else {
+            setNotification(response.message, 'error', 'bg-red-300')
+          }
       },
 
       async unArchiveArticle(articleId) {
-        try {
-          await unArchiveArticle(articleId)
-          this.article.isArchived = !this.article.isArchived
-        } catch (err) {
-          console.log(err)
-        }
-        
+        const {setNotification} = useGlobalNotificationStore()
+          const response = await unArchiveArticle(articleId)
+          if (response.status === 'success') {
+            this.article.isArchived = this.article.isArchived = false
+            setNotification(response.message, 'success', 'bg-green-300')
+          } else {
+            setNotification(response.message, 'error', 'bg-red-300')
+          }
       },
 
       async approveArticle(articleId) {
-        try {
-          await approveArticle(articleId)
-          this.article.isReviewed = !this.article.isReviewed
-        } catch (err) {
-          console.log(err)
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await approveArticle(articleId)
+        if (response.status === 'success') {
+          this.article.isReviewed = this.article.isReviewed = true
+          setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
         }
         
       },
 
       async unApproveArticle(articleId) {
-        try {
-          await unApproveArticle(articleId)
-          this.article.isReviewed = !this.article.isReviewed
-        } catch (err) {
-          console.log(err)
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await unApproveArticle(articleId)
+        if (response.status === 'success') {
+          this.article.isReviewed = this.article.isReviewed = false
+          setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
         }
-       
       },
 
       async uploadArticleImage(blob, imageName) {
-        try {
-          await uploadArticleImage(blob, imageName)
-        } catch (err) {
-          console.log(err)
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await uploadArticleImage(blob, imageName)
+        if (response.status === 'success') {
+          setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
         }
-        
       }
     }
   })

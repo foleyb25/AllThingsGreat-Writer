@@ -1,7 +1,7 @@
 <template>
 	<ArticleEditorComponent
-		v-if="getArticle()"
-		:article="getArticle()"
+		v-if="getArticle"
+		:article="getArticle"
 	></ArticleEditorComponent>
 </template>
 

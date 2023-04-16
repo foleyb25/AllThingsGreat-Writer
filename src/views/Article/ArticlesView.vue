@@ -9,7 +9,7 @@
 				:data-index="index"
 				class="flex flex-col items-center justify-center"
 			>
-				<a :href="'editArticle/' + article._id"
+				<router-link :to="'editArticle/' + article._id"
 					><ArticleComponent
 						:title="article.title"
 						:numcomments="article.numComments"
@@ -22,7 +22,7 @@
 						:numberOfRatings="article.numberOfRatings"
 						:moods="article.moods"
 						:author="article.writer.nickName"
-				/></a>
+				/></router-link>
 			</div>
 		</transition-group>
 	</div>

@@ -2,50 +2,56 @@
 import { defineStore } from 'pinia'
 import { auth0 } from '../auth0'
 import { getAuthenticatedWriter, saveDraftState, deleteDraft, updateWriter } from '../services/apiRequest.service'
+import { useGlobalNotificationStore } from './globalNotification.store';
 
 export const useWriterStore = defineStore('writerStore', {
     state: () => ({
       writer: null,
-      drafts: null,
       draft : null,
-      loading: false,
-      error: null,
     }),
-    getters: {},
+    getters: {
+      getWriter: (state) => {
+        return state.writer
+      },
+
+      getDraft: (state) => {
+        return state.draft
+      }
+    },
 
     actions: {
       async retrieveWriter() {
-        this.loading = true
-        try {
-          const response = await getAuthenticatedWriter()
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await getAuthenticatedWriter()
+        if (response.status === 'success') {
           this.writer = response.data
-          this.loading = false
-        } catch (err) {
-          this.error = err
-          this.loading = false
+          // setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
         }
+        return response
       },
 
       async saveDraft(body) {
-        this.loading = true
-        saveDraftState(this.writer._id, body).then( (data) => {
-          this.writer.drafts.push(data.data.draft)
-          this.loading = false
-        }).catch( (err) => {
-          this.loading = false 
-          this.error = err
-        })
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await saveDraftState(this.writer._id, body)
+        if (response.status === 'success') {
+          this.writer.drafts.push(response.data)
+          setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
+        }
       },
 
       async deleteDraft(draftId) {
-        this.loading = true
-        deleteDraft(this.writer._id, draftId).then( (data) => {
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await deleteDraft(this.writer._id, draftId)
+        if (response.status === 'success') {
           this.writer.drafts = this.writer.drafts.filter(draft => draft._id !== draftId);
-          this.loading = false
-        }).catch( (err) => {
-          this.loading = false 
-          this.error = err
-        })
+          setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
+        }
       },
 
       async checkWriter() {
@@ -53,21 +59,28 @@ export const useWriterStore = defineStore('writerStore', {
           //See if writer object already exists above
           if(!this.writer) {
             //writer does not exist and we are authenticate with auth0. Call DB to get single user
-            try {
-              await this.retrieveWriter()
-              return true
-            } catch (err) {
-              return false
-            }
-            
+              const response = await this.retrieveWriter()
+              if (response.status === 'success') {
+                return true
+              } else {
+                return false
+              }
           } else {
             return true
           }
-        } 
-      },
+        }
+        return false
+      }, 
 
       async updateWriterInfo(writer) {
-        await updateWriter(writer.value)
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await updateWriter(writer.value)
+        if (response.status === 'success') {
+          this.writer = response.data
+          setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
+        }
       }
     }
   })

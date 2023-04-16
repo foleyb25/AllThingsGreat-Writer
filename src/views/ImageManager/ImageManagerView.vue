@@ -98,7 +98,7 @@ export default defineComponent({
 			if (img.name == "") return;
 			if (cropper.value) {
 				const { canvas } = cropper.value.getResult();
-				await canvas.toBlob(async (blob) => {
+				canvas.toBlob(async (blob) => {
 					await uploadArticleImage(blob, img.name);
 				}, "image/jpeg");
 			}
