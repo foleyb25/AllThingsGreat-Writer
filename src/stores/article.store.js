@@ -1,6 +1,6 @@
 // state management guide: https://blog.logrocket.com/complex-vue-3-state-management-pinia/
 import { defineStore, storeToRefs } from 'pinia'
-import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles, getSingleArticle, approveArticle, unApproveArticle, archiveArticle, unArchiveArticle, uploadArticleImage, getArticleImageUrls } from '../services/apiRequest.service'
+import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles, getSingleArticle, approveArticle, unApproveArticle, archiveArticle, unArchiveArticle, uploadImage, getArticleImageUrls, getProfileImageUrls } from '../services/apiRequest.service'
 import { useWriterStore } from "./writer.store";
 import { useGlobalNotificationStore } from './globalNotification.store';
 
@@ -67,12 +67,12 @@ export const useArticleStore = defineStore('articleStore', {
         }
       },
 
-      async retrieveArticleImageUrls() {
+      async retrieveArticleImageUrls(writerId) {
         const {setNotification} = useGlobalNotificationStore()
-        const response = await getArticleImageUrls()
+        const response = await getArticleImageUrls(writerId)
         if (response.status === 'success') {
           this.articleImageUrls = response.data
-          // setNotification(response.message, 'success', 'bg-green-300')
+          setNotification(response.message, 'success', 'bg-green-300')
         } else {
           setNotification(response.message, 'error', 'bg-red-300')
         }
@@ -143,14 +143,24 @@ export const useArticleStore = defineStore('articleStore', {
         }
       },
 
-      async uploadArticleImage(blob, imageName) {
+      async pinia_uploadArticleImage(blob, imageName, writerId) {
         const {setNotification} = useGlobalNotificationStore()
-        const response = await uploadArticleImage(blob, imageName)
+        const response = await uploadImage(blob, imageName, writerId, 'article')
         if (response.status === 'success') {
           setNotification(response.message, 'success', 'bg-green-300')
         } else {
           setNotification(response.message, 'error', 'bg-red-300')
         }
-      }
+      },
+
+      async pinia_uploadProfileImage(blob, imageName, writerId) {
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await uploadImage(blob, imageName, writerId, 'profile')
+        if (response.status === 'success') {
+          setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
+        }
+      },
     }
   })

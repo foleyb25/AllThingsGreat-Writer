@@ -33,8 +33,9 @@ const getSingleArticle = async (to, from) => {
 }
 
 const getArticleImageUrls = async (to, from) => {
+    const {writer} = useWriterStore();
     const { retrieveArticleImageUrls} = useArticleStore();
-    retrieveArticleImageUrls()
+    retrieveArticleImageUrls(writer._id)
     return true
 }
 

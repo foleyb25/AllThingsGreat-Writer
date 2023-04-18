@@ -4,55 +4,91 @@ import { auth0 } from '../auth0'
 
 const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
 
-export const uploadArticleImage = async (blob, imageName) => {
+export const uploadImage = async (blob, imageName, writerId, type) => {
   //Check file size and if we need compression ( > 110 kb)
-  try {
-    new Compressor(blob, {
-      quality: 0.6,
-      async success(result){
-        if(result.size > 110000) {
-          return {
-            status: 'error',
-            message: "File Size Too Large, must be less than 110 KB",
+  return new Promise((resolve, reject) => {
+    let apiurl;
+    switch (type) {
+      case 'article':
+        apiurl = `${apiServerUrl}/api/v2/articles/uploadImage/writer/${writerId}`
+        break;
+      case 'profile':
+        apiurl = `${apiServerUrl}/api/v2/articles/uploadProfileImage/writer/${writerId}`
+        break;
+      default:
+        console.log("Unknown type");
+        reject(new Error("Unknown uploadImage type"));
+        break;
+    }
+    try {
+      new Compressor(blob, {
+        quality: 0.6,
+        async success(result){
+          if(result.size > 110000) {
+            reject( {
+              status: 'error',
+              message: "File Size Too Large, must be less than 110 KB",
+            } )
           }
-        }
-        const formData = new FormData()
-        formData.append('file', result, imageName);
-      
-        try {
-          const token = await auth0.getAccessTokenSilently()
-          const response = await axios.post(`${apiServerUrl}/api/v2/articles/uploadImage`, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          return {
-            status: 'success',
-            message: 'successfully uploaded article image',
-            data: response.data
-          }
-        } catch (err) {
-          return {
-            status: 'error',
-            message: err.message,
-          }
-        }
+          const formData = new FormData()
+          formData.append('file', result, imageName);
         
+          try {
+            const token = await auth0.getAccessTokenSilently()
+            const response = await axios.post(`${apiurl}`, formData, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            resolve ( {
+              status: 'success',
+              message: 'successfully uploaded article image',
+              data: response.data
+            } )
+          } catch (err) {
+            reject( {
+              status: 'error',
+              message: err.message,
+            } )
+          }
+          
+        },
+      })
+    } catch (err) {
+      return {
+        status: 'error',
+        message: err.message,
+      }
+    }
+  })
+};
+
+export const getArticleImageUrls = async (writerId) => { 
+  try {
+    const token = await auth0.getAccessTokenSilently()
+    const response = await axios.get(`${apiServerUrl}/api/v2/articles/getImageUrls/writer/${writerId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
     })
+    return {
+      status: 'success',
+      message: 'successfully retrieved article image urls',
+      data: response.data.data
+    }
   } catch (err) {
     return {
       status: 'error',
       message: err.message,
     }
-  }
-};
+  }    
+}
 
-export const getArticleImageUrls = async () => { 
+export const getProfileImageUrls = async (writerId) => { 
   try {
     const token = await auth0.getAccessTokenSilently()
-    const response = await axios.get(`${apiServerUrl}/api/v2/articles/getImageUrls`, {
+    const response = await axios.get(`${apiServerUrl}/api/v2/articles/getProfileImageUrls/writer/${writerId}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

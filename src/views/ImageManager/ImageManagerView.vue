@@ -1,13 +1,14 @@
 <template>
 	<div class="w-full">
 		<div class="flex flex-col justify-center items-center">
+			<h1>Article Images</h1>
 			<div
 				id="cropper-container"
 				class="flex justify-center items-center w-[45%] h-[500px] mr-2"
 			>
 				<cropper
 					ref="cropper"
-					:src="img.src"
+					:src="img.articleSrc"
 					@change="onChange"
 					:stencil-props="{
 						handlers: {},
@@ -22,7 +23,7 @@
 					class="h-full w-full"
 				/>
 			</div>
-			<DropFile @file-selected="setImage" class="mt-8"></DropFile>
+			<DropFile @file-selected="setArticleImage" class="mt-8"></DropFile>
 			<div
 				v-if="img.success"
 				class="flex justify-center items-center w-full bg-green-300 mt-4 border border-black border-solid rounded"
@@ -37,7 +38,48 @@
 			</div>
 			<button
 				class="w-24 h-12 bg-blue-300 border-solid border-black border rounded mt-4"
-				@click="uploadImage"
+				@click="uploadArticleImage"
+			>
+				Upload
+			</button>
+			<h1>Profile Images</h1>
+			<div
+				id="cropper-container"
+				class="flex justify-center items-center w-[45%] h-[500px] mr-2"
+			>
+				<cropper
+					ref="cropper"
+					:src="img.profileSrc"
+					@change="onChange"
+					:stencil-props="{
+						handlers: {},
+						moveable: false,
+						scaleable: false,
+						aspectRatio: 3 / 2,
+					}"
+					:resize-image="{
+						adjustStencil: false,
+					}"
+					image-restriction="stencil"
+					class="h-full w-full"
+				/>
+			</div>
+			<DropFile @file-selected="setProfileImage" class="mt-8"></DropFile>
+			<div
+				v-if="img.success"
+				class="flex justify-center items-center w-full bg-green-300 mt-4 border border-black border-solid rounded"
+			>
+				Successfully uploaded image
+			</div>
+			<div
+				v-if="img.failure"
+				class="flex justify-center items-center w-full bg-red-300 mt-4 border border-black border-solid rounded"
+			>
+				Failed: {{ img.failure_Message }}
+			</div>
+			<button
+				class="w-24 h-12 bg-blue-300 border-solid border-black border rounded mt-4"
+				@click="uploadProfileImage"
 			>
 				Upload
 			</button>
@@ -52,10 +94,12 @@ import { defineComponent, ref, reactive } from "vue";
 import DropFile from "../../components/ImageManager/DropFile.vue";
 import { storeToRefs } from "pinia";
 import { useArticleStore } from "../../stores/article.store";
+import { useWriterStore } from "../../stores/writer.store";
 
-const { error, loading } = storeToRefs(useArticleStore());
+const { writer } = storeToRefs(useWriterStore());
 
-const { uploadArticleImage } = useArticleStore();
+const { pinia_uploadArticleImage, pinia_uploadProfileImage } =
+	useArticleStore();
 
 export default defineComponent({
 	components: {
@@ -67,8 +111,12 @@ export default defineComponent({
 		const cropper = ref();
 
 		var img = reactive({
-			src: "/src/assets/images/1669432796163-181228722+missing_img.jpeg",
-			name: "",
+			articleSrc:
+				"/src/assets/images/1669432796163-181228722+missing_img.jpeg",
+			profileSrc:
+				"/src/assets/images/1669432796163-181228722+missing_img.jpeg",
+			article: "",
+			profile: "",
 			success: false,
 			failure: false,
 			failure_Message: "",
@@ -82,9 +130,14 @@ export default defineComponent({
 		});
 
 		//This function is called from an emitter in the child, DropFile
-		const setImage = (path) => {
-			img.src = path.path;
-			img.name = path.name;
+		const setArticleImage = (path) => {
+			img.articleSrc = path.path;
+			img.article = path.name;
+		};
+
+		const setProfileImage = (path) => {
+			img.profileSrc = path.path;
+			img.profile = path.name;
 		};
 
 		function onChange({ coordinates, image }) {
@@ -94,20 +147,40 @@ export default defineComponent({
 			};
 		}
 
-		const uploadImage = async () => {
-			if (img.name == "") return;
+		const uploadArticleImage = async () => {
+			if (img.article == "") return;
 			if (cropper.value) {
 				const { canvas } = cropper.value.getResult();
 				canvas.toBlob(async (blob) => {
-					await uploadArticleImage(blob, img.name);
+					await pinia_uploadArticleImage(
+						blob,
+						img.article,
+						writer.value._id
+					);
+				}, "image/jpeg");
+			}
+		};
+
+		const uploadProfileImage = async () => {
+			if (img.profile == "") return;
+			if (cropper.value) {
+				const { canvas } = cropper.value.getResult();
+				canvas.toBlob(async (blob) => {
+					await pinia_uploadProfileImage(
+						blob,
+						img.profile,
+						writer.value._id
+					);
 				}, "image/jpeg");
 			}
 		};
 
 		return {
-			uploadImage,
+			uploadArticleImage,
+			uploadProfileImage,
 			onChange,
-			setImage,
+			setProfileImage,
+			setArticleImage,
 			state,
 			cropper,
 			img,
