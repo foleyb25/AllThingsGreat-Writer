@@ -94,7 +94,7 @@
 					v-on:keydown.,="pushTag"
 					v-on:keyup.enter="clearInputField"
 					v-on:keyup.,="clearInputField"
-					class="bg-gray-50 border border-gray-300 text-primary-light text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					class="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 					placeholder="Enter tags separated by commas or enter..."
 					required
 				/>
@@ -102,7 +102,7 @@
 			<div class="m-4">
 				<div
 					v-for="tag in state.tags"
-					class="m-2 inline-block p-2 border border-black border-lg rounded-lg"
+					class="m-2 inline-block p-2 border border-black bg-white text-black border-lg rounded-lg"
 				>
 					<span class="p-1">{{ tag }} </span>
 					<span
