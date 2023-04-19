@@ -22,6 +22,7 @@
 						:numberOfRatings="article.numberOfRatings"
 						:moods="article.moods"
 						:author="article.writer.nickName"
+						:authorProfileImage="article.writer.profileImageUrl"
 				/></router-link>
 			</div>
 		</transition-group>

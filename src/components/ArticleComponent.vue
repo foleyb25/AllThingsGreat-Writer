@@ -62,7 +62,21 @@
 					{{ moods[0] }}
 				</div>
 			</div>
-			<div class="h-[10%]">{{ author }}</div>
+			<div class="flex flex-row justify-start items-center">
+				<div
+					class="w-[15%] mt-2 rounded-full border-2 border-gray-300 mb-2 overflow-hidden"
+				>
+					<div class="relative aspect-square">
+						<img
+							class="bg-cover w-full h-full object-cover"
+							:src="authorProfileImage"
+							alt=""
+						/>
+					</div>
+				</div>
+				<div class="h-[10%] ml-2">{{ author }}</div>
+			</div>
+
 			<div
 				id="article-status-box"
 				class="h-[10%] flex flex-row justify-between items-between"
@@ -96,6 +110,7 @@ const props = defineProps([
 	"numberOfRatings",
 	"rating",
 	"moods",
+	"authorProfileImage",
 	"author",
 ]);
 

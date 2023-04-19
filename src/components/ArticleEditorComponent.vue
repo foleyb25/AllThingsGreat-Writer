@@ -132,7 +132,14 @@
 					:rating="state.rating"
 					:numberOfRatings="state.numberOfRatings"
 					:moods="state.moods"
-					:author="article?.writer?.nickName"
+					:author="
+						article ? article?.writer?.nickName : writer?.nickName
+					"
+					:authorProfileImage="
+						article
+							? article?.writer?.profileImageUrl
+							: writer?.profileImageUrl
+					"
 				></ArticleComponent>
 			</div>
 		</div>
@@ -221,7 +228,7 @@ import router from "../router/index.js";
 import { renderMoodColor } from "../utils/colors.util";
 
 const emit = defineEmits(["removeDraft"]);
-const { error, loading } = storeToRefs(useWriterStore());
+const { error, loading, writer } = storeToRefs(useWriterStore());
 const { getImageUrls } = storeToRefs(useArticleStore());
 const { saveDraft } = useWriterStore();
 
