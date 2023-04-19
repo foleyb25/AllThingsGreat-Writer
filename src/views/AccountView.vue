@@ -35,6 +35,22 @@
 						v-model="writer.bio"
 					></textarea>
 				</div>
+				<div class="mb-4">
+					<div
+						class="w-[15%] mt-2 rounded-full border-2 border-gray-300 mb-2 overflow-hidden"
+					>
+						<div class="relative aspect-square">
+							<img
+								class="bg-cover w-full h-full object-cover"
+								:src="writer.profileImageUrl"
+								alt=""
+							/>
+						</div>
+					</div>
+
+					<input type="file" @click.prevent="showModal = true" />
+				</div>
+				{{ showModal }}
 				<button
 					type="submit"
 					@click="saveProfile"
@@ -43,17 +59,37 @@
 					Save
 				</button>
 			</div>
+			<Transition name="fade" appear>
+				<ImagePickerModalComponent
+					v-if="showModal"
+					v-model:imageUrls="getProfileImageUrls"
+					@close-modal="showModal = false"
+					@select-image="selectImage"
+				/>
+			</Transition>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useWriterStore } from "../stores/writer.store";
+import { useArticleStore } from "../stores/article.store";
+import ImagePickerModalComponent from "../components/article/ImagePickerModalComponent.vue";
 
-const { error, loading, writer } = storeToRefs(useWriterStore());
+const { error, loading, writer, getProfileImageUrls } = storeToRefs(
+	useWriterStore()
+);
 const { updateWriterInfo } = useWriterStore();
+
+const showModal = ref(false);
+
+const selectImage = async (url) => {
+	console.log(url);
+	console.log(writer.profileImageUrl);
+	writer.value.profileImageUrl = url;
+};
 
 const saveProfile = async () => {
 	console.log(writer);

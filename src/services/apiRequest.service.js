@@ -64,10 +64,23 @@ export const uploadImage = async (blob, imageName, writerId, type) => {
   })
 };
 
-export const getArticleImageUrls = async (writerId) => { 
+export const getImageUrls = async (writerId, type) => { 
   try {
+    let apiurl;
+    switch (type) {
+      case 'article':
+        apiurl = `${apiServerUrl}/api/v2/articles/getImageUrls/writer/${writerId}`
+        break;
+      case 'profile':
+        apiurl = `${apiServerUrl}/api/v2/writers/getProfileImageUrls/${writerId}`
+        break;
+      default:
+        console.log("Unknown type");
+        reject(new Error("Unknown uploadImage type"));
+        break;
+    }
     const token = await auth0.getAccessTokenSilently()
-    const response = await axios.get(`${apiServerUrl}/api/v2/articles/getImageUrls/writer/${writerId}`, {
+    const response = await axios.get(`${apiurl}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

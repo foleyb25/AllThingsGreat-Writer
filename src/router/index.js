@@ -39,6 +39,12 @@ const getArticleImageUrls = async (to, from) => {
     return true
 }
 
+const getProfileImageUrls = async (to, from) => {
+    const {writer, retrieveProfileImageUrls} = useWriterStore();
+    retrieveProfileImageUrls(writer._id)
+    return true
+}
+
 const setDraft = () => {
     console.log("SET DRAFT")
 }
@@ -95,7 +101,7 @@ const router = createRouter({
             path: "/account",
             name: "AccountView",
             component: () => import('../views/AccountView.vue'),
-            beforeEnter: [authGuard, checkForWriter]
+            beforeEnter: [authGuard, checkForWriter, getProfileImageUrls]
         },
         // {
         //     path: "/searchscreenplay",
