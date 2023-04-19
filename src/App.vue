@@ -18,7 +18,7 @@
 				class="w-full max-h-screen h-screen overflow-scroll shadow-2xl"
 			>
 				<router-view
-					class="p-4 bg-gradient-to-r from-primary-dark to-primary-teal"
+					class="min-h-screen p-4 bg-gradient-to-r from-primary-dark to-primary-teal"
 					v-slot="{ Component }"
 				>
 					<NotificationBannerComponent
