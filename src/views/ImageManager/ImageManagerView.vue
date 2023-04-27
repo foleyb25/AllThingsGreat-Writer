@@ -44,23 +44,18 @@
 			</button>
 			<h1>Profile Images</h1>
 			<div
-				id="cropper-container"
-				class="flex justify-center items-center w-[45%] h-[500px] mr-2"
+				id="profile-cropper-container"
+				class="flex justify-center items-center aspect-square h-[500px] mr-2"
 			>
 				<cropper
-					ref="cropper"
+					ref="circleCropper"
 					:src="img.profileSrc"
 					@change="onChange"
+					:stencil-component="$options.components.CircleStencil"
 					:stencil-props="{
-						handlers: {},
-						moveable: false,
-						scaleable: false,
-						aspectRatio: 3 / 2,
+						aspectRatio: 1 / 1,
 					}"
-					:resize-image="{
-						adjustStencil: false,
-					}"
-					image-restriction="stencil"
+					:resize-image="{ adjustStencil: false }"
 					class="h-full w-full"
 				/>
 			</div>
@@ -88,7 +83,7 @@
 </template>
 
 <script>
-import { Cropper, Preview } from "vue-advanced-cropper";
+import { Cropper, CircleStencil, Preview } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
 import { defineComponent, ref, reactive } from "vue";
 import DropFile from "../../components/ImageManager/DropFile.vue";
@@ -104,11 +99,13 @@ const { pinia_uploadArticleImage, pinia_uploadProfileImage } =
 export default defineComponent({
 	components: {
 		Cropper,
+		CircleStencil,
 		Preview,
 		DropFile,
 	},
 	setup() {
 		const cropper = ref();
+		const circleCropper = ref();
 
 		var img = reactive({
 			articleSrc:
@@ -148,13 +145,13 @@ export default defineComponent({
 		}
 
 		const uploadArticleImage = async () => {
-			if (img.article == "") return;
+			if (img.articleSrc == "") return;
 			if (cropper.value) {
 				const { canvas } = cropper.value.getResult();
 				canvas.toBlob(async (blob) => {
 					await pinia_uploadArticleImage(
 						blob,
-						img.article,
+						img.articleSrc,
 						writer.value._id
 					);
 				}, "image/jpeg");
@@ -162,13 +159,14 @@ export default defineComponent({
 		};
 
 		const uploadProfileImage = async () => {
-			if (img.profile == "") return;
-			if (cropper.value) {
-				const { canvas } = cropper.value.getResult();
-				canvas.toBlob(async (blob) => {
+			if (img.profileSrc == "") return;
+			console.log(circleCropper);
+			if (circleCropper.value) {
+				const { canvas } = circleCropper.value.getResult();
+				await canvas.toBlob(async (blob) => {
 					await pinia_uploadProfileImage(
 						blob,
-						img.profile,
+						img.profileSrc,
 						writer.value._id
 					);
 				}, "image/jpeg");
@@ -183,6 +181,7 @@ export default defineComponent({
 			setArticleImage,
 			state,
 			cropper,
+			circleCropper,
 			img,
 		};
 	},

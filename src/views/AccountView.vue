@@ -95,4 +95,19 @@ const saveProfile = async () => {
 	console.log(writer);
 	await updateWriterInfo(writer);
 };
+
+const uploadProfileImage = async () => {
+	if (img.profileSrc == "") return;
+	console.log(circlestencil);
+	if (circlestencil.value) {
+		const { canvas } = circlestencil.value.getResult();
+		await canvas.toBlob(async (blob) => {
+			await pinia_uploadProfileImage(
+				blob,
+				img.profileSrc,
+				writer.value._id
+			);
+		}, "image/jpeg");
+	}
+};
 </script>
