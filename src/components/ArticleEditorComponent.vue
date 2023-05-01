@@ -27,6 +27,16 @@
 				:config="state.editorConfig"
 			></ckeditor>
 		</div>
+		<button
+				class="ml-8 bg-blue-600 hover:bg-yellow-400 text-black font-bold py-2 px-4 border border-yellow-400 rounded disabled:opacity-25"
+				@click="handleEvaluate"
+			>
+				Evaluate Article
+			</button>
+		<div>
+			<div>Evaluation:</div>
+			{{ articleEvaluation }}
+		</div>
 		<div class="flex flex-col mt-4">
 			<label
 				for="category"
@@ -229,10 +239,10 @@ import { renderMoodColor } from "../utils/colors.util";
 
 const emit = defineEmits(["removeDraft"]);
 const { error, loading, writer } = storeToRefs(useWriterStore());
-const { getImageUrls } = storeToRefs(useArticleStore());
+const { getImageUrls, evauatedArticle } = storeToRefs(useArticleStore());
 const { saveDraft } = useWriterStore();
 
-const { submitArticle, updateArticle } = useArticleStore();
+const { submitArticle, updateArticle, evaluateArticle } = useArticleStore();
 
 const props = defineProps(["article", "draft"]);
 
@@ -308,6 +318,7 @@ const state = reactive({
 	showModal: false,
 	showDeleteModal: false,
 	user: useAuth0().user,
+	evaluating: false,
 });
 
 const selectImage = (url) => {
@@ -393,6 +404,14 @@ onMounted(() => {
 const onClick = (event) => {
 	twttr.widgets.load();
 };
+
+const handleEvaluate = async () => {
+	console.log("EVALUATING...")
+	state.evaluating = true
+	await evaluateArticle(state.editorData)
+	state.evaluating = false
+}
+
 </script>
 
 <style scoped>

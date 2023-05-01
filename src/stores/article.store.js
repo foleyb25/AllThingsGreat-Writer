@@ -1,6 +1,6 @@
 // state management guide: https://blog.logrocket.com/complex-vue-3-state-management-pinia/
 import { defineStore, storeToRefs } from 'pinia'
-import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles, getSingleArticle, approveArticle, unApproveArticle, archiveArticle, unArchiveArticle, uploadImage, getImageUrls } from '../services/apiRequest.service'
+import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles, getSingleArticle, approveArticle, unApproveArticle, archiveArticle, unArchiveArticle, uploadImage, getImageUrls, evaluate } from '../services/apiRequest.service'
 import { useWriterStore } from "./writer.store";
 import { useGlobalNotificationStore } from './globalNotification.store';
 
@@ -12,6 +12,7 @@ export const useArticleStore = defineStore('articleStore', {
       writerArticles: null,
       article: null,
       articleImageUrls: null,
+      articleEvaluation: null,
     }),
 
     getters: {
@@ -137,6 +138,17 @@ export const useArticleStore = defineStore('articleStore', {
         const response = await unApproveArticle(articleId)
         if (response.status === 'success') {
           this.article.isReviewed = this.article.isReviewed = false
+          setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
+        }
+      },
+
+      async evaluateArticle(bodyHTML) {
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await evaluate(bodyHTML)
+        this.articleEvaluation = response.data
+        if (response.status === 'success') {
           setNotification(response.message, 'success', 'bg-green-300')
         } else {
           setNotification(response.message, 'error', 'bg-red-300')

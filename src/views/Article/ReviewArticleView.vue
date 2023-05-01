@@ -46,7 +46,7 @@ import { useArticleStore } from "../../stores/article.store";
 
 const { getArticle } = storeToRefs(useArticleStore());
 
-const isDisabled = ref(false);
+var isDisabled = ref(false);
 
 const props = defineProps({
 	id: {
@@ -60,26 +60,26 @@ onMounted(async () => {
 });
 
 const approveArticle = async () => {
-	isDisabled = true;
+	this.isDisabled = true;
 	await useArticleStore().approveArticle(props.id);
-	isDisabled = false;
+	this.isDisabled = false;
 };
 
 const unApproveArticle = async () => {
-	isDisabled = true;
+	this.isDisabled = true;
 	await useArticleStore().unApproveArticle(props.id);
-	isDisabled = false;
+	this.isDisabled = false;
 };
 
 const archiveArticle = async () => {
-	isDisabled = true;
+	this.isDisabled = true;
 	await useArticleStore().archiveArticle(props.id);
 	isDisabled = false;
 };
 
 const unArchiveArticle = async () => {
-	isDisabled = true;
+	this.isDisabled = true;
 	await useArticleStore().unArchiveArticle(props.id);
-	isDisabled = false;
+	this.isDisabled = false;
 };
 </script>
