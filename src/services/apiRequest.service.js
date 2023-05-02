@@ -393,7 +393,7 @@ export const unArchiveArticle = async (mongoId) => {
 export const evaluate = async (bodyHTML) => {
   try {
     const token = await auth0.getAccessTokenSilently()
-    const response = await axios.post(`${apiServerUrl}/api/v2/articles/evaluate`, {body: bodyHTML}, {
+    const response = await axios.post(`${apiServerUrl}/api/v2/articles/evaluate`, {articleHTML: bodyHTML}, {
       "Content-Type": "multipart/form-data",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -402,7 +402,7 @@ export const evaluate = async (bodyHTML) => {
     return {
       status: 'success',
       message: 'successfully retrieved evaluation',
-      data: response.data
+      data: response.data.data
     }
   } catch (err) {
     return {

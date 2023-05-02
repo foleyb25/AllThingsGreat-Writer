@@ -28,14 +28,41 @@
 			></ckeditor>
 		</div>
 		<button
-				class="ml-8 bg-blue-600 hover:bg-yellow-400 text-black font-bold py-2 px-4 border border-yellow-400 rounded disabled:opacity-25"
-				@click="handleEvaluate"
-			>
-				Evaluate Article
-			</button>
-		<div>
+			class="ml-8 bg-blue-600 hover:bg-yellow-400 text-black font-bold py-2 px-4 border border-yellow-400 rounded disabled:opacity-25"
+			@click="handleEvaluate"
+			:disabled="state.evaluating"
+		>
+			{{ state.evaluating ? "Evaluating..." : "Evaluate Article" }}
+		</button>
+		<div
+			v-if="articleEvaluation"
+			id="evaluation-container"
+			class="text-primary-light"
+		>
 			<div>Evaluation:</div>
-			{{ articleEvaluation }}
+			<div>
+				<p>Structure: {{ articleEvaluation.structure }}</p>
+				<p>{{ articleEvaluation.structure_tip }}</p>
+				<p>Organization: {{ articleEvaluation.organization }}</p>
+				<p>{{ articleEvaluation.organization_tip }}</p>
+				<p>Content: {{ articleEvaluation.content }}</p>
+				<p>{{ articleEvaluation.content_tip }}</p>
+				<p>
+					Search Engine Optimization:
+					{{ articleEvaluation.seo }}
+				</p>
+				<p>{{ articleEvaluation.seo_tip }}</p>
+				<p>Smut: {{ articleEvaluation.smut }}</p>
+				<p>{{ articleEvaluation.smut_tip }}</p>
+				<br />
+				<p>Fixes:</p>
+				<div v-for="fix in articleEvaluation.fixes">
+					<p>Original: {{ fix.original }}</p>
+					<p>Suggestion: {{ fix.suggestion }}</p>
+				</div>
+				<p>Tags:</p>
+				{{ articleEvaluation.tags }}
+			</div>
 		</div>
 		<div class="flex flex-col mt-4">
 			<label
@@ -239,7 +266,7 @@ import { renderMoodColor } from "../utils/colors.util";
 
 const emit = defineEmits(["removeDraft"]);
 const { error, loading, writer } = storeToRefs(useWriterStore());
-const { getImageUrls, evauatedArticle } = storeToRefs(useArticleStore());
+const { getImageUrls, articleEvaluation } = storeToRefs(useArticleStore());
 const { saveDraft } = useWriterStore();
 
 const { submitArticle, updateArticle, evaluateArticle } = useArticleStore();
@@ -406,12 +433,14 @@ const onClick = (event) => {
 };
 
 const handleEvaluate = async () => {
-	console.log("EVALUATING...")
-	state.evaluating = true
-	await evaluateArticle(state.editorData)
-	state.evaluating = false
-}
+	console.log("EVALUATING...");
+	var dom = document.createElement("DIV");
+	dom.innerHTML = state.editorData;
 
+	state.evaluating = true;
+	await evaluateArticle(dom.innerText);
+	state.evaluating = false;
+};
 </script>
 
 <style scoped>
