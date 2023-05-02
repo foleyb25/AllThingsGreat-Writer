@@ -1,6 +1,6 @@
 // state management guide: https://blog.logrocket.com/complex-vue-3-state-management-pinia/
 import { defineStore, storeToRefs } from 'pinia'
-import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles, getSingleArticle, approveArticle, unApproveArticle, archiveArticle, unArchiveArticle, uploadImage, getImageUrls, evaluate } from '../services/apiRequest.service'
+import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles, getSingleArticle, approveArticle, unApproveArticle, archiveArticle, unArchiveArticle, uploadImage, getImageUrls, evaluate, analyze } from '../services/apiRequest.service'
 import { useWriterStore } from "./writer.store";
 import { useGlobalNotificationStore } from './globalNotification.store';
 
@@ -13,6 +13,7 @@ export const useArticleStore = defineStore('articleStore', {
       article: null,
       articleImageUrls: null,
       articleEvaluation: null,
+      matchupAnalysis: null,
     }),
 
     getters: {
@@ -153,6 +154,18 @@ export const useArticleStore = defineStore('articleStore', {
         } else {
           setNotification(response.message, 'error', 'bg-red-300')
         }
+      },
+
+      async analyzeMatchup(teamA, teamB) {
+        const {setNotification} = useGlobalNotificationStore()
+        const response = await analyze(teamA, teamB)
+        this.matchupAnalysis = response.data
+        if (response.status === 'success') {
+          setNotification(response.message, 'success', 'bg-green-300')
+        } else {
+          setNotification(response.message, 'error', 'bg-red-300')
+        }
+
       },
 
       async pinia_uploadArticleImage(blob, imageName, writerId) {

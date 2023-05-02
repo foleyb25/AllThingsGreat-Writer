@@ -135,6 +135,12 @@ const router = createRouter({
             beforeEnter: [authGuard, checkForWriter, getSingleArticle]
         },
         {
+            path: '/matchupAnalysis',
+            name: 'MatchupAnalysis',
+            component: () => import('../views/MatchupAnalysisView.vue'),
+            beforeEnter: [authGuard, checkForWriter]
+        },
+        {
             path: '/callback',
             name: "Callback",
             component: CallbackView,

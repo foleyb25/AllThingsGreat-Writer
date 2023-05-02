@@ -412,4 +412,25 @@ export const evaluate = async (bodyHTML) => {
   }
 }
 
+export const analyze = async (teamA, teamB) => {
+  try {
+    const token = await auth0.getAccessTokenSilently()
+    const response = await axios.post(`${apiServerUrl}/api/v2/articles/game/analyze`, {teamA: teamA, teamB: teamB}, {
+      "Content-Type": "multipart/form-data",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    return {
+      status: 'success',
+      message: 'successfully retrieved evaluation',
+      data: response.data.data
+    }
+  } catch (err) {
+    return {
+      status: 'error',
+      message: err.message,
+    }
+  }
+}
 
