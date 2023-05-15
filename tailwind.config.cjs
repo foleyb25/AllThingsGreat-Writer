@@ -50,6 +50,9 @@ module.exports = {
         }
       }
     },
+    fontFamily: {
+      'VCR': ['VCR-OSD', 'sans-serif'],
+    }
   },
   plugins: [
     require('flowbite/plugin'),

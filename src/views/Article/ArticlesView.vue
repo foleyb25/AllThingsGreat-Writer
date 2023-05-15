@@ -7,7 +7,7 @@
 				v-for="(article, index) in getWriterArticles"
 				:key="article._id"
 				:data-index="index"
-				class="flex flex-col items-center justify-center"
+				class="flex flex-col items-center"
 			>
 				<router-link :to="'editArticle/' + article._id"
 					><ArticleComponent
