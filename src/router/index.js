@@ -45,10 +45,6 @@ const getProfileImageUrls = async (to, from) => {
     return true
 }
 
-const setDraft = () => {
-    console.log("SET DRAFT")
-}
-
 const router = createRouter({
 
     history: createWebHistory(),

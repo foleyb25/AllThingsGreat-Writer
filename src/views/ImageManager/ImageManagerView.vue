@@ -160,7 +160,6 @@ export default defineComponent({
 
 		const uploadProfileImage = async () => {
 			if (img.profileSrc == "") return;
-			console.log(circleCropper);
 			if (circleCropper.value) {
 				const { canvas } = circleCropper.value.getResult();
 				await canvas.toBlob(async (blob) => {

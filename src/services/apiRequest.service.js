@@ -16,7 +16,6 @@ export const uploadImage = async (blob, imageName, writerId, type) => {
         apiurl = `${apiServerUrl}/api/v2/articles/uploadProfileImage/writer/${writerId}`
         break;
       default:
-        console.log("Unknown type");
         reject(new Error("Unknown uploadImage type"));
         break;
     }
@@ -75,7 +74,6 @@ export const getImageUrls = async (writerId, type) => {
         apiurl = `${apiServerUrl}/api/v2/writers/getProfileImageUrls/${writerId}`
         break;
       default:
-        console.log("Unknown type");
         reject(new Error("Unknown uploadImage type"));
         break;
     }
@@ -119,10 +117,10 @@ export const getProfileImageUrls = async (writerId) => {
   }    
 }
 
-export const createNewArticle = async (formData) => {
+export const createNewArticle = async (formData, innerText) => {
   try {
     const token = await auth0.getAccessTokenSilently()
-    const response = await axios.post(`${apiServerUrl}/api/v2/articles/create`, formData, {
+    const response = await axios.post(`${apiServerUrl}/api/v2/articles/create`, {article: formData, innerText: innerText}, {
       "Content-Type": "multipart/form-data",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -141,10 +139,10 @@ export const createNewArticle = async (formData) => {
   }
 }
 
-export const updateArticle = async (id, formData) => {
+export const updateArticle = async (id, formData, innerText) => {
   try {
     const token = await auth0.getAccessTokenSilently()
-    const response = await axios.patch(`${apiServerUrl}/api/v2/articles/update/`+id, formData, {
+    const response = await axios.patch(`${apiServerUrl}/api/v2/articles/update/`+id, {article: formData, innerText: innerText}, {
       "Content-Type": "multipart/form-data",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -390,10 +388,10 @@ export const unArchiveArticle = async (mongoId) => {
   }
 }
 
-export const evaluate = async (bodyHTML) => {
+export const evaluate = async (articleText) => {
   try {
     const token = await auth0.getAccessTokenSilently()
-    const response = await axios.post(`${apiServerUrl}/api/v2/articles/evaluate`, {articleHTML: bodyHTML}, {
+    const response = await axios.post(`${apiServerUrl}/api/v2/articles/evaluate`, {articleText: articleText}, {
       "Content-Type": "multipart/form-data",
       headers: {
         Authorization: `Bearer ${token}`,

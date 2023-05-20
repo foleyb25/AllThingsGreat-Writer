@@ -86,19 +86,15 @@ const { updateWriterInfo } = useWriterStore();
 const showModal = ref(false);
 
 const selectImage = async (url) => {
-	console.log(url);
-	console.log(writer.profileImageUrl);
 	writer.value.profileImageUrl = url;
 };
 
 const saveProfile = async () => {
-	console.log(writer);
 	await updateWriterInfo(writer);
 };
 
 const uploadProfileImage = async () => {
 	if (img.profileSrc == "") return;
-	console.log(circlestencil);
 	if (circlestencil.value) {
 		const { canvas } = circlestencil.value.getResult();
 		await canvas.toBlob(async (blob) => {

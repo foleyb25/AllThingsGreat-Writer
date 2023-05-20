@@ -26,42 +26,49 @@
 				v-model="state.editorData"
 				:config="state.editorConfig"
 			></ckeditor>
+			<!-- <ckeditor
+				:editor="state.editor"
+				v-model="state.editorData"
+				:config="state.editorConfig"
+			></ckeditor> -->
 		</div>
 		<button
-			class="ml-8 bg-blue-600 hover:bg-yellow-400 text-black font-bold py-2 px-4 border border-yellow-400 rounded disabled:opacity-25"
+			class="m-8 bg-purple-600 hover:bg-green-400 text-cyan-300 hover:text-black font-bold py-2 px-4 border border-cyan-300 rounded disabled:opacity-25"
 			@click="handleEvaluate"
-			:disabled="state.evaluating"
+			:disabled="
+				state.isEvaluating || state.isCreating || state.isUpdating
+			"
 		>
-			{{ state.evaluating ? "Evaluating..." : "Evaluate Article" }}
+			{{ state.isEvaluating ? "Evaluating..." : "Evaluate Article" }}
 		</button>
 		<div
-			v-if="articleEvaluation"
+			v-if="state.evaluation"
 			id="evaluation-container"
 			class="text-primary-light"
 		>
 			<div>Evaluation:</div>
 			<div>
-				<p>Structure: {{ articleEvaluation.structure }}</p>
-				<p>{{ articleEvaluation.structure_tip }}</p>
-				<p>Organization: {{ articleEvaluation.organization }}</p>
-				<p>{{ articleEvaluation.organization_tip }}</p>
-				<p>Content: {{ articleEvaluation.content }}</p>
-				<p>{{ articleEvaluation.content_tip }}</p>
+				<p>Structure: {{ state.evaluation.structure }}</p>
+				<p>{{ state.evaluation.structure_tip }}</p>
+				<p>Organization: {{ state.evaluation.organization }}</p>
+				<p>{{ state.evaluation.organization_tip }}</p>
+				<p>Content: {{ state.evaluation.content }}</p>
+				<p>{{ state.evaluation.content_tip }}</p>
 				<p>
 					Search Engine Optimization:
-					{{ articleEvaluation.seo }}
+					{{ state.evaluation.seo }}
 				</p>
-				<p>{{ articleEvaluation.seo_tip }}</p>
-				<p>Smut: {{ articleEvaluation.smut }}</p>
-				<p>{{ articleEvaluation.smut_tip }}</p>
+				<p>{{ state.evaluation.seo_tip }}</p>
+				<p>Smut: {{ state.evaluation.smut }}</p>
+				<p>{{ state.evaluation.smut_tip }}</p>
 				<br />
 				<p>Fixes:</p>
-				<div v-for="fix in articleEvaluation.fixes">
+				<div v-for="fix in state.evaluation.fixes">
 					<p>Original: {{ fix.original }}</p>
 					<p>Suggestion: {{ fix.suggestion }}</p>
 				</div>
 				<p>Tags:</p>
-				{{ articleEvaluation.tags }}
+				{{ state.evaluation.tags }}
 			</div>
 		</div>
 		<div class="flex flex-col mt-4">
@@ -77,11 +84,12 @@
 				required
 			>
 				<option value="AllThingsGreat">AllThingsGreat</option>
+				<option value="Combat Sports">Combat Sports</option>
 				<option value="Cryptocurrency">Cryptocurrency</option>
 				<option value="A.I. & Technology">A.I. & Technology</option>
 				<option value="Health & Fitness">Health & Fitness</option>
 				<option value="Extraordinary">Extraordinary</option>
-				<option value="Sports">Sports</option>
+				<option value="Matchup Analysis">Matchup Analysis</option>
 			</select>
 			<label
 				for="moods"
@@ -188,12 +196,11 @@
 				@change="onFileChange"
 			/>
 		</div>
-		<div v-if="error">Error: {{ error }}</div>
 		<div v-if="!loading" class="mt-4 flex flex-row">
 			<button
 				v-if="!props.article"
 				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25"
-				:disabled="state.isDisabled"
+				:disabled="state.isCreating || state.isEvaluating"
 				@click="handleSubmit()"
 			>
 				Create
@@ -201,7 +208,7 @@
 			<button
 				v-if="props.article"
 				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25"
-				:disabled="state.isDisabled"
+				:disabled="state.isUpdating || state.isEvaluating"
 				@click="handleUpdate()"
 			>
 				Update
@@ -209,6 +216,9 @@
 			<button
 				class="ml-8 bg-yellow-200 hover:bg-yellow-400 text-black font-bold py-2 px-4 border border-yellow-400 rounded disabled:opacity-25"
 				@click="handleSaveDraft"
+				:disabled="
+					state.isUpdating || state.isCreating || state.isEvaluating
+				"
 			>
 				Save Draft
 			</button>
@@ -216,19 +226,88 @@
 				v-if="props.draft"
 				class="ml-8 bg-red-800 hover:bg-red-600 text-black font-bold py-2 px-4 border border-red-900 rounded disabled:opacity-25"
 				@click="this.state.showDeleteModal = true"
+				:disabled="
+					state.isUpdating || state.isCreating || state.isEvaluating
+				"
 			>
 				Delete Draft
 			</button>
 		</div>
+		<div
+			class="text-white mt-2"
+			v-if="state.isUpdating || state.isCreating || state.isEvaluating"
+		>
+			Wait here for a bit, this may take a minute or so. AI is evaluating
+			your content.
+		</div>
 
 		<label
-			for="img"
 			class="block m-2 mt-20 text-sm font-medium text-primary-light dark:text-gray-300"
 			>Article Preview (Click anywhere to load your embedded
 			tweets)</label
 		>
-		<div class="bg-white">
-			<span v-html="state.editorData"></span>
+		<div class="relative bg-white p-4 rounded">
+			<header class="grid grid-cols-2 gap-5 border-b border-black">
+				<div class="flex items-center">
+					<img
+						:src="writer.profileImageUrl"
+						alt="Author's Avatar"
+						class="w-12 h-12 rounded-full mr-2"
+					/>
+					<h4 class="font-bold">{{ writer.nickName }}</h4>
+				</div>
+
+				<div class="flex justify-between">
+					<p>Published: 2 days ago | Last Updated: 5 days ago</p>
+					<p>Estimated reading time: {{ 4 }} minutes</p>
+				</div>
+
+				<div class="flex justify-start">
+					<!-- Replace with actual social share buttons -->
+					<button class="text-white rounded">
+						<font-awesome-icon
+							icon="fa-brands fa-twitter-square"
+							size="2x"
+							class="text-[#1DA1F2]"
+						/>
+					</button>
+				</div>
+
+				<div class="flex justify-end">
+					<p>Likes: {{ 11 }}</p>
+					<p>Dislikes: {{ 2 }}</p>
+				</div>
+			</header>
+			<header class="grid grid-cols-3 gap-5 border-b border-black">
+				<div>Content: {{ state.evaluation?.content }}</div>
+				<div>Structure: {{ state.evaluation?.structure }}</div>
+				<div>Organization: {{ state.evaluation?.organization }}</div>
+			</header>
+			<header class="flex flex-row justify-center">
+				<div>Smut:</div>
+			</header>
+			<div class="relative">
+				<img
+					:src="state.imagePath"
+					alt="Blog image"
+					class="w-full aspect-[3/2] object-cover"
+				/>
+				<div class="absolute inset-0 bg-black bg-opacity-60"></div>
+				<h1
+					class="absolute inset-0 flex items-center justify-center text-white text-2xl p-5"
+				>
+					<div
+						id="typedtext"
+						class="bg-black bg-opacity-40 text-white"
+						style="font-family: 'vcr'"
+						v-html="state.title"
+					></div>
+				</h1>
+			</div>
+			<div
+				v-html="state.editorData"
+				class="flex flex-col justify-center items-center"
+			></div>
 		</div>
 
 		<!-- Modal component -->
@@ -254,6 +333,7 @@
 
 <script setup>
 import ArticleComponent from "../components/ArticleComponent.vue";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ImagePickerModalComponent from "./article/ImagePickerModalComponent.vue";
 import DeleteConfirmationModalComponent from "./article/DeleteConfirmationModalComponent.vue";
 import { useAuth0 } from "@auth0/auth0-vue";
@@ -265,7 +345,7 @@ import router from "../router/index.js";
 import { renderMoodColor } from "../utils/colors.util";
 
 const emit = defineEmits(["removeDraft"]);
-const { error, loading, writer } = storeToRefs(useWriterStore());
+const { loading, writer } = storeToRefs(useWriterStore());
 const { getImageUrls, articleEvaluation } = storeToRefs(useArticleStore());
 const { saveDraft } = useWriterStore();
 
@@ -274,12 +354,18 @@ const { submitArticle, updateArticle, evaluateArticle } = useArticleStore();
 const props = defineProps(["article", "draft"]);
 
 const state = reactive({
+	// editor: ClassicEditor,
+	// editorData: "<p>Hello world!</p>",
+	// editorConfig: {},
 	editorConfig: {
+		// basePath: "/ckeditor/",
+		// ckeditorPath: "/ckeditor/ckeditor.js",
+		// extraPlugins: "testPlugin",
 		toolbar: [
 			{ name: "utils", items: ["Source", "Scayt"] },
 			{
 				name: "styling",
-				items: ["Bold", "Italic", "Underline", "Strike"],
+				items: ["Bold", "Italic", "Underline", "Strike", "Format"],
 			},
 			{
 				name: "formatting",
@@ -293,6 +379,7 @@ const state = reactive({
 		height: "400px",
 		allowedContent: true,
 	},
+
 	editorData: props.article
 		? props.article.bodyHTML
 		: props.draft
@@ -331,6 +418,7 @@ const state = reactive({
 		: props.draft
 		? props.draft.category
 		: "AllThingsGreat",
+	evaluation: props.article ? props.article.evaluation : "",
 	isDisabled: props.article ? false : true,
 	isPinned: props.article ? props.article.isPinned : false,
 	isArchived: props.article ? props.article.isArchived : false,
@@ -345,7 +433,9 @@ const state = reactive({
 	showModal: false,
 	showDeleteModal: false,
 	user: useAuth0().user,
-	evaluating: false,
+	isEvaluating: false,
+	isCreating: false,
+	isUpdating: false,
 });
 
 const selectImage = (url) => {
@@ -376,6 +466,8 @@ const getMoodColor = (mood) => {
 };
 
 const handleSubmit = async () => {
+	var dom = document.createElement("DIV");
+	dom.innerHTML = state.editorData;
 	const formData = {
 		title: state.title,
 		bodyHTML: state.editorData,
@@ -384,7 +476,9 @@ const handleSubmit = async () => {
 		moods: state.moods,
 		tags: state.tags,
 	};
-	await submitArticle(formData);
+	state.isCreating = true;
+	await submitArticle(formData, dom.innerText);
+	state.isCreating = false;
 	//article submitted, check to see if it was a draft and delete it
 	if (props.draft) {
 		emit("removeDraft");
@@ -411,6 +505,8 @@ const handleSaveDraft = async (e) => {
 };
 
 const handleUpdate = async (e) => {
+	var dom = document.createElement("DIV");
+	dom.innerHTML = state.editorData;
 	const formData = {
 		title: state.title,
 		bodyHTML: state.editorData,
@@ -419,7 +515,9 @@ const handleUpdate = async (e) => {
 		moods: state.moods,
 		tags: state.tags,
 	};
-	await updateArticle(props.article._id, formData);
+	state.isUpdating = true;
+	await updateArticle(props.article._id, formData, dom.innerText);
+	state.isUpdating = false;
 	router.push("/articles");
 };
 
@@ -433,13 +531,13 @@ const onClick = (event) => {
 };
 
 const handleEvaluate = async () => {
-	console.log("EVALUATING...");
+	//convert to text
 	var dom = document.createElement("DIV");
 	dom.innerHTML = state.editorData;
-
-	state.evaluating = true;
+	state.isEvaluating = true;
 	await evaluateArticle(dom.innerText);
-	state.evaluating = false;
+	state.isEvaluating = false;
+	state.evaluation = articleEvaluation;
 };
 </script>
 

@@ -80,9 +80,9 @@ export const useArticleStore = defineStore('articleStore', {
         }
       },
 
-      async submitArticle(formData) {
+      async submitArticle(formData, innerText) {
         const {setNotification} = useGlobalNotificationStore()
-        const response = await createNewArticle(formData)
+        const response = await createNewArticle(formData, innerText)
         if (response.status === 'success') {
           setNotification(response.message, 'success', 'bg-green-300')
         } else {
@@ -90,9 +90,9 @@ export const useArticleStore = defineStore('articleStore', {
         }
       },
 
-      async updateArticle(articleId, formData) {
+      async updateArticle(articleId, formData, innerText) {
           const {setNotification} = useGlobalNotificationStore()
-          const response = await updateArticle(articleId, formData)
+          const response = await updateArticle(articleId, formData, innerText)
           if (response.status === 'success') {
             setNotification(response.message, 'success', 'bg-green-300')
           } else {
@@ -145,9 +145,9 @@ export const useArticleStore = defineStore('articleStore', {
         }
       },
 
-      async evaluateArticle(bodyHTML) {
+      async evaluateArticle(articleText) {
         const {setNotification} = useGlobalNotificationStore()
-        const response = await evaluate(bodyHTML)
+        const response = await evaluate(articleText)
         this.articleEvaluation = response.data
         if (response.status === 'success') {
           setNotification(response.message, 'success', 'bg-green-300')
