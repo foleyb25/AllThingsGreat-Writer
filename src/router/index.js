@@ -79,7 +79,6 @@ const router = createRouter({
             name: "DraftView",
             component: () => import('../views/Article/DraftView.vue'),
             beforeEnter: [authGuard, checkForWriter],
-            beforeRouteUpdate: [setDraft]
         },
         // {
         //     path: "/metrics",
