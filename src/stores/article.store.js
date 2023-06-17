@@ -4,7 +4,7 @@ import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles,
 import { useWriterStore } from "./writer.store";
 import { useGlobalNotificationStore } from './globalNotification.store';
 
-const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
+const apiServerUrl = import.meta.env.VITE_API_SERVER_URL
 
 export const useArticleStore = defineStore('articleStore', {
     state: () => ({

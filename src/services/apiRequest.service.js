@@ -2,7 +2,7 @@ import axios from "axios"
 import Compressor from "compressorjs"
 import { auth0 } from '../auth0'
 
-const apiServerUrl = (import.meta.env.VITE_ENV == "production") ? import.meta.env.VITE_API_SERVER_URL_PROD : import.meta.env.VITE_API_SERVER_URL_DEV;
+const apiServerUrl = import.meta.env.VITE_API_SERVER_URL
 
 export const uploadImage = async (blob, imageName, writerId, type) => {
   //Check file size and if we need compression ( > 110 kb)
