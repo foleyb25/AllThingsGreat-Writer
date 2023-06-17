@@ -7,7 +7,7 @@
 		>
 			<a href="/atg-writer-logo.png" class="flex items-center">
 				<img
-					src="src/assets/images/atg-writer-logo.png"
+					src="../../assets/images/atg-writer-logo.png"
 					class="mr-3 h-6 sm:h-9"
 					alt="Flowbite Logo"
 				/>
