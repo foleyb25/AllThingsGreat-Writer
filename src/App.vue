@@ -37,8 +37,6 @@
 	</div>
 </template>
 
-<!-- test -->
-
 <script setup>
 import { useAuth0 } from "@auth0/auth0-vue";
 import SideNavDrawerComponent from "./components/global/SideNavDrawerComponent.vue";
