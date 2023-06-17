@@ -6,7 +6,7 @@ export default defineConfig( ({command, mode}) => {
   const env = loadEnv(mode, process.cwd(), "")
 
   return {
-    base: '/AllThingsGreat-Public/',
+    base: '/AllThingsGreatWriter-Hosting/',
     plugins: [vue()],
   }
   
