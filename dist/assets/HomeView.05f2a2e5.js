@@ -1,1 +1,0 @@
-import{_ as o,o as t,c as s,a as e}from"./index.1128caf2.js";const c={name:"Home"},n=e("header",{class:"mt-[55px]"},null,-1),r=e("div",{class:"flex flex-row justify-center items-center"},[e("div",null," Log in to your writer profile ")],-1),a=[n,r];function i(l,_,d,f,p,m){return t(),s("div",null,a)}const x=o(c,[["render",i]]);export{x as default};
