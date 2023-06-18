@@ -428,7 +428,7 @@ const state = reactive({
 	btnText: props.article ? "Update" : "Create",
 	imagePath: props.article
 		? props.article.imageUrl
-		: "../assets/images/1669432796163-181228722+missing_img.jpeg",
+		: "../../src/assets/images/1669432796163-181228722+missing_img.jpeg",
 	awsImageUrls: [],
 	showModal: false,
 	showDeleteModal: false,

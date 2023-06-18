@@ -109,9 +109,9 @@ export default defineComponent({
 
 		var img = reactive({
 			articleSrc:
-				"../../assets/images/1669432796163-181228722+missing_img.jpeg",
+				"../../../src/assets/images/1669432796163-181228722+missing_img.jpeg",
 			profileSrc:
-				"../../assets/images/1669432796163-181228722+missing_img.jpeg",
+				"../../../src/assets/images/1669432796163-181228722+missing_img.jpeg",
 			article: "",
 			profile: "",
 			success: false,
