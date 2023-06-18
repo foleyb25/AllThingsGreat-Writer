@@ -29,8 +29,6 @@ export const useWriterStore = defineStore('writerStore', {
         const {setNotification} = useGlobalNotificationStore()
         const response = await getAuthenticatedWriter()
         if (response.status === 'success') {
-          console.log("Writer: ", response)
-          console.log("PROD API URL: ", import.meta.env.VITE_API_SERVER_URL)
           this.writer = response.data
           // setNotification(response.message, 'success', 'bg-green-300')
         } else {
