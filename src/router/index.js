@@ -1,4 +1,4 @@
-import {createRouter} from 'vue-router'
+import {createRouter, createWebHashHistory} from 'vue-router'
 import CallbackView from "../views/Splash/Callback.vue";
 import { authGuard } from "@auth0/auth0-vue";
 import {useWriterStore} from '../stores/writer.store.js'
@@ -47,7 +47,7 @@ const getProfileImageUrls = async (to, from) => {
 
 const router = createRouter({
 
-    // history: createWebHistory(),
+    history: createWebHashHistory(),
 
     routes: [
         {
