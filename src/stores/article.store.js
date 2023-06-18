@@ -38,6 +38,7 @@ export const useArticleStore = defineStore('articleStore', {
       async retrieveArticlesByWriterId() {
         const {setNotification} = useGlobalNotificationStore()
         const {  writer } = storeToRefs(useWriterStore());
+        console.log(writer, "writer value")
         const response = await getArticlesByWriterId(writer.value._id)
         if (response.status === 'success') {
           this.writerArticles = response.data
