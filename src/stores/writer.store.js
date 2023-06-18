@@ -71,6 +71,7 @@ export const useWriterStore = defineStore('writerStore', {
       },
 
       async checkWriter() {
+        const {setNotification} = useGlobalNotificationStore()
         if (auth0.isAuthenticated.value) {
           //See if writer object already exists above
           if(!this.writer) {
@@ -79,6 +80,7 @@ export const useWriterStore = defineStore('writerStore', {
               if (response.status === 'success') {
                 return true
               } else {
+                setNotification(response.message, 'error', 'bg-red-300')
                 return false
               }
           } else {
