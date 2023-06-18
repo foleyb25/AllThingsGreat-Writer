@@ -47,7 +47,7 @@ const getProfileImageUrls = async (to, from) => {
 
 const router = createRouter({
 
-    history: createWebHistory(),
+    // history: createWebHistory(),
 
     routes: [
         {
