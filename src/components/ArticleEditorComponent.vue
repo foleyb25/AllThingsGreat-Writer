@@ -343,6 +343,7 @@ import { useWriterStore } from "../stores/writer.store";
 import { useArticleStore } from "../stores/article.store";
 import router from "../router/index.js";
 import { renderMoodColor } from "../utils/colors.util";
+import profileSrcImport from "@/assets/images/aspect_missing_img.jpeg";
 
 const emit = defineEmits(["removeDraft"]);
 const { loading, writer } = storeToRefs(useWriterStore());
@@ -426,9 +427,7 @@ const state = reactive({
 	isReviewed: props.article ? props.article.isReviewed : false,
 	numberOfRatings: props.article ? props.article.numberOfRatings : 0,
 	btnText: props.article ? "Update" : "Create",
-	imagePath: props.article
-		? props.article.imageUrl
-		: "../assets/images/1669432796163-181228722+missing_img.jpeg",
+	imagePath: props.article ? props.article.imageUrl : profileSrcImport,
 	awsImageUrls: [],
 	showModal: false,
 	showDeleteModal: false,

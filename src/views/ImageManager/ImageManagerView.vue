@@ -90,6 +90,8 @@ import DropFile from "../../components/ImageManager/DropFile.vue";
 import { storeToRefs } from "pinia";
 import { useArticleStore } from "../../stores/article.store";
 import { useWriterStore } from "../../stores/writer.store";
+import articleSrcImport from "@/assets/images/aspect_missing_img.jpeg";
+import profileSrcImport from "@/assets/images/missing_img.jpeg";
 
 const { writer } = storeToRefs(useWriterStore());
 
@@ -108,10 +110,8 @@ export default defineComponent({
 		const circleCropper = ref();
 
 		var img = reactive({
-			articleSrc:
-				"../../assets/images/1669432796163-181228722+missing_img.jpeg",
-			profileSrc:
-				"../../assets/images/1669432796163-181228722+missing_img.jpeg",
+			articleSrc: articleSrcImport,
+			profileSrc: profileSrcImport,
 			article: "",
 			profile: "",
 			success: false,
