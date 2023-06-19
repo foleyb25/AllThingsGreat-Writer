@@ -431,7 +431,6 @@ const state = reactive({
 	awsImageUrls: [],
 	showModal: false,
 	showDeleteModal: false,
-	user: useAuth0().user,
 	isEvaluating: false,
 	isCreating: false,
 	isUpdating: false,
@@ -471,7 +470,7 @@ const handleSubmit = async () => {
 		title: state.title,
 		bodyHTML: state.editorData,
 		imageUrl: state.imagePath,
-		writer: state.user.mongoId,
+		writer: writer.value._id,
 		moods: state.moods,
 		tags: state.tags,
 	};
@@ -510,7 +509,7 @@ const handleUpdate = async (e) => {
 		title: state.title,
 		bodyHTML: state.editorData,
 		imageUrl: state.imagePath,
-		writer: state.user.mongoId,
+		writer: writer.value._id,
 		moods: state.moods,
 		tags: state.tags,
 	};
