@@ -83,13 +83,13 @@
 				class="bg-gray-50 border border-gray-300 text-primary-dark text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
 				required
 			>
-				<option value="AllThingsGreat">AllThingsGreat</option>
-				<option value="Combat Sports">Combat Sports</option>
-				<option value="Cryptocurrency">Cryptocurrency</option>
-				<option value="A.I. & Technology">A.I. & Technology</option>
-				<option value="Health & Fitness">Health & Fitness</option>
-				<option value="Extraordinary">Extraordinary</option>
-				<option value="Matchup Analysis">Matchup Analysis</option>
+				<option
+					v-for="(option, index) in options"
+					:key="index"
+					:value="option"
+				>
+					{{ option }}
+				</option>
 			</select>
 			<label
 				for="moods"
@@ -434,6 +434,15 @@ const state = reactive({
 	isEvaluating: false,
 	isCreating: false,
 	isUpdating: false,
+	categoryOptions: [
+		"AllThingsGreat",
+		"Combat Sports",
+		"College Football",
+		"A.I. & Technology",
+		"Health & Fitness",
+		"Extraordinary",
+		"Matchup Analysis",
+	],
 });
 //
 const selectImage = (url) => {
