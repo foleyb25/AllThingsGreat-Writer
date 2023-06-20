@@ -67,7 +67,7 @@ const router = createRouter({
             name: "EditArticleView",
             component: () => import('../views/Article/EditArticleView.vue'),
             props: true,
-            beforeEnter: [authGuard, checkForWriter, getSingleArticle]
+            beforeEnter: [authGuard, checkForWriter, getSingleArticle, getArticleImageUrls]
         },
         {
             path: "/articles",
