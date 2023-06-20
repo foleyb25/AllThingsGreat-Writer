@@ -9,7 +9,7 @@ const apiServerUrl = import.meta.env.VITE_API_SERVER_URL
 export const useArticleStore = defineStore('articleStore', {
     state: () => ({
       allArticles: null,
-      writerArticles: null,
+      writerArticles: [],
       article: null,
       articleImageUrls: null,
       articleEvaluation: null,
@@ -182,6 +182,7 @@ export const useArticleStore = defineStore('articleStore', {
         const {setNotification} = useGlobalNotificationStore()
         const response = await uploadImage(blob, imageName, writerId, 'profile')
         if (response.status === 'success') {
+          this.writerArticles.push(response.data.data.data.Location)
           setNotification(response.message, 'success', 'bg-green-300')
         } else {
           setNotification(response.message, 'error', 'bg-red-300')

@@ -206,7 +206,7 @@ export const getArticlesByWriterId = async (userId) => {
 
 export const getAllArticles = async () => {
   try {
-    const token = auth0.getAccessTokenSilently()
+    const token = await auth0.getAccessTokenSilently()
     const response = await axios.get(`${apiServerUrl}/api/v2/articles/writer`, {
       headers: {
         Authorization: `Bearer ${token}`,

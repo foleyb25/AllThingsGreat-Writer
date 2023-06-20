@@ -4,9 +4,12 @@
 		<button @click="showModal = true">Select an image</button>
 
 		<!-- Modal component -->
-		<div>
+		<div
+			class="fixed z-50 inset-0 bg-black bg-opacity-60 flex items-center justify-center"
+			style="backdrop-filter: blur(5px)"
+		>
 			<div
-				class="modal-content shadow-2xl bg-gradient-to-r from-[#000] to-[#555] rounded w-4/5 max-w-[500px] absolute top-[25%] left-[25%] p-[20px]"
+				class="modal-content shadow-2xl bg-gradient-to-r from-[#000] to-[#555] rounded w-4/5 max-w-[500px] p-[20px]"
 			>
 				<div
 					class="text-white mb-8 flex flex-row items-between justify-between w-100"
@@ -18,7 +21,7 @@
 						>&times;</span
 					>
 				</div>
-				<div>
+				<div class="max-h-[500px] overflow-y-auto">
 					<ul
 						class="grid gap-4 sm:gap-8 grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 					>

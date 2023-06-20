@@ -55,7 +55,6 @@
 					</button>
 				</div>
 			</div>
-			<h1>Analysis:</h1>
 			<div>{{ matchupAnalysis }}</div>
 		</div>
 	</div>

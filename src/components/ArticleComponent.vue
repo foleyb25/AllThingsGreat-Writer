@@ -13,7 +13,24 @@
 			<div class="h-[50%] break-words line-clamp-3 font-semibold p-1">
 				{{ props.title }}
 			</div>
-			<div class="flex items-center font-light h-[10%]">
+			<div
+				id="article-status-box"
+				class="h-[10%] flex flex-row justify-between items-between"
+			>
+				<div
+					v-if="!props.isReviewed"
+					class="w-1/2 m-1 bg-orange-400 text-center rounded flex justify-center items-center"
+				>
+					Needs Review
+				</div>
+				<div
+					v-if="props.isArchived"
+					class="w-1/2 m-1 bg-blue-400 text-center rounded flex justify-center items-center"
+				>
+					Archived
+				</div>
+			</div>
+			<!-- <div class="flex items-center font-light h-[10%]">
 				{{ props.numberOfRatings }}
 				Rating
 				<svg
@@ -40,15 +57,15 @@
 							: "Not Yet Rated"
 					}}
 				</p>
-				<!-- <span
+				 <span
 					class="w-1 h-1 mx-1.5 bg-gray-500 rounded-full dark:bg-gray-400"
 				></span> -->
-				<!-- <a
+			<!-- <a
 					href="#"
 					class="font-medium text-gray-900 underline hover:no-underline dark:text-white"
 					>{{ props.numcomments }} comments</a
 				> -->
-			</div>
+			<!-- </div> -->
 			<div class="h-[20%]">
 				<div></div>
 				{{ props.category }}
@@ -75,24 +92,6 @@
 					</div>
 				</div>
 				<div class="h-[10%] ml-2">{{ author }}</div>
-			</div>
-
-			<div
-				id="article-status-box"
-				class="h-[10%] flex flex-row justify-between items-between"
-			>
-				<div
-					v-if="props.isReviewed"
-					class="w-1/2 m-1 bg-orange-400 text-center rounded flex justify-center items-center"
-				>
-					Needs Review
-				</div>
-				<div
-					v-if="props.isArchived"
-					class="w-1/2 m-1 bg-blue-400 text-center rounded flex justify-center items-center"
-				>
-					Archived
-				</div>
 			</div>
 		</div>
 	</div>

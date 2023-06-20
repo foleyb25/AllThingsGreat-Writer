@@ -67,43 +67,153 @@
 					@select-image="selectImage"
 				/>
 			</Transition>
+			<div class="flex flex-col justify-center items-center mt-6">
+				<div
+					id="profile-cropper-container"
+					class="flex justify-center items-center aspect-square h-[500px] mr-2"
+				>
+					<cropper
+						ref="circleCropper"
+						:src="img.profileSrc"
+						@change="onChangeProfile"
+						:stencil-component="$options.components.CircleStencil"
+						:stencil-props="{
+							aspectRatio: 1 / 1,
+						}"
+						:resize-image="{ adjustStencil: false }"
+						class="h-full w-full"
+					/>
+				</div>
+				<DropFile
+					@file-selected="setProfileImage"
+					class="mt-8"
+				></DropFile>
+				<div
+					v-if="img.success"
+					class="flex justify-center items-center w-full bg-green-300 mt-4 border border-black border-solid rounded"
+				>
+					Successfully uploaded image
+				</div>
+				<div
+					v-if="img.failure"
+					class="flex justify-center items-center w-full bg-red-300 mt-4 border border-black border-solid rounded"
+				>
+					Failed: {{ img.failure_Message }}
+				</div>
+				<button
+					class="w-24 h-12 bg-blue-300 border-solid border-black border rounded mt-4"
+					@click="uploadProfileImage"
+				>
+					Upload
+				</button>
+			</div>
 		</div>
 	</div>
 </template>
 
-<script setup>
-import { reactive, ref } from "vue";
-import { storeToRefs } from "pinia";
-import { useWriterStore } from "../stores/writer.store";
-import { useArticleStore } from "../stores/article.store";
+<script>
 import ImagePickerModalComponent from "../components/article/ImagePickerModalComponent.vue";
+import { Cropper, CircleStencil, Preview } from "vue-advanced-cropper";
+import "vue-advanced-cropper/dist/style.css";
+import { defineComponent, ref, reactive } from "vue";
+import DropFile from "../components/ImageManager/DropFile.vue";
+import { storeToRefs } from "pinia";
+import { useArticleStore } from "../stores/article.store";
+import { useWriterStore } from "../stores/writer.store";
+import articleSrcImport from "@/assets/images/aspect_missing_img.jpeg";
+import profileSrcImport from "@/assets/images/missing_img.jpeg";
 
-const { error, loading, writer, getProfileImageUrls } = storeToRefs(
-	useWriterStore()
-);
-const { updateWriterInfo } = useWriterStore();
+export default defineComponent({
+	components: {
+		Cropper,
+		CircleStencil,
+		Preview,
+		DropFile,
+		ImagePickerModalComponent,
+	},
+	setup() {
+		const { error, loading, writer, getProfileImageUrls } = storeToRefs(
+			useWriterStore()
+		);
 
-const showModal = ref(false);
+		const { updateWriterInfo } = useWriterStore();
 
-const selectImage = async (url) => {
-	writer.value.profileImageUrl = url;
-};
+		const { pinia_uploadProfileImage } = useArticleStore();
 
-const saveProfile = async () => {
-	await updateWriterInfo(writer);
-};
+		const showModal = ref(false);
 
-const uploadProfileImage = async () => {
-	if (img.profileSrc == "") return;
-	if (circlestencil.value) {
-		const { canvas } = circlestencil.value.getResult();
-		await canvas.toBlob(async (blob) => {
-			await pinia_uploadProfileImage(
-				blob,
-				img.profileSrc,
-				writer.value._id
-			);
-		}, "image/jpeg");
-	}
-};
+		const selectImage = async (url) => {
+			writer.value.profileImageUrl = url;
+			showModal.value = false;
+		};
+
+		const saveProfile = async () => {
+			await updateWriterInfo(writer);
+		};
+
+		const cropper = ref();
+		const circleCropper = ref();
+
+		var img = reactive({
+			articleSrc: articleSrcImport,
+			profileSrc: profileSrcImport,
+			article: "",
+			profile: "",
+			success: false,
+			failure: false,
+			failure_Message: "",
+		});
+
+		var state = reactive({
+			result: {
+				coordinates: null,
+				image: null,
+			},
+		});
+
+		const setProfileImage = (path) => {
+			console.log("Setting profile image");
+			img.profileSrc = path.path;
+			img.profile = path.name;
+		};
+
+		const onChangeProfile = ({ coordinates, image }) => {
+			state.result = {
+				coordinates,
+				image,
+			};
+		};
+
+		const uploadProfileImage = async () => {
+			if (img.profileSrc == "") return;
+			if (circleCropper.value) {
+				const { canvas } = circleCropper.value.getResult();
+				await canvas.toBlob(async (blob) => {
+					const result = await pinia_uploadProfileImage(
+						blob,
+						img.profileSrc,
+						writer.value._id
+					);
+				}, "image/jpeg");
+			}
+		};
+
+		return {
+			uploadProfileImage,
+			setProfileImage,
+			selectImage,
+			onChangeProfile,
+			saveProfile,
+			showModal,
+			writer,
+			loading,
+			error,
+			getProfileImageUrls,
+			state,
+			cropper,
+			circleCropper,
+			img,
+		};
+	},
+});
 </script>

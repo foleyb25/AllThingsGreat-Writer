@@ -1,7 +1,6 @@
 <template>
 	<div class="w-full">
 		<div class="flex flex-col justify-center items-center">
-			<h1>Article Images</h1>
 			<div
 				id="cropper-container"
 				class="flex justify-center items-center w-[45%] h-[500px] mr-2"
@@ -9,7 +8,7 @@
 				<cropper
 					ref="cropper"
 					:src="img.articleSrc"
-					@change="onChange"
+					@change="onChangeArticle"
 					:stencil-props="{
 						handlers: {},
 						moveable: false,
@@ -42,7 +41,7 @@
 			>
 				Upload
 			</button>
-			<h1>Profile Images</h1>
+			<div class="mt-6"></div>
 			<div
 				id="profile-cropper-container"
 				class="flex justify-center items-center aspect-square h-[500px] mr-2"
@@ -50,7 +49,7 @@
 				<cropper
 					ref="circleCropper"
 					:src="img.profileSrc"
-					@change="onChange"
+					@change="onChangeProfile"
 					:stencil-component="$options.components.CircleStencil"
 					:stencil-props="{
 						aspectRatio: 1 / 1,
@@ -128,21 +127,31 @@ export default defineComponent({
 
 		//This function is called from an emitter in the child, DropFile
 		const setArticleImage = (path) => {
+			console.log("Setting article image");
 			img.articleSrc = path.path;
 			img.article = path.name;
 		};
 
 		const setProfileImage = (path) => {
+			console.log("Setting profile image");
 			img.profileSrc = path.path;
 			img.profile = path.name;
 		};
 
-		function onChange({ coordinates, image }) {
+		const onChangeArticle = ({ coordinates, image }) => {
+			console.log("On");
 			state.result = {
 				coordinates,
 				image,
 			};
-		}
+		};
+
+		const onChangeProfile = ({ coordinates, image }) => {
+			state.result = {
+				coordinates,
+				image,
+			};
+		};
 
 		const uploadArticleImage = async () => {
 			if (img.articleSrc == "") return;
@@ -175,9 +184,10 @@ export default defineComponent({
 		return {
 			uploadArticleImage,
 			uploadProfileImage,
-			onChange,
 			setProfileImage,
 			setArticleImage,
+			onChangeProfile,
+			onChangeArticle,
 			state,
 			cropper,
 			circleCropper,

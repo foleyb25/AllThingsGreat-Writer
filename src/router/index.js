@@ -28,7 +28,7 @@ const getAllArticles = async () => {
 const getSingleArticle = async (to, from) => {
     const id = to.params.id;
     const { retrieveSingleArticle} = useArticleStore();
-    retrieveSingleArticle(id)
+    await retrieveSingleArticle(id)
     return true
 }
 
@@ -52,6 +52,7 @@ const router = createRouter({
     routes: [
         {
             path: "/",
+            redirect: "/articles",
             name: "home",
             component: () => import('../views/HomeView.vue'),
         },

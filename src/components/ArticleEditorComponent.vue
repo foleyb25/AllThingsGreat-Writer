@@ -84,7 +84,7 @@
 				required
 			>
 				<option
-					v-for="(option, index) in options"
+					v-for="(option, index) in state.categoryOptions"
 					:key="index"
 					:value="option"
 				>
@@ -225,7 +225,7 @@
 			<button
 				v-if="props.draft"
 				class="ml-8 bg-red-800 hover:bg-red-600 text-black font-bold py-2 px-4 border border-red-900 rounded disabled:opacity-25"
-				@click="this.state.showDeleteModal = true"
+				@click="state.showDeleteModal = true"
 				:disabled="
 					state.isUpdating || state.isCreating || state.isEvaluating
 				"
@@ -444,7 +444,7 @@ const state = reactive({
 		"Matchup Analysis",
 	],
 });
-//
+
 const selectImage = (url) => {
 	state.imagePath = url;
 	state.isDisabled = false;
@@ -482,10 +482,12 @@ const handleSubmit = async () => {
 		writer: writer.value._id,
 		moods: state.moods,
 		tags: state.tags,
+		category: state.category,
 	};
 	state.isCreating = true;
 	await submitArticle(formData, dom.innerText);
 	state.isCreating = false;
+	router.push("/articles");
 	//article submitted, check to see if it was a draft and delete it
 	if (props.draft) {
 		emit("removeDraft");
@@ -521,6 +523,7 @@ const handleUpdate = async (e) => {
 		writer: writer.value._id,
 		moods: state.moods,
 		tags: state.tags,
+		category: state.category,
 	};
 	state.isUpdating = true;
 	await updateArticle(props.article._id, formData, dom.innerText);

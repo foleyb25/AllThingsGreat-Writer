@@ -1,8 +1,10 @@
 <template>
-	<div
-		class="flex flex-col items-center justify-center"
-		v-html="getArticle.bodyHTML"
-	></div>
+	<div class="mt-6 w-full flex flex-col items-center justify-center">
+		<div class="w-[90%] bg-white flex flex-col justify-center items-center">
+			<h1>{{ getArticle.title }}</h1>
+			<div v-html="getArticle.bodyHTML"></div>
+		</div>
+	</div>
 	<div class="flex mt-8 flex-row justify-start items-center">
 		<button
 			:isdisabled="isDisabled"
@@ -60,26 +62,26 @@ onMounted(async () => {
 });
 
 const approveArticle = async () => {
-	this.isDisabled = true;
+	isDisabled.value = true;
 	await useArticleStore().approveArticle(props.id);
-	this.isDisabled = false;
+	isDisabled.value = false;
 };
 
 const unApproveArticle = async () => {
-	this.isDisabled = true;
+	isDisabled.value = true;
 	await useArticleStore().unApproveArticle(props.id);
-	this.isDisabled = false;
+	isDisabled.value = false;
 };
 
 const archiveArticle = async () => {
-	this.isDisabled = true;
+	isDisabled.value = true;
 	await useArticleStore().archiveArticle(props.id);
-	isDisabled = false;
+	isDisabled.value = false;
 };
 
 const unArchiveArticle = async () => {
-	this.isDisabled = true;
+	isDisabled.value = true;
 	await useArticleStore().unArchiveArticle(props.id);
-	this.isDisabled = false;
+	isDisabled.value = false;
 };
 </script>
