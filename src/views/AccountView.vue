@@ -172,7 +172,6 @@ export default defineComponent({
 		});
 
 		const setProfileImage = (path) => {
-			console.log("Setting profile image");
 			img.profileSrc = path.path;
 			img.profile = path.name;
 		};

@@ -35,11 +35,9 @@
 		<button
 			class="m-8 bg-purple-600 hover:bg-green-400 text-cyan-300 hover:text-black font-bold py-2 px-4 border border-cyan-300 rounded disabled:opacity-25"
 			@click="handleEvaluate"
-			:disabled="
-				state.isEvaluating || state.isCreating || state.isUpdating
-			"
+			:disabled="isEvaluating || isCreating || isUpdating"
 		>
-			{{ state.isEvaluating ? "Evaluating..." : "Evaluate Article" }}
+			{{ isEvaluating ? "Evaluating..." : "Evaluate Article" }}
 		</button>
 		<div
 			v-if="state.evaluation"
@@ -200,7 +198,7 @@
 			<button
 				v-if="!props.article"
 				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25"
-				:disabled="state.isCreating || state.isEvaluating"
+				:disabled="isCreating || isEvaluating"
 				@click="handleSubmit()"
 			>
 				Create
@@ -208,7 +206,7 @@
 			<button
 				v-if="props.article"
 				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25"
-				:disabled="state.isUpdating || state.isEvaluating"
+				:disabled="isUpdating || isEvaluating"
 				@click="handleUpdate()"
 			>
 				Update
@@ -216,9 +214,7 @@
 			<button
 				class="ml-8 bg-yellow-200 hover:bg-yellow-400 text-black font-bold py-2 px-4 border border-yellow-400 rounded disabled:opacity-25"
 				@click="handleSaveDraft"
-				:disabled="
-					state.isUpdating || state.isCreating || state.isEvaluating
-				"
+				:disabled="isUpdating || isCreating || isEvaluating"
 			>
 				Save Draft
 			</button>
@@ -226,16 +222,14 @@
 				v-if="props.draft"
 				class="ml-8 bg-red-800 hover:bg-red-600 text-black font-bold py-2 px-4 border border-red-900 rounded disabled:opacity-25"
 				@click="state.showDeleteModal = true"
-				:disabled="
-					state.isUpdating || state.isCreating || state.isEvaluating
-				"
+				:disabled="isUpdating || isCreating || isEvaluating"
 			>
 				Delete Draft
 			</button>
 		</div>
 		<div
 			class="text-white mt-2"
-			v-if="state.isUpdating || state.isCreating || state.isEvaluating"
+			v-if="isUpdating || state.isCreating || isEvaluating"
 		>
 			Wait here for a bit, this may take a minute or so. AI is evaluating
 			your content.
@@ -279,9 +273,9 @@
 				</div>
 			</header>
 			<header class="grid grid-cols-3 gap-5 border-b border-black">
-				<div>Content: {{ state.evaluation?.content }}</div>
-				<div>Structure: {{ state.evaluation?.structure }}</div>
-				<div>Organization: {{ state.evaluation?.organization }}</div>
+				<div>Content: {{ articleEvaluation?.content }}</div>
+				<div>Structure: {{ articleEvaluation?.structure }}</div>
+				<div>Organization: {{ articleEvaluation?.organization }}</div>
 			</header>
 			<header class="flex flex-row justify-center">
 				<div>Smut:</div>
@@ -347,7 +341,13 @@ import profileSrcImport from "@/assets/images/aspect_missing_img.jpeg";
 
 const emit = defineEmits(["removeDraft"]);
 const { loading, writer } = storeToRefs(useWriterStore());
-const { getImageUrls, articleEvaluation } = storeToRefs(useArticleStore());
+const {
+	getImageUrls,
+	articleEvaluation,
+	isEvaluating,
+	isCreating,
+	isUpdating,
+} = storeToRefs(useArticleStore());
 const { saveDraft } = useWriterStore();
 
 const { submitArticle, updateArticle, evaluateArticle } = useArticleStore();
@@ -419,7 +419,11 @@ const state = reactive({
 		: props.draft
 		? props.draft.category
 		: "AllThingsGreat",
-	evaluation: props.article ? props.article.evaluation : "",
+	evaluation: articleEvaluation
+		? articleEvaluation
+		: props.article
+		? props.article.evaluation
+		: "",
 	isDisabled: props.article ? false : true,
 	isPinned: props.article ? props.article.isPinned : false,
 	isArchived: props.article ? props.article.isArchived : false,
@@ -431,9 +435,6 @@ const state = reactive({
 	awsImageUrls: [],
 	showModal: false,
 	showDeleteModal: false,
-	isEvaluating: false,
-	isCreating: false,
-	isUpdating: false,
 	categoryOptions: [
 		"AllThingsGreat",
 		"Combat Sports",
@@ -484,15 +485,21 @@ const handleSubmit = async () => {
 		tags: state.tags,
 		category: state.category,
 	};
-	state.isCreating = true;
-	await submitArticle(formData, dom.innerText);
-	state.isCreating = false;
-	router.push("/articles");
-	//article submitted, check to see if it was a draft and delete it
-	if (props.draft) {
-		emit("removeDraft");
-	}
-	router.push("/articles");
+	// await submitArticle(formData, dom.innerText);
+	submitArticle(formData, dom.innerText)
+		.then(() => {
+			// Once the article has been submitted and the job has been added to the queue,
+			// this code will run.
+			// If submitArticle has thrown any errors, this will not run.
+			if (props.draft) {
+				emit("removeDraft");
+			}
+			router.push("/articles");
+		})
+		.catch((error) => {
+			// Handle any errors here.
+			console.error("Error submitting the article:", error);
+		});
 };
 
 const handleDeleteDraft = () => {
@@ -525,9 +532,7 @@ const handleUpdate = async (e) => {
 		tags: state.tags,
 		category: state.category,
 	};
-	state.isUpdating = true;
 	await updateArticle(props.article._id, formData, dom.innerText);
-	state.isUpdating = false;
 	router.push("/articles");
 };
 
@@ -544,10 +549,7 @@ const handleEvaluate = async () => {
 	//convert to text
 	var dom = document.createElement("DIV");
 	dom.innerHTML = state.editorData;
-	state.isEvaluating = true;
 	await evaluateArticle(dom.innerText);
-	state.isEvaluating = false;
-	state.evaluation = articleEvaluation;
 };
 </script>
 

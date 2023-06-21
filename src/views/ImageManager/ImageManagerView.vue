@@ -127,19 +127,16 @@ export default defineComponent({
 
 		//This function is called from an emitter in the child, DropFile
 		const setArticleImage = (path) => {
-			console.log("Setting article image");
 			img.articleSrc = path.path;
 			img.article = path.name;
 		};
 
 		const setProfileImage = (path) => {
-			console.log("Setting profile image");
 			img.profileSrc = path.path;
 			img.profile = path.name;
 		};
 
 		const onChangeArticle = ({ coordinates, image }) => {
-			console.log("On");
 			state.result = {
 				coordinates,
 				image,

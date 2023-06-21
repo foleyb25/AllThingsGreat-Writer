@@ -148,10 +148,11 @@ export const updateArticle = async (id, formData, innerText) => {
         Authorization: `Bearer ${token}`,
       },
     })
+    console.log("RESPONSE UPDATE: ", response)
     return {
       status: 'success',
       message: 'successfully updated article',
-      data: response.data.data
+      data: response.data
     }
   } catch (err) {
     return {
@@ -159,7 +160,31 @@ export const updateArticle = async (id, formData, innerText) => {
       message: err.message,
     }
   }
+
 }
+
+export const evaluate = async (articleText) => {
+  try {
+    const token = await auth0.getAccessTokenSilently();
+    const response = await axios.post(`${apiServerUrl}/api/v2/articles/evaluate`, {articleText: articleText}, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return {
+      status: 'success',
+      message: 'Successfully added the job to the queue',
+      data: response.data, // Modify this line to return the entire response data which includes the job id.
+    };
+  } catch (err) {
+    return {
+      status: 'error',
+      message: err.message,
+    };
+  }
+};
+
+
 
 export const updateWriter = async (writer) => {
   try {
@@ -388,27 +413,29 @@ export const unArchiveArticle = async (mongoId) => {
   }
 }
 
-export const evaluate = async (articleText) => {
+export const getJobStatus = async (jobId, queueType) => {
   try {
-    const token = await auth0.getAccessTokenSilently()
-    const response = await axios.post(`${apiServerUrl}/api/v2/articles/evaluate`, {articleText: articleText}, {
-      "Content-Type": "multipart/form-data",
+    const token = await auth0.getAccessTokenSilently();
+    const response = await axios.get(`${apiServerUrl}/api/v2/articles/getJobStatus/${jobId}/${queueType}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    })
+    });
     return {
       status: 'success',
-      message: 'successfully retrieved evaluation',
-      data: response.data.data
+      statusCode: response.status,
+      message: 'Successfully retrieved job status',
+      data: response.data,
     }
   } catch (err) {
     return {
       status: 'error',
       message: err.message,
+      statusCode: err.response.status
     }
   }
 }
+
 
 export const analyze = async (teamA, teamB) => {
   try {

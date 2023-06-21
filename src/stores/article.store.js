@@ -1,10 +1,8 @@
 // state management guide: https://blog.logrocket.com/complex-vue-3-state-management-pinia/
 import { defineStore, storeToRefs } from 'pinia'
-import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles, getSingleArticle, approveArticle, unApproveArticle, archiveArticle, unArchiveArticle, uploadImage, getImageUrls, evaluate, analyze } from '../services/apiRequest.service'
+import { createNewArticle, updateArticle, getArticlesByWriterId, getAllArticles, getSingleArticle, approveArticle, unApproveArticle, archiveArticle, unArchiveArticle, uploadImage, getImageUrls, evaluate, analyze, getJobStatus} from '../services/apiRequest.service'
 import { useWriterStore } from "./writer.store";
 import { useGlobalNotificationStore } from './globalNotification.store';
-
-const apiServerUrl = import.meta.env.VITE_API_SERVER_URL
 
 export const useArticleStore = defineStore('articleStore', {
     state: () => ({
@@ -14,6 +12,9 @@ export const useArticleStore = defineStore('articleStore', {
       articleImageUrls: null,
       articleEvaluation: null,
       matchupAnalysis: null,
+      isEvaluating: false,
+      isCreating: false,
+      isUpdating: false,
     }),
 
     getters: {
@@ -80,24 +81,130 @@ export const useArticleStore = defineStore('articleStore', {
         }
       },
 
-      async submitArticle(formData, innerText) {
-        const {setNotification} = useGlobalNotificationStore()
-        const response = await createNewArticle(formData, innerText)
-        if (response.status === 'success') {
-          setNotification(response.message, 'success', 'bg-green-300')
-        } else {
-          setNotification(response.message, 'error', 'bg-red-300')
-        }
+      submitArticle(formData, innerText) {
+        return new Promise(async (resolve, reject) => {
+          const { setNotification } = useGlobalNotificationStore();
+          this.isCreating = true;
+          const response = await createNewArticle(formData, innerText);
+          if (response.status === 'success') {
+            setNotification("Creating article, this may take about a minute..", 'Creating article, please wait...', 'bg-green-300');
+      
+            const jobId = response.data.job;
+            // Check job status every 5 seconds
+            this.intervalId = setInterval(async () => {
+              console.log("Checking status....")
+              const jobStatus = await getJobStatus(jobId, 'create');
+              if (jobStatus.statusCode === 200) {
+                console.log("Status complete....")
+                setNotification("Article successfully created", 'Job Complete', 'bg-green-300');
+                // Job has been completed, get the evaluation data and stop the interval
+                this.articleEvaluation = jobStatus.data.data;
+                this.isCreating = false;
+                clearInterval(this.intervalId);
+                resolve(); // Resolve the promise when the job is complete
+              } else if (jobStatus.statusCode === 202) {
+                // setNotification("Job Processing In Progress", 'Job processing in Progress', 'bg-green-300');
+              } else {
+                // Handle any kind of failure status codes by rejecting the promise
+                this.isCreating = false;
+                clearInterval(this.intervalId);
+                if (jobStatus.statusCode === 404) {
+                  setNotification(`${jobStatus.message}: Job Not Found`, 'error', 'bg-red-300');
+                } else if (jobStatus.statusCode === 500) {
+                  setNotification(`${jobStatus.message}: Job Failed`, 'error', 'bg-red-300');
+                }
+                reject(new Error(jobStatus.message));
+              }
+            }, 5000);
+          } else {
+            this.isCreating = false;
+            setNotification(response.message, 'error', 'bg-red-300');
+            reject(new Error(response.message)); // If creating a new article failed, reject the promise
+          }
+        });
       },
+      
 
       async updateArticle(articleId, formData, innerText) {
-          const {setNotification} = useGlobalNotificationStore()
-          const response = await updateArticle(articleId, formData, innerText)
-          if (response.status === 'success') {
-            setNotification(response.message, 'success', 'bg-green-300')
-          } else {
-            setNotification(response.message, 'error', 'bg-red-300')
-          }
+          return new Promise(async (resolve, reject) => {
+            const { setNotification } = useGlobalNotificationStore();
+            this.isUpdating = true;
+            const response = await updateArticle(articleId, formData, innerText)
+            if (response.status === 'success') {
+              setNotification("Creating article, this may take about a minute..", 'Creating article, please wait...', 'bg-green-300');
+        
+              const jobId = response.data.job;
+              // Check job status every 5 seconds
+              this.intervalId = setInterval(async () => {
+                console.log("Checking status....")
+                const jobStatus = await getJobStatus(jobId, 'update');
+                if (jobStatus.statusCode === 200) {
+                  console.log("Status complete....")
+                  setNotification("Article successfully updated Article", 'Job Complete', 'bg-green-300');
+                  // Job has been completed, get the evaluation data and stop the interval
+                  this.articleEvaluation = jobStatus.data.data;
+                  this.isUpdating = false;
+                  clearInterval(this.intervalId);
+                  resolve(); // Resolve the promise when the job is complete
+                } else if (jobStatus.statusCode === 202) {
+                  // setNotification("Job Processing In Progress", 'Job processing in Progress', 'bg-green-300');
+                } else {
+                  // Handle any kind of failure status codes by rejecting the promise
+                  this.isUpdating = false;
+                  clearInterval(this.intervalId);
+                  if (jobStatus.statusCode === 404) {
+                    setNotification(`${jobStatus.message}: Article Update Failed`, 'error', 'bg-red-300');
+                  } else if (jobStatus.statusCode === 500) {
+                    setNotification(`${jobStatus.message}: Article Update Failed`, 'error', 'bg-red-300');
+                  }
+                  reject(new Error(jobStatus.message));
+                }
+              }, 5000);
+            } else {
+              this.isUpdating = false;
+              setNotification(response.message, 'error', 'bg-red-300');
+              reject(new Error(response.message)); // If creating a new article failed, reject the promise
+            }
+          });
+      },
+
+      async evaluateArticle(articleText) {
+        const { setNotification } = useGlobalNotificationStore();
+        this.isEvaluating = true;
+        const response = await evaluate(articleText);
+        console.log("Evaluate response: ", response)
+        
+        if (response.status === 'success') {
+          setNotification(response.message, 'Evaluating article, please wait...', 'bg-green-300');
+          
+          const jobId = response.data.job;
+          // Check job status every 5 seconds
+          this.intervalId = setInterval(async () => {
+            console.log("Cecking status....")
+            const jobStatus = await getJobStatus(jobId, 'eval');
+            if (jobStatus.statusCode === 200) {
+              console.log("Status complete....")
+              setNotification(jobStatus.message, 'Job Complete', 'bg-green-300');
+              // Job has been completed, get the evaluation data and stop the interval
+              this.articleEvaluation = jobStatus.data.data;
+              this.isEvaluating = false;
+              clearInterval(this.intervalId);
+            } else if (jobStatus.statusCode === 202) {
+              setNotification("Job Processing In Progress", 'Job processing in Progress', 'bg-green-300');
+            } else if (jobStatus.statusCode === 404) {
+              this.isEvaluating = false;
+              setNotification(`${jobStatus.message}: Job Not Found`, 'error', 'bg-red-300');
+              clearInterval(this.intervalId);
+            } else if (jobStatus.statusCode === 500) {
+              this.isEvaluating = false;
+              setNotification(`${jobStatus.message}: Job Failed`, 'error', 'bg-red-300');
+              clearInterval(this.intervalId);
+            }
+          }, 5000);
+        } else {
+          this.isEvaluating = false;
+          setNotification(response.message, 'error', 'bg-red-300');
+        }
       },
 
       async archiveArticle(articleId) {
@@ -144,17 +251,7 @@ export const useArticleStore = defineStore('articleStore', {
           setNotification(response.message, 'error', 'bg-red-300')
         }
       },
-
-      async evaluateArticle(articleText) {
-        const {setNotification} = useGlobalNotificationStore()
-        const response = await evaluate(articleText)
-        this.articleEvaluation = response.data
-        if (response.status === 'success') {
-          setNotification(response.message, 'success', 'bg-green-300')
-        } else {
-          setNotification(response.message, 'error', 'bg-red-300')
-        }
-      },
+      
 
       async analyzeMatchup(teamA, teamB) {
         const {setNotification} = useGlobalNotificationStore()
