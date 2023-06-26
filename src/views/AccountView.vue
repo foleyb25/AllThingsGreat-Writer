@@ -50,7 +50,6 @@
 
 					<input type="file" @click.prevent="showModal = true" />
 				</div>
-				{{ showModal }}
 				<button
 					type="submit"
 					@click="saveProfile"
