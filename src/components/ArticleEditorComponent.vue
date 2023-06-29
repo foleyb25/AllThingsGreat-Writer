@@ -330,7 +330,6 @@ import ArticleComponent from "../components/ArticleComponent.vue";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import ImagePickerModalComponent from "./article/ImagePickerModalComponent.vue";
 import DeleteConfirmationModalComponent from "./article/DeleteConfirmationModalComponent.vue";
-import { useAuth0 } from "@auth0/auth0-vue";
 import { reactive, onMounted } from "vue";
 import { storeToRefs } from "pinia";
 import { useWriterStore } from "../stores/writer.store";
