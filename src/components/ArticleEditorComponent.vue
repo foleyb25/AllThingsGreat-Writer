@@ -32,13 +32,7 @@
 				:config="state.editorConfig"
 			></ckeditor> -->
 		</div>
-		<button
-			class="m-8 bg-purple-600 hover:bg-green-400 text-cyan-300 hover:text-black font-bold py-2 px-4 border border-cyan-300 rounded disabled:opacity-25"
-			@click="handleEvaluate"
-			:disabled="isEvaluating || isCreating || isUpdating"
-		>
-			{{ isEvaluating ? "Evaluating..." : "Evaluate Article" }}
-		</button>
+
 		<div
 			v-if="state.evaluation"
 			id="evaluation-container"
@@ -198,7 +192,7 @@
 			<button
 				v-if="!props.article"
 				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25"
-				:disabled="isCreating || isEvaluating"
+				:disabled="isCreating"
 				@click="handleSubmit()"
 			>
 				Create
@@ -206,7 +200,7 @@
 			<button
 				v-if="props.article"
 				class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded disabled:opacity-25"
-				:disabled="isUpdating || isEvaluating"
+				:disabled="isUpdating"
 				@click="handleUpdate()"
 			>
 				Update
@@ -214,7 +208,7 @@
 			<button
 				class="ml-8 bg-yellow-200 hover:bg-yellow-400 text-black font-bold py-2 px-4 border border-yellow-400 rounded disabled:opacity-25"
 				@click="handleSaveDraft"
-				:disabled="isUpdating || isCreating || isEvaluating"
+				:disabled="isUpdating || isCreating"
 			>
 				Save Draft
 			</button>
@@ -222,15 +216,12 @@
 				v-if="props.draft"
 				class="ml-8 bg-red-800 hover:bg-red-600 text-black font-bold py-2 px-4 border border-red-900 rounded disabled:opacity-25"
 				@click="state.showDeleteModal = true"
-				:disabled="isUpdating || isCreating || isEvaluating"
+				:disabled="isUpdating || isCreating"
 			>
 				Delete Draft
 			</button>
 		</div>
-		<div
-			class="text-white mt-2"
-			v-if="isUpdating || state.isCreating || isEvaluating"
-		>
+		<div class="text-white mt-2" v-if="isUpdating || state.isCreating">
 			Wait here for a bit, this may take a minute or so. AI is evaluating
 			your content.
 		</div>
@@ -266,17 +257,10 @@
 						/>
 					</button>
 				</div>
-
-				<div class="flex justify-end">
-					<p>Likes: {{ 11 }}</p>
-					<p>Dislikes: {{ 2 }}</p>
-				</div>
 			</header>
-			<header class="grid grid-cols-3 gap-5 border-b border-black">
-				<div>Content: {{ articleEvaluation?.content }}</div>
-				<div>Structure: {{ articleEvaluation?.structure }}</div>
-				<div>Organization: {{ articleEvaluation?.organization }}</div>
-			</header>
+			<header
+				class="grid grid-cols-3 gap-5 border-b border-black"
+			></header>
 			<header class="flex flex-row justify-center">
 				<div>Smut:</div>
 			</header>

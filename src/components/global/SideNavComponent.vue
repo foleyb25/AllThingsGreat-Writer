@@ -370,8 +370,8 @@
 								>
 							</button>
 						</router-link>
-					</li>
-					<li>
+						<!-- </li> -->
+						<!-- <li>
 						<router-link to="/matchupAnalysis">
 							<button
 								class="flex items-center p-2 w-full text-base font-normal text-primary-LIGHT rounded-lg transition duration-75 group hover:bg-primary-dark dark:text-white dark:hover:bg-gray-700"
@@ -398,6 +398,7 @@
 								>
 							</button>
 						</router-link>
+					</li> -->
 					</li>
 				</ul>
 			</div>

@@ -88,34 +88,35 @@ export const useArticleStore = defineStore('articleStore', {
           const response = await createNewArticle(formData, innerText);
           if (response.status === 'success') {
             setNotification("Creating article, this may take about a minute..", 'Creating article, please wait...', 'bg-green-300');
-      
-            const jobId = response.data.job;
+            resolve(response.data);
+            this.isCreating = false;
+            // const jobId = response.data.job;
             // Check job status every 5 seconds
-            this.intervalId = setInterval(async () => {
-              console.log("Checking status....")
-              const jobStatus = await getJobStatus(jobId, 'create');
-              if (jobStatus.statusCode === 200) {
-                console.log("Status complete....")
-                setNotification("Article successfully created", 'Job Complete', 'bg-green-300');
-                // Job has been completed, get the evaluation data and stop the interval
-                this.articleEvaluation = jobStatus.data.data;
-                this.isCreating = false;
-                clearInterval(this.intervalId);
-                resolve(); // Resolve the promise when the job is complete
-              } else if (jobStatus.statusCode === 202) {
-                // setNotification("Job Processing In Progress", 'Job processing in Progress', 'bg-green-300');
-              } else {
-                // Handle any kind of failure status codes by rejecting the promise
-                this.isCreating = false;
-                clearInterval(this.intervalId);
-                if (jobStatus.statusCode === 404) {
-                  setNotification(`${jobStatus.message}: Job Not Found`, 'error', 'bg-red-300');
-                } else if (jobStatus.statusCode === 500) {
-                  setNotification(`${jobStatus.message}: Job Failed`, 'error', 'bg-red-300');
-                }
-                reject(new Error(jobStatus.message));
-              }
-            }, 5000);
+            // this.intervalId = setInterval(async () => {
+            //   console.log("Checking status....")
+            //   const jobStatus = await getJobStatus(jobId, 'create');
+            //   if (jobStatus.statusCode === 200) {
+            //     console.log("Status complete....")
+            //     setNotification("Article successfully created", 'Job Complete', 'bg-green-300');
+            //     // Job has been completed, get the evaluation data and stop the interval
+            //     this.articleEvaluation = jobStatus.data.data;
+            //     this.isCreating = false;
+            //     clearInterval(this.intervalId);
+            //     resolve(); // Resolve the promise when the job is complete
+            //   } else if (jobStatus.statusCode === 202) {
+            //     // setNotification("Job Processing In Progress", 'Job processing in Progress', 'bg-green-300');
+            //   } else {
+            //     // Handle any kind of failure status codes by rejecting the promise
+            //     this.isCreating = false;
+            //     clearInterval(this.intervalId);
+            //     if (jobStatus.statusCode === 404) {
+            //       setNotification(`${jobStatus.message}: Job Not Found`, 'error', 'bg-red-300');
+            //     } else if (jobStatus.statusCode === 500) {
+            //       setNotification(`${jobStatus.message}: Job Failed`, 'error', 'bg-red-300');
+            //     }
+            //     reject(new Error(jobStatus.message));
+            //   }
+            // }, 5000);
           } else {
             this.isCreating = false;
             setNotification(response.message, 'error', 'bg-red-300');
@@ -132,34 +133,35 @@ export const useArticleStore = defineStore('articleStore', {
             const response = await updateArticle(articleId, formData, innerText)
             if (response.status === 'success') {
               setNotification("Creating article, this may take about a minute..", 'Creating article, please wait...', 'bg-green-300');
-        
-              const jobId = response.data.job;
-              // Check job status every 5 seconds
-              this.intervalId = setInterval(async () => {
-                console.log("Checking status....")
-                const jobStatus = await getJobStatus(jobId, 'update');
-                if (jobStatus.statusCode === 200) {
-                  console.log("Status complete....")
-                  setNotification("Article successfully updated Article", 'Job Complete', 'bg-green-300');
-                  // Job has been completed, get the evaluation data and stop the interval
-                  this.articleEvaluation = jobStatus.data.data;
-                  this.isUpdating = false;
-                  clearInterval(this.intervalId);
-                  resolve(); // Resolve the promise when the job is complete
-                } else if (jobStatus.statusCode === 202) {
-                  // setNotification("Job Processing In Progress", 'Job processing in Progress', 'bg-green-300');
-                } else {
-                  // Handle any kind of failure status codes by rejecting the promise
-                  this.isUpdating = false;
-                  clearInterval(this.intervalId);
-                  if (jobStatus.statusCode === 404) {
-                    setNotification(`${jobStatus.message}: Article Update Failed`, 'error', 'bg-red-300');
-                  } else if (jobStatus.statusCode === 500) {
-                    setNotification(`${jobStatus.message}: Article Update Failed`, 'error', 'bg-red-300');
-                  }
-                  reject(new Error(jobStatus.message));
-                }
-              }, 5000);
+              this.isUpdating = false;
+              resolve(response.data);
+              // const jobId = response.data.job;
+              // // Check job status every 5 seconds
+              // this.intervalId = setInterval(async () => {
+              //   console.log("Checking status....")
+              //   const jobStatus = await getJobStatus(jobId, 'update');
+              //   if (jobStatus.statusCode === 200) {
+              //     console.log("Status complete....")
+              //     setNotification("Article successfully updated Article", 'Job Complete', 'bg-green-300');
+              //     // Job has been completed, get the evaluation data and stop the interval
+              //     this.articleEvaluation = jobStatus.data.data;
+              //     this.isUpdating = false;
+              //     clearInterval(this.intervalId);
+              //     resolve(); // Resolve the promise when the job is complete
+              //   } else if (jobStatus.statusCode === 202) {
+              //     // setNotification("Job Processing In Progress", 'Job processing in Progress', 'bg-green-300');
+              //   } else {
+              //     // Handle any kind of failure status codes by rejecting the promise
+              //     this.isUpdating = false;
+              //     clearInterval(this.intervalId);
+              //     if (jobStatus.statusCode === 404) {
+              //       setNotification(`${jobStatus.message}: Article Update Failed`, 'error', 'bg-red-300');
+              //     } else if (jobStatus.statusCode === 500) {
+              //       setNotification(`${jobStatus.message}: Article Update Failed`, 'error', 'bg-red-300');
+              //     }
+              //     reject(new Error(jobStatus.message));
+              //   }
+              // }, 5000);
             } else {
               this.isUpdating = false;
               setNotification(response.message, 'error', 'bg-red-300');
@@ -177,30 +179,30 @@ export const useArticleStore = defineStore('articleStore', {
         if (response.status === 'success') {
           setNotification(response.message, 'Evaluating article, please wait...', 'bg-green-300');
           
-          const jobId = response.data.job;
-          // Check job status every 5 seconds
-          this.intervalId = setInterval(async () => {
-            console.log("Cecking status....")
-            const jobStatus = await getJobStatus(jobId, 'eval');
-            if (jobStatus.statusCode === 200) {
-              console.log("Status complete....")
-              setNotification(jobStatus.message, 'Job Complete', 'bg-green-300');
-              // Job has been completed, get the evaluation data and stop the interval
-              this.articleEvaluation = jobStatus.data.data;
-              this.isEvaluating = false;
-              clearInterval(this.intervalId);
-            } else if (jobStatus.statusCode === 202) {
-              setNotification("Job Processing In Progress", 'Job processing in Progress', 'bg-green-300');
-            } else if (jobStatus.statusCode === 404) {
-              this.isEvaluating = false;
-              setNotification(`${jobStatus.message}: Job Not Found`, 'error', 'bg-red-300');
-              clearInterval(this.intervalId);
-            } else if (jobStatus.statusCode === 500) {
-              this.isEvaluating = false;
-              setNotification(`${jobStatus.message}: Job Failed`, 'error', 'bg-red-300');
-              clearInterval(this.intervalId);
-            }
-          }, 5000);
+          // const jobId = response.data.job;
+          // // Check job status every 5 seconds
+          // this.intervalId = setInterval(async () => {
+          //   console.log("Cecking status....")
+          //   const jobStatus = await getJobStatus(jobId, 'eval');
+          //   if (jobStatus.statusCode === 200) {
+          //     console.log("Status complete....")
+          //     setNotification(jobStatus.message, 'Job Complete', 'bg-green-300');
+          //     // Job has been completed, get the evaluation data and stop the interval
+          //     this.articleEvaluation = jobStatus.data.data;
+          //     this.isEvaluating = false;
+          //     clearInterval(this.intervalId);
+          //   } else if (jobStatus.statusCode === 202) {
+          //     setNotification("Job Processing In Progress", 'Job processing in Progress', 'bg-green-300');
+          //   } else if (jobStatus.statusCode === 404) {
+          //     this.isEvaluating = false;
+          //     setNotification(`${jobStatus.message}: Job Not Found`, 'error', 'bg-red-300');
+          //     clearInterval(this.intervalId);
+          //   } else if (jobStatus.statusCode === 500) {
+          //     this.isEvaluating = false;
+          //     setNotification(`${jobStatus.message}: Job Failed`, 'error', 'bg-red-300');
+          //     clearInterval(this.intervalId);
+          //   }
+          // }, 5000);
         } else {
           this.isEvaluating = false;
           setNotification(response.message, 'error', 'bg-red-300');
