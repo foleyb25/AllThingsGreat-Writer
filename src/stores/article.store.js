@@ -9,7 +9,7 @@ export const useArticleStore = defineStore('articleStore', {
       allArticles: null,
       writerArticles: [],
       article: null,
-      articleImageUrls: null,
+      articleImageUrls: [],
       articleEvaluation: null,
       matchupAnalysis: null,
       isEvaluating: false,
@@ -271,6 +271,7 @@ export const useArticleStore = defineStore('articleStore', {
         const {setNotification} = useGlobalNotificationStore()
         const response = await uploadImage(blob, imageName, writerId, 'article')
         if (response.status === 'success') {
+          this.articleImageUrls.push(response.data.data.data.Location)
           setNotification(response.message, 'success', 'bg-green-300')
         } else {
           setNotification(response.message, 'error', 'bg-red-300')
@@ -281,7 +282,6 @@ export const useArticleStore = defineStore('articleStore', {
         const {setNotification} = useGlobalNotificationStore()
         const response = await uploadImage(blob, imageName, writerId, 'profile')
         if (response.status === 'success') {
-          this.writerArticles.push(response.data.data.data.Location)
           setNotification(response.message, 'success', 'bg-green-300')
         } else {
           setNotification(response.message, 'error', 'bg-red-300')
