@@ -221,6 +221,12 @@
 				Delete Draft
 			</button>
 		</div>
+		<div
+			class="bg-red-500 mt-1 inline-flex p-1 rounded"
+			v-if="state.draftError"
+		>
+			Must include title in draft
+		</div>
 		<div class="text-white mt-2" v-if="isUpdating || state.isCreating">
 			Wait here for a bit, this may take a minute or so. AI is evaluating
 			your content.
@@ -427,6 +433,7 @@ const state = reactive({
 		"Extraordinary",
 		"Matchup Analysis",
 	],
+	draftError: false,
 });
 
 const selectImage = (url) => {
@@ -492,6 +499,10 @@ const handleDeleteDraft = () => {
 
 const handleSaveDraft = async (e) => {
 	//Patch request
+	if (state.title === "" || state.title === null) {
+		state.draftError = true;
+		return;
+	}
 	const draftState = {
 		title: state.title,
 		bodyHTML: state.editorData,
