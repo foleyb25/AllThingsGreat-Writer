@@ -368,6 +368,7 @@ const state = reactive({
 		],
 		height: "400px",
 		allowedContent: true,
+		tabSpaces: 4,
 	},
 
 	editorData: props.article
