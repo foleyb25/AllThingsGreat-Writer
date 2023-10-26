@@ -4,11 +4,7 @@
 
 ## Description
 
-All Things Great is a place where people go to escape the the BS of the Main Stream Media. We aim to write with a high degree of creativity, wittiness, sarcasm, informativeness, and topics that leave the reader with a boost a confidence. We steer clear from politics, unless a joke comes to be, to make for the last best place on the internet.
-
-We indulge in locker room talk and walk on the hot coals of twisted humor. Covering sports, achievements, history, entertainment, and topics that make up of greatness - with our own unique tone behind it.
-
-This is the All Things Great experience.
+All Things Great is a multi-media and content distribution SaaS covering topics ranging from sports, to fitness, to current events.
 
 ## Application
 
@@ -16,7 +12,7 @@ Currently, the application is going through a complete revamp ranging from the f
 
 This is one of two front-end applications that communicate with our API. The front end applications consist of a user-side (what the public user engages with) and a writer-side (what a selected authenticated writer interacts with). This is the writer-side application. Writer's are able to read blogs, explore reviews, comment on blogs, and rate blogs.
 
-All Things Great front-end applications are written in VueJS. They use Vite as a build tool and Tailwind for styling.
+All Things Great front-end applications are written in VueJS.
 
 ## Dependencies
 

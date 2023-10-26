@@ -21,7 +21,7 @@
 						>&times;</span
 					>
 				</div>
-				<div class="max-h-[500px] overflow-y-auto">
+				<div class="max-h-[500px] overflow-y-scroll">
 					<ul
 						class="grid gap-4 sm:gap-8 grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 					>
